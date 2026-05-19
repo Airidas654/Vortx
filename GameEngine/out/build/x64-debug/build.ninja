@@ -41,42 +41,6 @@ include CMakeFiles\rules.ninja
 
 cmake_ninja_workdir = C$:\Users\Airidas\Desktop\GameEngine\GameEngine\out\build\x64-debug\
 # =============================================================================
-# Object build statements for STATIC_LIBRARY target GameEngineLib
-
-
-#############################################
-# Order-only phony target for GameEngineLib
-
-build cmake_object_order_depends_target_GameEngineLib: phony || cmake_object_order_depends_target_glad cmake_object_order_depends_target_glfw cmake_object_order_depends_target_imgui
-
-build CMakeFiles\GameEngineLib.dir\src\Engine.cpp.obj: CXX_COMPILER__GameEngineLib_unscanned_Debug C$:\Users\Airidas\Desktop\GameEngine\GameEngine\src\Engine.cpp || cmake_object_order_depends_target_GameEngineLib
-  DEFINES = -DGLM_ENABLE_EXPERIMENTAL
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Ob0 /Od /RTC1 -std:c++17 -MDd
-  INCLUDES = -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\include -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\include -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glad\include -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\imgui -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\imgui\backends -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glm -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\miniaudio -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\nlohmann -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\stb_image -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\stb_truetype
-  OBJECT_DIR = CMakeFiles\GameEngineLib.dir
-  OBJECT_FILE_DIR = CMakeFiles\GameEngineLib.dir\src
-  TARGET_COMPILE_PDB = CMakeFiles\GameEngineLib.dir\GameEngineLib.pdb
-  TARGET_PDB = GameEngineLib.pdb
-
-
-# =============================================================================
-# Link build statements for STATIC_LIBRARY target GameEngineLib
-
-
-#############################################
-# Link the static library GameEngineLib.lib
-
-build GameEngineLib.lib: CXX_STATIC_LIBRARY_LINKER__GameEngineLib_Debug CMakeFiles\GameEngineLib.dir\src\Engine.cpp.obj || external\glfw\src\glfw3.lib glad.lib imgui.lib
-  LANGUAGE_COMPILE_FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Ob0 /Od /RTC1 -MDd
-  LINK_FLAGS = /machine:x64
-  OBJECT_DIR = CMakeFiles\GameEngineLib.dir
-  POST_BUILD = cd .
-  PRE_LINK = cd .
-  TARGET_COMPILE_PDB = CMakeFiles\GameEngineLib.dir\GameEngineLib.pdb
-  TARGET_FILE = GameEngineLib.lib
-  TARGET_PDB = GameEngineLib.pdb
-
-# =============================================================================
 # Object build statements for STATIC_LIBRARY target glad
 
 
@@ -86,7 +50,7 @@ build GameEngineLib.lib: CXX_STATIC_LIBRARY_LINKER__GameEngineLib_Debug CMakeFil
 build cmake_object_order_depends_target_glad: phony || CMakeFiles\glad.dir
 
 build CMakeFiles\glad.dir\external\glad\src\glad.c.obj: C_COMPILER__glad_unscanned_Debug C$:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glad\src\glad.c || cmake_object_order_depends_target_glad
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /MDd /Ob0 /Od /RTC1 -MDd
+  FLAGS = /DWIN32 /D_WINDOWS /Zi /Ob0 /Od /RTC1 -MDd
   INCLUDES = -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glad\include
   OBJECT_DIR = CMakeFiles\glad.dir
   OBJECT_FILE_DIR = CMakeFiles\glad.dir\external\glad\src
@@ -102,7 +66,7 @@ build CMakeFiles\glad.dir\external\glad\src\glad.c.obj: C_COMPILER__glad_unscann
 # Link the static library glad.lib
 
 build glad.lib: C_STATIC_LIBRARY_LINKER__glad_Debug CMakeFiles\glad.dir\external\glad\src\glad.c.obj
-  LANGUAGE_COMPILE_FLAGS = /DWIN32 /D_WINDOWS /W3 /MDd /Ob0 /Od /RTC1 -MDd
+  LANGUAGE_COMPILE_FLAGS = /DWIN32 /D_WINDOWS /Zi /Ob0 /Od /RTC1 -MDd
   LINK_FLAGS = /machine:x64
   OBJECT_DIR = CMakeFiles\glad.dir
   POST_BUILD = cd .
@@ -121,7 +85,7 @@ build glad.lib: C_STATIC_LIBRARY_LINKER__glad_Debug CMakeFiles\glad.dir\external
 build cmake_object_order_depends_target_imgui: phony || cmake_object_order_depends_target_glad cmake_object_order_depends_target_glfw
 
 build CMakeFiles\imgui.dir\external\imgui\backends\imgui_impl_glfw.cpp.obj: CXX_COMPILER__imgui_unscanned_Debug C$:\Users\Airidas\Desktop\GameEngine\GameEngine\external\imgui\backends\imgui_impl_glfw.cpp || cmake_object_order_depends_target_imgui
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Ob0 /Od /RTC1 -std:c++17 -MDd
+  FLAGS = /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -std:c++17 -MDd
   INCLUDES = -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\imgui -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\imgui\backends -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\include -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glad\include
   OBJECT_DIR = CMakeFiles\imgui.dir
   OBJECT_FILE_DIR = CMakeFiles\imgui.dir\external\imgui\backends
@@ -129,7 +93,7 @@ build CMakeFiles\imgui.dir\external\imgui\backends\imgui_impl_glfw.cpp.obj: CXX_
   TARGET_PDB = imgui.pdb
 
 build CMakeFiles\imgui.dir\external\imgui\backends\imgui_impl_opengl3.cpp.obj: CXX_COMPILER__imgui_unscanned_Debug C$:\Users\Airidas\Desktop\GameEngine\GameEngine\external\imgui\backends\imgui_impl_opengl3.cpp || cmake_object_order_depends_target_imgui
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Ob0 /Od /RTC1 -std:c++17 -MDd
+  FLAGS = /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -std:c++17 -MDd
   INCLUDES = -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\imgui -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\imgui\backends -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\include -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glad\include
   OBJECT_DIR = CMakeFiles\imgui.dir
   OBJECT_FILE_DIR = CMakeFiles\imgui.dir\external\imgui\backends
@@ -137,7 +101,7 @@ build CMakeFiles\imgui.dir\external\imgui\backends\imgui_impl_opengl3.cpp.obj: C
   TARGET_PDB = imgui.pdb
 
 build CMakeFiles\imgui.dir\external\imgui\imgui.cpp.obj: CXX_COMPILER__imgui_unscanned_Debug C$:\Users\Airidas\Desktop\GameEngine\GameEngine\external\imgui\imgui.cpp || cmake_object_order_depends_target_imgui
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Ob0 /Od /RTC1 -std:c++17 -MDd
+  FLAGS = /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -std:c++17 -MDd
   INCLUDES = -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\imgui -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\imgui\backends -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\include -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glad\include
   OBJECT_DIR = CMakeFiles\imgui.dir
   OBJECT_FILE_DIR = CMakeFiles\imgui.dir\external\imgui
@@ -145,7 +109,7 @@ build CMakeFiles\imgui.dir\external\imgui\imgui.cpp.obj: CXX_COMPILER__imgui_uns
   TARGET_PDB = imgui.pdb
 
 build CMakeFiles\imgui.dir\external\imgui\imgui_demo.cpp.obj: CXX_COMPILER__imgui_unscanned_Debug C$:\Users\Airidas\Desktop\GameEngine\GameEngine\external\imgui\imgui_demo.cpp || cmake_object_order_depends_target_imgui
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Ob0 /Od /RTC1 -std:c++17 -MDd
+  FLAGS = /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -std:c++17 -MDd
   INCLUDES = -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\imgui -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\imgui\backends -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\include -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glad\include
   OBJECT_DIR = CMakeFiles\imgui.dir
   OBJECT_FILE_DIR = CMakeFiles\imgui.dir\external\imgui
@@ -153,7 +117,7 @@ build CMakeFiles\imgui.dir\external\imgui\imgui_demo.cpp.obj: CXX_COMPILER__imgu
   TARGET_PDB = imgui.pdb
 
 build CMakeFiles\imgui.dir\external\imgui\imgui_draw.cpp.obj: CXX_COMPILER__imgui_unscanned_Debug C$:\Users\Airidas\Desktop\GameEngine\GameEngine\external\imgui\imgui_draw.cpp || cmake_object_order_depends_target_imgui
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Ob0 /Od /RTC1 -std:c++17 -MDd
+  FLAGS = /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -std:c++17 -MDd
   INCLUDES = -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\imgui -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\imgui\backends -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\include -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glad\include
   OBJECT_DIR = CMakeFiles\imgui.dir
   OBJECT_FILE_DIR = CMakeFiles\imgui.dir\external\imgui
@@ -161,7 +125,7 @@ build CMakeFiles\imgui.dir\external\imgui\imgui_draw.cpp.obj: CXX_COMPILER__imgu
   TARGET_PDB = imgui.pdb
 
 build CMakeFiles\imgui.dir\external\imgui\imgui_tables.cpp.obj: CXX_COMPILER__imgui_unscanned_Debug C$:\Users\Airidas\Desktop\GameEngine\GameEngine\external\imgui\imgui_tables.cpp || cmake_object_order_depends_target_imgui
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Ob0 /Od /RTC1 -std:c++17 -MDd
+  FLAGS = /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -std:c++17 -MDd
   INCLUDES = -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\imgui -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\imgui\backends -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\include -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glad\include
   OBJECT_DIR = CMakeFiles\imgui.dir
   OBJECT_FILE_DIR = CMakeFiles\imgui.dir\external\imgui
@@ -169,7 +133,7 @@ build CMakeFiles\imgui.dir\external\imgui\imgui_tables.cpp.obj: CXX_COMPILER__im
   TARGET_PDB = imgui.pdb
 
 build CMakeFiles\imgui.dir\external\imgui\imgui_widgets.cpp.obj: CXX_COMPILER__imgui_unscanned_Debug C$:\Users\Airidas\Desktop\GameEngine\GameEngine\external\imgui\imgui_widgets.cpp || cmake_object_order_depends_target_imgui
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Ob0 /Od /RTC1 -std:c++17 -MDd
+  FLAGS = /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -std:c++17 -MDd
   INCLUDES = -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\imgui -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\imgui\backends -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\include -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glad\include
   OBJECT_DIR = CMakeFiles\imgui.dir
   OBJECT_FILE_DIR = CMakeFiles\imgui.dir\external\imgui
@@ -177,7 +141,7 @@ build CMakeFiles\imgui.dir\external\imgui\imgui_widgets.cpp.obj: CXX_COMPILER__i
   TARGET_PDB = imgui.pdb
 
 build CMakeFiles\imgui.dir\external\imgui\misc\cpp\imgui_stdlib.cpp.obj: CXX_COMPILER__imgui_unscanned_Debug C$:\Users\Airidas\Desktop\GameEngine\GameEngine\external\imgui\misc\cpp\imgui_stdlib.cpp || cmake_object_order_depends_target_imgui
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Ob0 /Od /RTC1 -std:c++17 -MDd
+  FLAGS = /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -std:c++17 -MDd
   INCLUDES = -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\imgui -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\imgui\backends -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\include -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glad\include
   OBJECT_DIR = CMakeFiles\imgui.dir
   OBJECT_FILE_DIR = CMakeFiles\imgui.dir\external\imgui\misc\cpp
@@ -193,7 +157,7 @@ build CMakeFiles\imgui.dir\external\imgui\misc\cpp\imgui_stdlib.cpp.obj: CXX_COM
 # Link the static library imgui.lib
 
 build imgui.lib: CXX_STATIC_LIBRARY_LINKER__imgui_Debug CMakeFiles\imgui.dir\external\imgui\backends\imgui_impl_glfw.cpp.obj CMakeFiles\imgui.dir\external\imgui\backends\imgui_impl_opengl3.cpp.obj CMakeFiles\imgui.dir\external\imgui\imgui.cpp.obj CMakeFiles\imgui.dir\external\imgui\imgui_demo.cpp.obj CMakeFiles\imgui.dir\external\imgui\imgui_draw.cpp.obj CMakeFiles\imgui.dir\external\imgui\imgui_tables.cpp.obj CMakeFiles\imgui.dir\external\imgui\imgui_widgets.cpp.obj CMakeFiles\imgui.dir\external\imgui\misc\cpp\imgui_stdlib.cpp.obj || external\glfw\src\glfw3.lib glad.lib
-  LANGUAGE_COMPILE_FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Ob0 /Od /RTC1 -MDd
+  LANGUAGE_COMPILE_FLAGS = /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -MDd
   LINK_FLAGS = /machine:x64
   OBJECT_DIR = CMakeFiles\imgui.dir
   POST_BUILD = cd .
@@ -203,42 +167,90 @@ build imgui.lib: CXX_STATIC_LIBRARY_LINKER__imgui_Debug CMakeFiles\imgui.dir\ext
   TARGET_PDB = imgui.pdb
 
 # =============================================================================
-# Object build statements for EXECUTABLE target GameEngine
+# Object build statements for SHARED_LIBRARY target GameEngineLib
 
 
 #############################################
-# Order-only phony target for GameEngine
+# Order-only phony target for GameEngineLib
 
-build cmake_object_order_depends_target_GameEngine: phony || cmake_object_order_depends_target_GameEngineLib cmake_object_order_depends_target_glad cmake_object_order_depends_target_glfw cmake_object_order_depends_target_imgui
+build cmake_object_order_depends_target_GameEngineLib: phony || cmake_object_order_depends_target_glad cmake_object_order_depends_target_glfw
 
-build CMakeFiles\GameEngine.dir\main.cpp.obj: CXX_COMPILER__GameEngine_unscanned_Debug C$:\Users\Airidas\Desktop\GameEngine\GameEngine\main.cpp || cmake_object_order_depends_target_GameEngine
-  DEFINES = -DGLM_ENABLE_EXPERIMENTAL
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Ob0 /Od /RTC1 -std:c++17 -MDd
-  INCLUDES = -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\include -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\include -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glad\include -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\imgui -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\imgui\backends -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glm -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\miniaudio -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\nlohmann -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\stb_image -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\stb_truetype
-  OBJECT_DIR = CMakeFiles\GameEngine.dir
-  OBJECT_FILE_DIR = CMakeFiles\GameEngine.dir
-  TARGET_COMPILE_PDB = CMakeFiles\GameEngine.dir\
-  TARGET_PDB = bin\GameEngine.pdb
+build CMakeFiles\GameEngineLib.dir\src\Engine\Engine.cpp.obj: CXX_COMPILER__GameEngineLib_unscanned_Debug C$:\Users\Airidas\Desktop\GameEngine\GameEngine\src\Engine\Engine.cpp || cmake_object_order_depends_target_GameEngineLib
+  DEFINES = -DENGINE_BUILD_DLL -DGLM_ENABLE_EXPERIMENTAL -DGameEngineLib_EXPORTS
+  FLAGS = /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -std:c++17 -MDd
+  INCLUDES = -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\include\Engine -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\include -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glad\include -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glm -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\miniaudio -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\nlohmann -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\stb_image -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\stb_truetype -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\entt
+  OBJECT_DIR = CMakeFiles\GameEngineLib.dir
+  OBJECT_FILE_DIR = CMakeFiles\GameEngineLib.dir\src\Engine
+  TARGET_COMPILE_PDB = CMakeFiles\GameEngineLib.dir\
+  TARGET_PDB = bin\GameEngineLib.pdb
 
 
 # =============================================================================
-# Link build statements for EXECUTABLE target GameEngine
+# Link build statements for SHARED_LIBRARY target GameEngineLib
 
 
 #############################################
-# Link the executable bin\GameEngine.exe
+# Link the shared library bin\GameEngineLib.dll
 
-build bin\GameEngine.exe: CXX_EXECUTABLE_LINKER__GameEngine_Debug CMakeFiles\GameEngine.dir\main.cpp.obj | GameEngineLib.lib imgui.lib external\glfw\src\glfw3.lib glad.lib || GameEngineLib.lib external\glfw\src\glfw3.lib glad.lib imgui.lib
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Ob0 /Od /RTC1 -MDd
-  LINK_FLAGS = /machine:x64 /debug /INCREMENTAL /subsystem:console
-  LINK_LIBRARIES = GameEngineLib.lib  opengl32.lib  imgui.lib  external\glfw\src\glfw3.lib  glad.lib  opengl32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
-  OBJECT_DIR = CMakeFiles\GameEngine.dir
+build bin\GameEngineLib.dll GameEngineLib.lib: CXX_SHARED_LIBRARY_LINKER__GameEngineLib_Debug CMakeFiles\GameEngineLib.dir\src\Engine\Engine.cpp.obj | external\glfw\src\glfw3.lib glad.lib || external\glfw\src\glfw3.lib glad.lib
+  LANGUAGE_COMPILE_FLAGS = /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -MDd
+  LINK_FLAGS = /machine:x64 /debug /INCREMENTAL
+  LINK_LIBRARIES = external\glfw\src\glfw3.lib  opengl32.lib  glad.lib  opengl32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
+  OBJECT_DIR = CMakeFiles\GameEngineLib.dir
   POST_BUILD = cd .
   PRE_LINK = cd .
-  TARGET_COMPILE_PDB = CMakeFiles\GameEngine.dir\
-  TARGET_FILE = bin\GameEngine.exe
-  TARGET_IMPLIB = GameEngine.lib
-  TARGET_PDB = bin\GameEngine.pdb
+  RESTAT = 1
+  TARGET_COMPILE_PDB = CMakeFiles\GameEngineLib.dir\
+  TARGET_FILE = bin\GameEngineLib.dll
+  TARGET_IMPLIB = GameEngineLib.lib
+  TARGET_PDB = bin\GameEngineLib.pdb
+
+# =============================================================================
+# Object build statements for EXECUTABLE target Editor
+
+
+#############################################
+# Order-only phony target for Editor
+
+build cmake_object_order_depends_target_Editor: phony || cmake_object_order_depends_target_GameEngineLib cmake_object_order_depends_target_glad cmake_object_order_depends_target_glfw cmake_object_order_depends_target_imgui
+
+build CMakeFiles\Editor.dir\src\Editor\Editor.cpp.obj: CXX_COMPILER__Editor_unscanned_Debug C$:\Users\Airidas\Desktop\GameEngine\GameEngine\src\Editor\Editor.cpp || cmake_object_order_depends_target_Editor
+  DEFINES = -DGLM_ENABLE_EXPERIMENTAL
+  FLAGS = /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -std:c++17 -MDd
+  INCLUDES = -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\imgui -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\imgui\backends -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\include\Engine -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\include -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glad\include -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glm -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\miniaudio -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\nlohmann -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\stb_image -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\stb_truetype -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\entt
+  OBJECT_DIR = CMakeFiles\Editor.dir
+  OBJECT_FILE_DIR = CMakeFiles\Editor.dir\src\Editor
+  TARGET_COMPILE_PDB = CMakeFiles\Editor.dir\
+  TARGET_PDB = bin\Editor.pdb
+
+build CMakeFiles\Editor.dir\src\Editor\main.cpp.obj: CXX_COMPILER__Editor_unscanned_Debug C$:\Users\Airidas\Desktop\GameEngine\GameEngine\src\Editor\main.cpp || cmake_object_order_depends_target_Editor
+  DEFINES = -DGLM_ENABLE_EXPERIMENTAL
+  FLAGS = /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -std:c++17 -MDd
+  INCLUDES = -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\imgui -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\imgui\backends -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\include\Engine -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\include -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glad\include -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glm -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\miniaudio -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\nlohmann -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\stb_image -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\stb_truetype -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\entt
+  OBJECT_DIR = CMakeFiles\Editor.dir
+  OBJECT_FILE_DIR = CMakeFiles\Editor.dir\src\Editor
+  TARGET_COMPILE_PDB = CMakeFiles\Editor.dir\
+  TARGET_PDB = bin\Editor.pdb
+
+
+# =============================================================================
+# Link build statements for EXECUTABLE target Editor
+
+
+#############################################
+# Link the executable bin\Editor.exe
+
+build bin\Editor.exe: CXX_EXECUTABLE_LINKER__Editor_Debug CMakeFiles\Editor.dir\src\Editor\Editor.cpp.obj CMakeFiles\Editor.dir\src\Editor\main.cpp.obj | GameEngineLib.lib imgui.lib external\glfw\src\glfw3.lib glad.lib || bin\GameEngineLib.dll external\glfw\src\glfw3.lib glad.lib imgui.lib
+  FLAGS = /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -MDd
+  LINK_FLAGS = /machine:x64 /debug /INCREMENTAL /subsystem:console
+  LINK_LIBRARIES = GameEngineLib.lib  imgui.lib  opengl32.lib  opengl32.lib  external\glfw\src\glfw3.lib  glad.lib  kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
+  OBJECT_DIR = CMakeFiles\Editor.dir
+  POST_BUILD = cd .
+  PRE_LINK = cd .
+  TARGET_COMPILE_PDB = CMakeFiles\Editor.dir\
+  TARGET_FILE = bin\Editor.exe
+  TARGET_IMPLIB = Editor.lib
+  TARGET_PDB = bin\Editor.pdb
 
 
 #############################################
@@ -380,7 +392,7 @@ build cmake_object_order_depends_target_glfw: phony || external\glfw\src\CMakeFi
 
 build external\glfw\src\CMakeFiles\glfw.dir\context.c.obj: C_COMPILER__glfw_unscanned_Debug C$:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\src\context.c || cmake_object_order_depends_target_glfw
   DEFINES = -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /MDd /Ob0 /Od /RTC1 -MDd /W3
+  FLAGS = /DWIN32 /D_WINDOWS /Zi /Ob0 /Od /RTC1 -MDd /W3
   INCLUDES = -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\include -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\src -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\out\build\x64-debug\external\glfw\src
   OBJECT_DIR = external\glfw\src\CMakeFiles\glfw.dir
   OBJECT_FILE_DIR = external\glfw\src\CMakeFiles\glfw.dir
@@ -389,7 +401,7 @@ build external\glfw\src\CMakeFiles\glfw.dir\context.c.obj: C_COMPILER__glfw_unsc
 
 build external\glfw\src\CMakeFiles\glfw.dir\init.c.obj: C_COMPILER__glfw_unscanned_Debug C$:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\src\init.c || cmake_object_order_depends_target_glfw
   DEFINES = -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /MDd /Ob0 /Od /RTC1 -MDd /W3
+  FLAGS = /DWIN32 /D_WINDOWS /Zi /Ob0 /Od /RTC1 -MDd /W3
   INCLUDES = -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\include -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\src -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\out\build\x64-debug\external\glfw\src
   OBJECT_DIR = external\glfw\src\CMakeFiles\glfw.dir
   OBJECT_FILE_DIR = external\glfw\src\CMakeFiles\glfw.dir
@@ -398,7 +410,7 @@ build external\glfw\src\CMakeFiles\glfw.dir\init.c.obj: C_COMPILER__glfw_unscann
 
 build external\glfw\src\CMakeFiles\glfw.dir\input.c.obj: C_COMPILER__glfw_unscanned_Debug C$:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\src\input.c || cmake_object_order_depends_target_glfw
   DEFINES = -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /MDd /Ob0 /Od /RTC1 -MDd /W3
+  FLAGS = /DWIN32 /D_WINDOWS /Zi /Ob0 /Od /RTC1 -MDd /W3
   INCLUDES = -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\include -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\src -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\out\build\x64-debug\external\glfw\src
   OBJECT_DIR = external\glfw\src\CMakeFiles\glfw.dir
   OBJECT_FILE_DIR = external\glfw\src\CMakeFiles\glfw.dir
@@ -407,7 +419,7 @@ build external\glfw\src\CMakeFiles\glfw.dir\input.c.obj: C_COMPILER__glfw_unscan
 
 build external\glfw\src\CMakeFiles\glfw.dir\monitor.c.obj: C_COMPILER__glfw_unscanned_Debug C$:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\src\monitor.c || cmake_object_order_depends_target_glfw
   DEFINES = -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /MDd /Ob0 /Od /RTC1 -MDd /W3
+  FLAGS = /DWIN32 /D_WINDOWS /Zi /Ob0 /Od /RTC1 -MDd /W3
   INCLUDES = -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\include -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\src -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\out\build\x64-debug\external\glfw\src
   OBJECT_DIR = external\glfw\src\CMakeFiles\glfw.dir
   OBJECT_FILE_DIR = external\glfw\src\CMakeFiles\glfw.dir
@@ -416,7 +428,7 @@ build external\glfw\src\CMakeFiles\glfw.dir\monitor.c.obj: C_COMPILER__glfw_unsc
 
 build external\glfw\src\CMakeFiles\glfw.dir\platform.c.obj: C_COMPILER__glfw_unscanned_Debug C$:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\src\platform.c || cmake_object_order_depends_target_glfw
   DEFINES = -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /MDd /Ob0 /Od /RTC1 -MDd /W3
+  FLAGS = /DWIN32 /D_WINDOWS /Zi /Ob0 /Od /RTC1 -MDd /W3
   INCLUDES = -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\include -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\src -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\out\build\x64-debug\external\glfw\src
   OBJECT_DIR = external\glfw\src\CMakeFiles\glfw.dir
   OBJECT_FILE_DIR = external\glfw\src\CMakeFiles\glfw.dir
@@ -425,7 +437,7 @@ build external\glfw\src\CMakeFiles\glfw.dir\platform.c.obj: C_COMPILER__glfw_uns
 
 build external\glfw\src\CMakeFiles\glfw.dir\vulkan.c.obj: C_COMPILER__glfw_unscanned_Debug C$:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\src\vulkan.c || cmake_object_order_depends_target_glfw
   DEFINES = -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /MDd /Ob0 /Od /RTC1 -MDd /W3
+  FLAGS = /DWIN32 /D_WINDOWS /Zi /Ob0 /Od /RTC1 -MDd /W3
   INCLUDES = -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\include -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\src -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\out\build\x64-debug\external\glfw\src
   OBJECT_DIR = external\glfw\src\CMakeFiles\glfw.dir
   OBJECT_FILE_DIR = external\glfw\src\CMakeFiles\glfw.dir
@@ -434,7 +446,7 @@ build external\glfw\src\CMakeFiles\glfw.dir\vulkan.c.obj: C_COMPILER__glfw_unsca
 
 build external\glfw\src\CMakeFiles\glfw.dir\window.c.obj: C_COMPILER__glfw_unscanned_Debug C$:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\src\window.c || cmake_object_order_depends_target_glfw
   DEFINES = -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /MDd /Ob0 /Od /RTC1 -MDd /W3
+  FLAGS = /DWIN32 /D_WINDOWS /Zi /Ob0 /Od /RTC1 -MDd /W3
   INCLUDES = -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\include -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\src -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\out\build\x64-debug\external\glfw\src
   OBJECT_DIR = external\glfw\src\CMakeFiles\glfw.dir
   OBJECT_FILE_DIR = external\glfw\src\CMakeFiles\glfw.dir
@@ -443,7 +455,7 @@ build external\glfw\src\CMakeFiles\glfw.dir\window.c.obj: C_COMPILER__glfw_unsca
 
 build external\glfw\src\CMakeFiles\glfw.dir\egl_context.c.obj: C_COMPILER__glfw_unscanned_Debug C$:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\src\egl_context.c || cmake_object_order_depends_target_glfw
   DEFINES = -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /MDd /Ob0 /Od /RTC1 -MDd /W3
+  FLAGS = /DWIN32 /D_WINDOWS /Zi /Ob0 /Od /RTC1 -MDd /W3
   INCLUDES = -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\include -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\src -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\out\build\x64-debug\external\glfw\src
   OBJECT_DIR = external\glfw\src\CMakeFiles\glfw.dir
   OBJECT_FILE_DIR = external\glfw\src\CMakeFiles\glfw.dir
@@ -452,7 +464,7 @@ build external\glfw\src\CMakeFiles\glfw.dir\egl_context.c.obj: C_COMPILER__glfw_
 
 build external\glfw\src\CMakeFiles\glfw.dir\osmesa_context.c.obj: C_COMPILER__glfw_unscanned_Debug C$:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\src\osmesa_context.c || cmake_object_order_depends_target_glfw
   DEFINES = -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /MDd /Ob0 /Od /RTC1 -MDd /W3
+  FLAGS = /DWIN32 /D_WINDOWS /Zi /Ob0 /Od /RTC1 -MDd /W3
   INCLUDES = -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\include -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\src -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\out\build\x64-debug\external\glfw\src
   OBJECT_DIR = external\glfw\src\CMakeFiles\glfw.dir
   OBJECT_FILE_DIR = external\glfw\src\CMakeFiles\glfw.dir
@@ -461,7 +473,7 @@ build external\glfw\src\CMakeFiles\glfw.dir\osmesa_context.c.obj: C_COMPILER__gl
 
 build external\glfw\src\CMakeFiles\glfw.dir\null_init.c.obj: C_COMPILER__glfw_unscanned_Debug C$:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\src\null_init.c || cmake_object_order_depends_target_glfw
   DEFINES = -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /MDd /Ob0 /Od /RTC1 -MDd /W3
+  FLAGS = /DWIN32 /D_WINDOWS /Zi /Ob0 /Od /RTC1 -MDd /W3
   INCLUDES = -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\include -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\src -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\out\build\x64-debug\external\glfw\src
   OBJECT_DIR = external\glfw\src\CMakeFiles\glfw.dir
   OBJECT_FILE_DIR = external\glfw\src\CMakeFiles\glfw.dir
@@ -470,7 +482,7 @@ build external\glfw\src\CMakeFiles\glfw.dir\null_init.c.obj: C_COMPILER__glfw_un
 
 build external\glfw\src\CMakeFiles\glfw.dir\null_monitor.c.obj: C_COMPILER__glfw_unscanned_Debug C$:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\src\null_monitor.c || cmake_object_order_depends_target_glfw
   DEFINES = -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /MDd /Ob0 /Od /RTC1 -MDd /W3
+  FLAGS = /DWIN32 /D_WINDOWS /Zi /Ob0 /Od /RTC1 -MDd /W3
   INCLUDES = -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\include -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\src -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\out\build\x64-debug\external\glfw\src
   OBJECT_DIR = external\glfw\src\CMakeFiles\glfw.dir
   OBJECT_FILE_DIR = external\glfw\src\CMakeFiles\glfw.dir
@@ -479,7 +491,7 @@ build external\glfw\src\CMakeFiles\glfw.dir\null_monitor.c.obj: C_COMPILER__glfw
 
 build external\glfw\src\CMakeFiles\glfw.dir\null_window.c.obj: C_COMPILER__glfw_unscanned_Debug C$:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\src\null_window.c || cmake_object_order_depends_target_glfw
   DEFINES = -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /MDd /Ob0 /Od /RTC1 -MDd /W3
+  FLAGS = /DWIN32 /D_WINDOWS /Zi /Ob0 /Od /RTC1 -MDd /W3
   INCLUDES = -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\include -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\src -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\out\build\x64-debug\external\glfw\src
   OBJECT_DIR = external\glfw\src\CMakeFiles\glfw.dir
   OBJECT_FILE_DIR = external\glfw\src\CMakeFiles\glfw.dir
@@ -488,7 +500,7 @@ build external\glfw\src\CMakeFiles\glfw.dir\null_window.c.obj: C_COMPILER__glfw_
 
 build external\glfw\src\CMakeFiles\glfw.dir\null_joystick.c.obj: C_COMPILER__glfw_unscanned_Debug C$:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\src\null_joystick.c || cmake_object_order_depends_target_glfw
   DEFINES = -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /MDd /Ob0 /Od /RTC1 -MDd /W3
+  FLAGS = /DWIN32 /D_WINDOWS /Zi /Ob0 /Od /RTC1 -MDd /W3
   INCLUDES = -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\include -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\src -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\out\build\x64-debug\external\glfw\src
   OBJECT_DIR = external\glfw\src\CMakeFiles\glfw.dir
   OBJECT_FILE_DIR = external\glfw\src\CMakeFiles\glfw.dir
@@ -497,7 +509,7 @@ build external\glfw\src\CMakeFiles\glfw.dir\null_joystick.c.obj: C_COMPILER__glf
 
 build external\glfw\src\CMakeFiles\glfw.dir\win32_module.c.obj: C_COMPILER__glfw_unscanned_Debug C$:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\src\win32_module.c || cmake_object_order_depends_target_glfw
   DEFINES = -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /MDd /Ob0 /Od /RTC1 -MDd /W3
+  FLAGS = /DWIN32 /D_WINDOWS /Zi /Ob0 /Od /RTC1 -MDd /W3
   INCLUDES = -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\include -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\src -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\out\build\x64-debug\external\glfw\src
   OBJECT_DIR = external\glfw\src\CMakeFiles\glfw.dir
   OBJECT_FILE_DIR = external\glfw\src\CMakeFiles\glfw.dir
@@ -506,7 +518,7 @@ build external\glfw\src\CMakeFiles\glfw.dir\win32_module.c.obj: C_COMPILER__glfw
 
 build external\glfw\src\CMakeFiles\glfw.dir\win32_time.c.obj: C_COMPILER__glfw_unscanned_Debug C$:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\src\win32_time.c || cmake_object_order_depends_target_glfw
   DEFINES = -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /MDd /Ob0 /Od /RTC1 -MDd /W3
+  FLAGS = /DWIN32 /D_WINDOWS /Zi /Ob0 /Od /RTC1 -MDd /W3
   INCLUDES = -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\include -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\src -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\out\build\x64-debug\external\glfw\src
   OBJECT_DIR = external\glfw\src\CMakeFiles\glfw.dir
   OBJECT_FILE_DIR = external\glfw\src\CMakeFiles\glfw.dir
@@ -515,7 +527,7 @@ build external\glfw\src\CMakeFiles\glfw.dir\win32_time.c.obj: C_COMPILER__glfw_u
 
 build external\glfw\src\CMakeFiles\glfw.dir\win32_thread.c.obj: C_COMPILER__glfw_unscanned_Debug C$:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\src\win32_thread.c || cmake_object_order_depends_target_glfw
   DEFINES = -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /MDd /Ob0 /Od /RTC1 -MDd /W3
+  FLAGS = /DWIN32 /D_WINDOWS /Zi /Ob0 /Od /RTC1 -MDd /W3
   INCLUDES = -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\include -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\src -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\out\build\x64-debug\external\glfw\src
   OBJECT_DIR = external\glfw\src\CMakeFiles\glfw.dir
   OBJECT_FILE_DIR = external\glfw\src\CMakeFiles\glfw.dir
@@ -524,7 +536,7 @@ build external\glfw\src\CMakeFiles\glfw.dir\win32_thread.c.obj: C_COMPILER__glfw
 
 build external\glfw\src\CMakeFiles\glfw.dir\win32_init.c.obj: C_COMPILER__glfw_unscanned_Debug C$:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\src\win32_init.c || cmake_object_order_depends_target_glfw
   DEFINES = -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /MDd /Ob0 /Od /RTC1 -MDd /W3
+  FLAGS = /DWIN32 /D_WINDOWS /Zi /Ob0 /Od /RTC1 -MDd /W3
   INCLUDES = -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\include -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\src -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\out\build\x64-debug\external\glfw\src
   OBJECT_DIR = external\glfw\src\CMakeFiles\glfw.dir
   OBJECT_FILE_DIR = external\glfw\src\CMakeFiles\glfw.dir
@@ -533,7 +545,7 @@ build external\glfw\src\CMakeFiles\glfw.dir\win32_init.c.obj: C_COMPILER__glfw_u
 
 build external\glfw\src\CMakeFiles\glfw.dir\win32_joystick.c.obj: C_COMPILER__glfw_unscanned_Debug C$:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\src\win32_joystick.c || cmake_object_order_depends_target_glfw
   DEFINES = -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /MDd /Ob0 /Od /RTC1 -MDd /W3
+  FLAGS = /DWIN32 /D_WINDOWS /Zi /Ob0 /Od /RTC1 -MDd /W3
   INCLUDES = -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\include -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\src -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\out\build\x64-debug\external\glfw\src
   OBJECT_DIR = external\glfw\src\CMakeFiles\glfw.dir
   OBJECT_FILE_DIR = external\glfw\src\CMakeFiles\glfw.dir
@@ -542,7 +554,7 @@ build external\glfw\src\CMakeFiles\glfw.dir\win32_joystick.c.obj: C_COMPILER__gl
 
 build external\glfw\src\CMakeFiles\glfw.dir\win32_monitor.c.obj: C_COMPILER__glfw_unscanned_Debug C$:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\src\win32_monitor.c || cmake_object_order_depends_target_glfw
   DEFINES = -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /MDd /Ob0 /Od /RTC1 -MDd /W3
+  FLAGS = /DWIN32 /D_WINDOWS /Zi /Ob0 /Od /RTC1 -MDd /W3
   INCLUDES = -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\include -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\src -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\out\build\x64-debug\external\glfw\src
   OBJECT_DIR = external\glfw\src\CMakeFiles\glfw.dir
   OBJECT_FILE_DIR = external\glfw\src\CMakeFiles\glfw.dir
@@ -551,7 +563,7 @@ build external\glfw\src\CMakeFiles\glfw.dir\win32_monitor.c.obj: C_COMPILER__glf
 
 build external\glfw\src\CMakeFiles\glfw.dir\win32_window.c.obj: C_COMPILER__glfw_unscanned_Debug C$:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\src\win32_window.c || cmake_object_order_depends_target_glfw
   DEFINES = -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /MDd /Ob0 /Od /RTC1 -MDd /W3
+  FLAGS = /DWIN32 /D_WINDOWS /Zi /Ob0 /Od /RTC1 -MDd /W3
   INCLUDES = -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\include -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\src -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\out\build\x64-debug\external\glfw\src
   OBJECT_DIR = external\glfw\src\CMakeFiles\glfw.dir
   OBJECT_FILE_DIR = external\glfw\src\CMakeFiles\glfw.dir
@@ -560,7 +572,7 @@ build external\glfw\src\CMakeFiles\glfw.dir\win32_window.c.obj: C_COMPILER__glfw
 
 build external\glfw\src\CMakeFiles\glfw.dir\wgl_context.c.obj: C_COMPILER__glfw_unscanned_Debug C$:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\src\wgl_context.c || cmake_object_order_depends_target_glfw
   DEFINES = -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /MDd /Ob0 /Od /RTC1 -MDd /W3
+  FLAGS = /DWIN32 /D_WINDOWS /Zi /Ob0 /Od /RTC1 -MDd /W3
   INCLUDES = -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\include -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\src -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\out\build\x64-debug\external\glfw\src
   OBJECT_DIR = external\glfw\src\CMakeFiles\glfw.dir
   OBJECT_FILE_DIR = external\glfw\src\CMakeFiles\glfw.dir
@@ -576,7 +588,7 @@ build external\glfw\src\CMakeFiles\glfw.dir\wgl_context.c.obj: C_COMPILER__glfw_
 # Link the static library external\glfw\src\glfw3.lib
 
 build external\glfw\src\glfw3.lib: C_STATIC_LIBRARY_LINKER__glfw_Debug external\glfw\src\CMakeFiles\glfw.dir\context.c.obj external\glfw\src\CMakeFiles\glfw.dir\init.c.obj external\glfw\src\CMakeFiles\glfw.dir\input.c.obj external\glfw\src\CMakeFiles\glfw.dir\monitor.c.obj external\glfw\src\CMakeFiles\glfw.dir\platform.c.obj external\glfw\src\CMakeFiles\glfw.dir\vulkan.c.obj external\glfw\src\CMakeFiles\glfw.dir\window.c.obj external\glfw\src\CMakeFiles\glfw.dir\egl_context.c.obj external\glfw\src\CMakeFiles\glfw.dir\osmesa_context.c.obj external\glfw\src\CMakeFiles\glfw.dir\null_init.c.obj external\glfw\src\CMakeFiles\glfw.dir\null_monitor.c.obj external\glfw\src\CMakeFiles\glfw.dir\null_window.c.obj external\glfw\src\CMakeFiles\glfw.dir\null_joystick.c.obj external\glfw\src\CMakeFiles\glfw.dir\win32_module.c.obj external\glfw\src\CMakeFiles\glfw.dir\win32_time.c.obj external\glfw\src\CMakeFiles\glfw.dir\win32_thread.c.obj external\glfw\src\CMakeFiles\glfw.dir\win32_init.c.obj external\glfw\src\CMakeFiles\glfw.dir\win32_joystick.c.obj external\glfw\src\CMakeFiles\glfw.dir\win32_monitor.c.obj external\glfw\src\CMakeFiles\glfw.dir\win32_window.c.obj external\glfw\src\CMakeFiles\glfw.dir\wgl_context.c.obj
-  LANGUAGE_COMPILE_FLAGS = /DWIN32 /D_WINDOWS /W3 /MDd /Ob0 /Od /RTC1 -MDd
+  LANGUAGE_COMPILE_FLAGS = /DWIN32 /D_WINDOWS /Zi /Ob0 /Od /RTC1 -MDd
   LINK_FLAGS = /machine:x64
   OBJECT_DIR = external\glfw\src\CMakeFiles\glfw.dir
   POST_BUILD = cd .
@@ -713,11 +725,13 @@ build external\glfw\docs\install\local: phony external\glfw\docs\CMakeFiles\inst
 # =============================================================================
 # Target aliases.
 
-build GameEngine: phony bin\GameEngine.exe
+build Editor: phony bin\Editor.exe
 
-build GameEngine.exe: phony bin\GameEngine.exe
+build Editor.exe: phony bin\Editor.exe
 
-build GameEngineLib: phony GameEngineLib.lib
+build GameEngineLib: phony bin\GameEngineLib.dll
+
+build GameEngineLib.dll: phony bin\GameEngineLib.dll
 
 build glad: phony glad.lib
 
@@ -739,7 +753,7 @@ build update_mappings: phony external\glfw\src\update_mappings
 #############################################
 # Folder: C:/Users/Airidas/Desktop/GameEngine/GameEngine/out/build/x64-debug
 
-build all: phony GameEngineLib.lib glad.lib imgui.lib bin\GameEngine.exe external\glfw\all
+build all: phony glad.lib imgui.lib bin\GameEngineLib.dll bin\Editor.exe external\glfw\all
 
 # =============================================================================
 

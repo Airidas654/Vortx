@@ -13,9 +13,13 @@
   },
   "ExpandedNodes": [
     "",
-    "\\external",
-    "\\out"
+    "\\external\\imgui\\examples",
+    "\\include",
+    "\\include\\Engine",
+    "\\src",
+    "\\src\\Editor",
+    "\\src\\Engine"
   ],
-  "SelectedNode": "\\main.cpp",
+  "SelectedNode": "\\src\\Editor\\main.cpp",
   "PreviewInSolutionExplorer": false
 }
