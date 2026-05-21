@@ -19,15 +19,15 @@ target_include_directories(glad PUBLIC external/glad/include)
 
 # imgui is Editor-only — not linked into the Engine DLL
 file(GLOB IMGUI_SRC
-    external/imgui/*.cpp
-    external/imgui/backends/imgui_impl_glfw.cpp
-    external/imgui/backends/imgui_impl_opengl3.cpp
-    external/imgui/misc/cpp/imgui_stdlib.cpp
+    external/imgui-docking/*.cpp
+    external/imgui-docking/backends/imgui_impl_glfw.cpp
+    external/imgui-docking/backends/imgui_impl_opengl3.cpp
+    external/imgui-docking/misc/cpp/imgui_stdlib.cpp
 )
 add_library(imgui STATIC ${IMGUI_SRC})
 target_include_directories(imgui PUBLIC
-    external/imgui
-    external/imgui/backends
+    external/imgui-docking
+    external/imgui-docking/backends
 )
 target_link_libraries(imgui PUBLIC glfw glad)
 
@@ -77,13 +77,17 @@ endif()
 # ---------------------------------------------------------------
 file(GLOB_RECURSE SRC_EDITOR CONFIGURE_DEPENDS
     src/Editor/*.cpp
+    src/Common/*.cpp
 )
 
 add_executable(Editor ${SRC_EDITOR})
 
 target_include_directories(Editor PRIVATE
-    external/imgui
-    external/imgui/backends
+    external/imgui-docking
+    external/imgui-docking/backends
+    include/Common
+    include/Engine
+    include/Editor
 )
 
 target_link_libraries(Editor PRIVATE

@@ -13,13 +13,16 @@
   },
   "ExpandedNodes": [
     "",
-    "\\external\\imgui\\examples",
+    "\\external",
     "\\include",
+    "\\include\\Common",
+    "\\include\\Editor",
     "\\include\\Engine",
     "\\src",
+    "\\src\\Common",
     "\\src\\Editor",
     "\\src\\Engine"
   ],
-  "SelectedNode": "\\src\\Editor\\main.cpp",
+  "SelectedNode": "\\include\\Editor\\EditorInputManager.h",
   "PreviewInSolutionExplorer": false
 }

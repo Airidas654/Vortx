@@ -1,0 +1,97 @@
+#pragma once
+
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/matrix_decompose.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
+#include "imgui.h"
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl3.h"
+
+#include <string>
+#include <memory>
+#include <functional>
+
+//using ImportModelCallback = std::function<void(const std::string& path)>;
+//using ImportTextureCallback = std::function<AssetID(const std::string& path, bool sRGB)>;
+//using SaveSceneCallback = std::function<void(const std::string& path)>;
+//using LoadSceneCallback = std::function<void(const std::string& path)>;
+//using NewSceneCallback = std::function<void()>;
+
+class EditorUI {
+public:
+    EditorUI(GLFWwindow* window);
+    ~EditorUI();
+
+    void NewFrame();
+    void Render();
+    void Shutdown();
+
+   /* void SetImportModelCallback(ImportModelCallback cb) { importModel = cb; }
+    void SetImportTextureCallback(ImportTextureCallback cb) { importTexture = cb; }
+    void SetSaveSceneCallback(SaveSceneCallback cb) { onSaveScene = cb; }
+    void SetLoadSceneCallback(LoadSceneCallback cb) { onLoadScene = cb; }
+    void SetNewSceneCallback(NewSceneCallback cb) { onNewScene = cb; }
+
+    AssetID GetSelectedModelID() const { return selectedModelIDReadOnly; }
+
+    void ResetSelectedId() { ChangeSelectedID(AssetID(0)); };*/
+
+private:
+
+    void DrawMenuBar();
+    void RenderDockspace();
+    void DrawScenePanel();
+    /*void DrawPropertiesPanel();
+    void DrawViewportStatusBar();
+    void DrawRenderSettingsSection();
+
+    void RaytraceImageSave();
+
+    void DrawCameraTransformSection();
+    void DrawCameraSceneSection();
+    void DrawCameraSection();
+    void DrawTransformSection(Model* model);
+    void DrawMaterialSection(Model* model);
+    void DrawTextureSlot(const char* label, std::function<void(AssetID)> texture_replace, AssetID texID, bool needSRGB, const char* hint);
+
+    std::string OpenFileDialog(const char* filterDesc, const char* filterPattern);
+    std::string SaveFileDialog(const char* filterDesc, const char* filterPattern, const char* defaultExt);
+
+    void ChangeSelectedID(const AssetID& id);
+    */
+    GLFWwindow* window;
+
+    /*
+    std::unique_ptr<Scene>& scene;
+    RayTracing* raytracing;
+    EditorController* editor;
+
+    AssetID selectedModelIDReadOnly;
+
+    glm::vec3 cachedTranslation{ 0.0f };
+    glm::vec3 cachedRotation{ 0.0f };
+    glm::vec3 cachedScale{ 1.0f };
+
+    int uiRayBounces = 3;
+    int uiShadowBounces = 1;
+    int uiBatchSize = 1;
+    int uiTargetSamples = 512;
+    float uiExposure = 1.0f;
+    bool uiApplyGamma = false;
+    glm::ivec2 uiresolution = { 1280, 720 };
+    float uifov = 45;
+
+    bool sectionTransformOpen = true;
+    bool sectionMaterialOpen = true;
+    bool sectionRenderOpen = true;
+
+    ImportModelCallback importModel;
+    ImportTextureCallback importTexture;
+    SaveSceneCallback onSaveScene;
+    LoadSceneCallback onLoadScene;
+    NewSceneCallback onNewScene;*/
+};
