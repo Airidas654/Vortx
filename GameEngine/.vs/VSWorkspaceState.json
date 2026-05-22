@@ -23,6 +23,6 @@
     "\\src\\Editor",
     "\\src\\Engine"
   ],
-  "SelectedNode": "\\include\\Editor\\EditorInputManager.h",
+  "SelectedNode": "\\include\\Engine\\Scene.h",
   "PreviewInSolutionExplorer": false
 }

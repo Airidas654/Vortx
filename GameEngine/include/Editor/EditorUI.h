@@ -1,12 +1,13 @@
 #pragma once
 
+#include "AssetID.h"
+
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/matrix_decompose.hpp>
 #include <glm/gtc/type_ptr.hpp>
-
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
@@ -34,11 +35,11 @@ public:
     void SetImportTextureCallback(ImportTextureCallback cb) { importTexture = cb; }
     void SetSaveSceneCallback(SaveSceneCallback cb) { onSaveScene = cb; }
     void SetLoadSceneCallback(LoadSceneCallback cb) { onLoadScene = cb; }
-    void SetNewSceneCallback(NewSceneCallback cb) { onNewScene = cb; }
+    void SetNewSceneCallback(NewSceneCallback cb) { onNewScene = cb; }*/
 
     AssetID GetSelectedModelID() const { return selectedModelIDReadOnly; }
 
-    void ResetSelectedId() { ChangeSelectedID(AssetID(0)); };*/
+    void ResetSelectedId() { ChangeSelectedID(AssetID(0)); };
 
 private:
 
@@ -60,18 +61,18 @@ private:
 
     std::string OpenFileDialog(const char* filterDesc, const char* filterPattern);
     std::string SaveFileDialog(const char* filterDesc, const char* filterPattern, const char* defaultExt);
-
-    void ChangeSelectedID(const AssetID& id);
     */
+    void ChangeSelectedID(const AssetID& id);
+    
     GLFWwindow* window;
 
-    /*
-    std::unique_ptr<Scene>& scene;
-    RayTracing* raytracing;
-    EditorController* editor;
+    
+    //std::unique_ptr<Scene>& scene;
+    //RayTracing* raytracing;
+    //EditorController* editor;
 
     AssetID selectedModelIDReadOnly;
-
+    /*
     glm::vec3 cachedTranslation{ 0.0f };
     glm::vec3 cachedRotation{ 0.0f };
     glm::vec3 cachedScale{ 1.0f };

@@ -82,6 +82,8 @@ EditorUI::EditorUI(GLFWwindow* window) : window(window)
     c[ImGuiCol_ScrollbarGrabHovered] = ImVec4(0.34f, 0.34f, 0.38f, 1.00f);
     c[ImGuiCol_ScrollbarGrabActive] = accent;
 
+    ChangeSelectedID(AssetID(0));
+
     ImGui_ImplGlfw_InitForOpenGL(window, false);
     ImGui_ImplOpenGL3_Init("#version 460");
 }
@@ -252,49 +254,67 @@ void EditorUI::DrawMenuBar()
 
     ImGui::EndMenuBar();
 }
-//
-//void EditorUI::ChangeSelectedID(const AssetID& id)
-//{
-//    editor->ChangeSelectedID(id);
-//
-//    selectedModelIDReadOnly = id;
-//}
-//
+
+void EditorUI::ChangeSelectedID(const AssetID& id)
+{
+    selectedModelIDReadOnly = id;
+}
+
 void EditorUI::DrawScenePanel()
 {
-    if (ImGui::TreeNode("Hierarchy lines"))
-    {
-        ImGuiTreeNodeFlags base_flags = ImGuiTreeNodeFlags_DrawLinesFull | ImGuiTreeNodeFlags_DefaultOpen;
-        //ImGui::CheckboxFlags("ImGuiTreeNodeFlags_DrawLinesNone", &base_flags, ImGuiTreeNodeFlags_DrawLinesNone);
-        //ImGui::CheckboxFlags("ImGuiTreeNodeFlags_DrawLinesFull", &base_flags, ImGuiTreeNodeFlags_DrawLinesFull);
-        //ImGui::CheckboxFlags("ImGuiTreeNodeFlags_DrawLinesToNodes", &base_flags, ImGuiTreeNodeFlags_DrawLinesToNodes);
+    static int selectedNode = -1;
 
-        if (ImGui::TreeNodeEx("Parent", base_flags))
+    ImGuiTreeNodeFlags base_flags = 
+        ImGuiTreeNodeFlags_DrawLinesFull
+        | ImGuiTreeNodeFlags_DefaultOpen
+        | ImGuiTreeNodeFlags_OpenOnArrow   
+        | ImGuiTreeNodeFlags_OpenOnDoubleClick;
+
+    auto NodeFlags = [&](int id) {
+        return base_flags | (selectedNode == id ? ImGuiTreeNodeFlags_Selected : 0);
+    };
+
+    // --- Parent (id = 0) ---
+    bool parentOpen = ImGui::TreeNodeEx("Parent##0", NodeFlags(0));
+    if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen())
+        selectedNode = 0;
+
+    if (parentOpen)
+    {
+        // --- Child 1 (id = 1) ---
+        bool child1Open = ImGui::TreeNodeEx("Child 1##1", NodeFlags(1));
+        if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen())
+            selectedNode = 1;
+
+        if (child1Open)
         {
-            if (ImGui::TreeNodeEx("Child 1", base_flags))
+            // --- Child 1 > Child 1 (id = 2) ---
+            bool child1_1Open = ImGui::TreeNodeEx("Child 1##2", NodeFlags(2));
+            if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen())
+                selectedNode = 2;
+
+            if (child1_1Open)
             {
-                //ImGui::Button("Button for Child 1");
-                if (ImGui::TreeNodeEx("Child 1", base_flags))
-                {
-                    //ImGui::Button("Button for Child 1");
-                    if (ImGui::TreeNodeEx("Child 1", base_flags))
-                    {
-                        //ImGui::Button("Button for Child 1");
-                        ImGui::TreePop();
-                    }
+                // --- Child 1 > Child 1 > Child 1 (id = 3) ---
+                bool child1_1_1Open = ImGui::TreeNodeEx("Child 1##3", NodeFlags(3));
+                if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen())
+                    selectedNode = 3;
+
+                if (child1_1_1Open)
                     ImGui::TreePop();
-                }
+
                 ImGui::TreePop();
             }
-            if (ImGui::TreeNodeEx("Child 2", base_flags))
-            {
-                //ImGui::Button("Button for Child 2");
-                ImGui::TreePop();
-            }
-            ImGui::Text("Remaining contents");
-            ImGui::Text("Remaining contents");
             ImGui::TreePop();
         }
+
+        // --- Child 2 (id = 4) ---
+        bool child2Open = ImGui::TreeNodeEx("Child 2##4", NodeFlags(4));
+        if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen())
+            selectedNode = 4;
+
+        if (child2Open)
+            ImGui::TreePop();
 
         ImGui::TreePop();
     }
