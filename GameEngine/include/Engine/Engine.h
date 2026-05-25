@@ -1,12 +1,14 @@
 #pragma once
 #include "EngineAPI.h"
+#include "Scene.h"
 
 extern "C"
 {
     class ENGINE_API Engine {
     public:
+        std::unique_ptr<Scene> scene;
+
         void Init();
-        void Render();
     };
 
     

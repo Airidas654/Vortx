@@ -13,16 +13,16 @@
   },
   "ExpandedNodes": [
     "",
-    "\\external",
     "\\include",
-    "\\include\\Common",
-    "\\include\\Editor",
     "\\include\\Engine",
+    "\\include\\Engine\\Components",
+    "\\include\\Engine\\ECS",
+    "\\include\\Engine\\SimpleAPI",
     "\\src",
-    "\\src\\Common",
-    "\\src\\Editor",
-    "\\src\\Engine"
+    "\\src\\Engine",
+    "\\src\\Engine\\ECS",
+    "\\src\\Engine\\SimpleAPI"
   ],
-  "SelectedNode": "\\include\\Engine\\Scene.h",
+  "SelectedNode": "\\include\\Engine\\SimpleAPI\\Transform.h",
   "PreviewInSolutionExplorer": false
 }

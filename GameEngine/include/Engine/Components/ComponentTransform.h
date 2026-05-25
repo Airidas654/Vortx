@@ -2,6 +2,7 @@
 
 #include "AssetID.h"
 #include "SimpleAPI/GameObject.h"
+#include "SimpleAPI/Transform.h"
 
 #include <glm/glm.hpp>
 
@@ -12,12 +13,12 @@
 
 struct TransformData
 {
-	glm::vec3 position;
+	glm::vec2 position;
 	glm::vec1 rotation;
 	glm::vec2 scale;
 
-	std::optional<entt::entity> parent;
-	std::vector<entt::entity> children;
+	std::optional<Transform> parent;
+	std::vector<Transform> children;
 
 	glm::mat4 matrix;
 

@@ -36,6 +36,8 @@ target_link_libraries(imgui PUBLIC glfw glad)
 # ---------------------------------------------------------------
 file(GLOB_RECURSE SRC_ENGINE CONFIGURE_DEPENDS
     src/Engine/*.cpp
+    src/Engine/ECS/*.cpp
+    src/Engine/SimpleAPI/*.cpp
 )
 
 add_library(GameEngineLib SHARED ${SRC_ENGINE})

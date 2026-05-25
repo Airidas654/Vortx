@@ -14,7 +14,7 @@
 #  include <cstdio>
 #endif
 
-EditorUI::EditorUI(GLFWwindow* window) : window(window)
+EditorUI::EditorUI(GLFWwindow* window, Engine& engine) : window(window), engine(engine)
 {
     ImGui::StyleColorsDark();
     ImGuiStyle& style = ImGui::GetStyle();
@@ -262,7 +262,7 @@ void EditorUI::ChangeSelectedID(const AssetID& id)
 
 void EditorUI::DrawScenePanel()
 {
-    static int selectedNode = -1;
+    static std::optional<Entity> selectedNode = std::nullopt;
 
     ImGuiTreeNodeFlags base_flags = 
         ImGuiTreeNodeFlags_DrawLinesFull
@@ -270,54 +270,80 @@ void EditorUI::DrawScenePanel()
         | ImGuiTreeNodeFlags_OpenOnArrow   
         | ImGuiTreeNodeFlags_OpenOnDoubleClick;
 
-    auto NodeFlags = [&](int id) {
-        return base_flags | (selectedNode == id ? ImGuiTreeNodeFlags_Selected : 0);
+    auto NodeFlags = [&](Entity& id) {
+        return base_flags | ((selectedNode.has_value() && selectedNode.value() == id) ? ImGuiTreeNodeFlags_Selected : 0);
     };
 
-    // --- Parent (id = 0) ---
-    bool parentOpen = ImGui::TreeNodeEx("Parent##0", NodeFlags(0));
-    if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen())
-        selectedNode = 0;
+    /*bool parentOpen = ImGui::TreeNodeEx("Parent##", NodeFlags(0));
+    parentOpen = ImGui::TreeNodeEx("Parent##", NodeFlags(0));
 
-    if (parentOpen)
+    ImGui::TreePop();
+
+    ImGui::TreePop();*/
+
+    for (auto& i : engine.scene->GetChildren())
     {
-        // --- Child 1 (id = 1) ---
-        bool child1Open = ImGui::TreeNodeEx("Child 1##1", NodeFlags(1));
+        //std::cout << (uint32_t)(i.GetEntity().GetValue()) << std::endl;
+        ImGui::PushID((uint32_t)i.GetEntity().GetValue());
+        bool parentOpen = ImGui::TreeNodeEx("Node", NodeFlags(i.GetEntity()));
+
         if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen())
-            selectedNode = 1;
-
-        if (child1Open)
         {
-            // --- Child 1 > Child 1 (id = 2) ---
-            bool child1_1Open = ImGui::TreeNodeEx("Child 1##2", NodeFlags(2));
-            if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen())
-                selectedNode = 2;
-
-            if (child1_1Open)
-            {
-                // --- Child 1 > Child 1 > Child 1 (id = 3) ---
-                bool child1_1_1Open = ImGui::TreeNodeEx("Child 1##3", NodeFlags(3));
-                if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen())
-                    selectedNode = 3;
-
-                if (child1_1_1Open)
-                    ImGui::TreePop();
-
-                ImGui::TreePop();
-            }
-            ImGui::TreePop();
+            selectedNode.emplace(i.GetEntity());
         }
 
-        // --- Child 2 (id = 4) ---
-        bool child2Open = ImGui::TreeNodeEx("Child 2##4", NodeFlags(4));
-        if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen())
-            selectedNode = 4;
-
-        if (child2Open)
+        if (parentOpen) {
             ImGui::TreePop();
-
-        ImGui::TreePop();
+        }
+         //i.GameObject().Data();
+        
+        ImGui::PopID();
     }
+
+    //// --- Parent (id = 0) ---
+    //bool parentOpen = ImGui::TreeNodeEx("Parent##0", NodeFlags(0));
+    //if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen())
+    //    selectedNode = 0;
+
+    //if (parentOpen)
+    //{
+    //    // --- Child 1 (id = 1) ---
+    //    bool child1Open = ImGui::TreeNodeEx("Child 1##1", NodeFlags(1));
+    //    if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen())
+    //        selectedNode = 1;
+
+    //    if (child1Open)
+    //    {
+    //        // --- Child 1 > Child 1 (id = 2) ---
+    //        bool child1_1Open = ImGui::TreeNodeEx("Child 1##2", NodeFlags(2));
+    //        if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen())
+    //            selectedNode = 2;
+
+    //        if (child1_1Open)
+    //        {
+    //            // --- Child 1 > Child 1 > Child 1 (id = 3) ---
+    //            bool child1_1_1Open = ImGui::TreeNodeEx("Child 1##3", NodeFlags(3));
+    //            if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen())
+    //                selectedNode = 3;
+
+    //            if (child1_1_1Open)
+    //                ImGui::TreePop();
+
+    //            ImGui::TreePop();
+    //        }
+    //        ImGui::TreePop();
+    //    }
+
+    //    // --- Child 2 (id = 4) ---
+    //    bool child2Open = ImGui::TreeNodeEx("Child 2##4", NodeFlags(4));
+    //    if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen())
+    //        selectedNode = 4;
+
+    //    if (child2Open)
+    //        ImGui::TreePop();
+
+    //    ImGui::TreePop();
+    //}
 }
 //{
 //    float btnWidth = ImGui::GetContentRegionAvail().x;

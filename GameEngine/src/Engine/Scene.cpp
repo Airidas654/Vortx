@@ -1,31 +1,35 @@
 #include "Scene.h"
 
-
-void Scene::ChangeTransformParent(TransformData &transform, const TransformData *parent)
+extern "C"
 {
-	//if ((parent == nullptr && transform.parent == AssetID(0)) || transform.id == parent->id || transform.parent == parent->id) return;
 
-	//auto view = registry.view<Transform>();
+	void Scene::ChangeTransformParent(Transform& transform, const Transform* parent)
+	{
+		//if ((parent == nullptr && transform.parent == AssetID(0)) || transform.id == parent->id || transform.parent == parent->id) return;
 
-	//if (transform.parent == AssetID(0))
-	//{
-	//	std::remove(children.begin(), children.end(), transform.id);
-	//}
-	//else 
-	//{
-	//	//Transform &prev_parent = registry.g
+		//auto view = registry.view<Transform>();
 
-	//	//view.
-	//}
+		//if (transform.parent == AssetID(0))
+		//{
+		//	std::remove(children.begin(), children.end(), transform.id);
+		//}
+		//else 
+		//{
+		//	//Transform &prev_parent = registry.g
+
+		//	//view.
+		//}
 
 
-}
+	}
 
-GameObject Scene::CreateGameObject()
-{
-	GameObject entity = { registry.create(), registry };
+	GameObject Scene::CreateGameObject()
+	{
+		GameObject gameObject = { registry.Create() };
 
-	entity.AddComponent<TransformData>();
+		children.emplace_back(gameObject.AddComponent<Transform>());
 
-	return entity;
+		return gameObject;
+	}
+
 }

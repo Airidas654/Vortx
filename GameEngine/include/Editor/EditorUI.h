@@ -1,6 +1,7 @@
 #pragma once
 
 #include "AssetID.h"
+#include "Engine.h"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -24,7 +25,7 @@
 
 class EditorUI {
 public:
-    EditorUI(GLFWwindow* window);
+    EditorUI(GLFWwindow* window, Engine& engine);
     ~EditorUI();
 
     void NewFrame();
@@ -65,7 +66,7 @@ private:
     void ChangeSelectedID(const AssetID& id);
     
     GLFWwindow* window;
-
+    Engine& engine;
     
     //std::unique_ptr<Scene>& scene;
     //RayTracing* raytracing;

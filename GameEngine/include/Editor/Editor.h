@@ -6,6 +6,6 @@
 static class Editor
 {
 public:
-	static void Start(Engine* engine);
+	static void Start(Engine& engine);
 
 };

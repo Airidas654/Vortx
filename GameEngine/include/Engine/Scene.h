@@ -1,21 +1,30 @@
 #pragma once
 
+#include "EngineAPI.h"
 #include "Components/ComponentTransform.h"
+#include "SimpleAPI/Transform.h"
 
 #include "SimpleAPI/GameObject.h"
 
-#include "entt.hpp"
+#include "ECS/Registry.h"
 
-class Scene
+extern "C"
 {
-public:
 
-	void ChangeTransformParent(TransformData &transform, const TransformData *parent);
+	class ENGINE_API Scene
+	{
+	public:
 
-	GameObject CreateGameObject();
+		void ChangeTransformParent(Transform& transform, const Transform* parent);
 
-private:
-	entt::registry registry;
+		GameObject CreateGameObject();
 
-	std::vector<AssetID> children;
-};
+		std::vector<Transform>& GetChildren() { return children; }
+
+	private:
+		Registry registry;
+
+		std::vector<Transform> children;
+	};
+
+}

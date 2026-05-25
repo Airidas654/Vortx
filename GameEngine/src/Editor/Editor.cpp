@@ -1,6 +1,7 @@
 #include "Editor.h"
 #include "EditorUI.h"
 #include "EditorInputManager.h"
+#include "Scene.h"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -49,15 +50,24 @@ GLFWwindow* CreateWindow()
     return window;
 }
 
-void Editor::Start(Engine* engine)
+void Test(Engine& engine)
 {
-    engine->Init();
+    engine.scene->CreateGameObject();
+    engine.scene->CreateGameObject();
+    engine.scene->CreateGameObject();
+}
+
+void Editor::Start(Engine& engine)
+{
+    engine.Init();
 
     GLFWwindow* window = CreateWindow();
 
     EditorInputManager input(window);
 
-    EditorUI editorUI(window);
+    EditorUI editorUI(window, engine);
+
+    Test(engine);
 
     if (!window) return;
 
