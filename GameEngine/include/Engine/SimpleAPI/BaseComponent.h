@@ -12,6 +12,7 @@ protected:
 
 	virtual void _InternalCreate() = 0;
 
+	BaseComponent() = default;
 	BaseComponent(Entity entity) : entity(entity) {}
 	~BaseComponent() = default;
 

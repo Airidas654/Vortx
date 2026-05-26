@@ -6,6 +6,9 @@
 #include <cstring>
 #include <functional>
 
+#include "SimpleAPI/Transform.h"
+#include "Components/ComponentTransform.h"
+
 #ifdef _WIN32
 #  define WIN32_LEAN_AND_MEAN
 #  include <windows.h>
@@ -82,6 +85,7 @@ EditorUI::EditorUI(GLFWwindow* window, Engine& engine) : window(window), engine(
     c[ImGuiCol_ScrollbarGrabHovered] = ImVec4(0.34f, 0.34f, 0.38f, 1.00f);
     c[ImGuiCol_ScrollbarGrabActive] = accent;
 
+    selectedNode = std::nullopt;
     ChangeSelectedID(AssetID(0));
 
     ImGui_ImplGlfw_InitForOpenGL(window, false);
@@ -260,90 +264,125 @@ void EditorUI::ChangeSelectedID(const AssetID& id)
     selectedModelIDReadOnly = id;
 }
 
-void EditorUI::DrawScenePanel()
+static bool hasPendingMove = false;
+static Transform moveNode;
+static std::optional<Transform> moveTargetParent;
+//static int  s_moveTargetIndex = -1;
+
+void ApplyPendingMove() {
+    
+    if (!hasPendingMove) return;
+    hasPendingMove = false;
+
+    moveNode.SetParent(moveTargetParent);
+}
+
+void RenderDropZone(std::optional<Transform> parent, int insertIndex) {
+    ImVec2 pos = ImGui::GetCursorScreenPos();
+    ImGui::InvisibleButton("##dropzone", ImVec2(-1.0f, 1.0f));
+
+    if (ImGui::BeginDragDropTarget()) {
+        // Draw insertion line
+        ImDrawList* dl = ImGui::GetWindowDrawList();
+        float y = pos.y;
+        dl->AddLine({ pos.x, y },
+            { pos.x + ImGui::GetContentRegionAvail().x, y },
+            IM_COL32(255, 165, 0, 255), 2.0f);
+
+        if (auto* payload = ImGui::AcceptDragDropPayload("SCENE_NODE")) {
+            /*s_moveNodeId = *(int*)payload->Data;
+            s_moveTargetParentId = parentId;
+            s_moveTargetIndex = insertIndex;
+            s_hasPendingMove = true;*/
+
+            hasPendingMove = true;
+            moveNode = *(Transform*)payload->Data;
+            moveTargetParent = parent;
+        }
+        ImGui::EndDragDropTarget();
+    }
+}
+
+const ImGuiTreeNodeFlags base_flags =
+ImGuiTreeNodeFlags_DrawLinesFull
+| ImGuiTreeNodeFlags_DefaultOpen
+| ImGuiTreeNodeFlags_OpenOnArrow
+| ImGuiTreeNodeFlags_OpenOnDoubleClick;
+
+void EditorUI::RenderSceneNode(Transform& transform, uint32_t index)
 {
-    static std::optional<Entity> selectedNode = std::nullopt;
+    ImGui::PushID((uint32_t)transform.GetEntity().GetValue());
 
-    ImGuiTreeNodeFlags base_flags = 
-        ImGuiTreeNodeFlags_DrawLinesFull
-        | ImGuiTreeNodeFlags_DefaultOpen
-        | ImGuiTreeNodeFlags_OpenOnArrow   
-        | ImGuiTreeNodeFlags_OpenOnDoubleClick;
+    std::vector<Transform>& children = transform.Data().children;
 
-    auto NodeFlags = [&](Entity& id) {
-        return base_flags | ((selectedNode.has_value() && selectedNode.value() == id) ? ImGuiTreeNodeFlags_Selected : 0);
-    };
+    ImGuiTreeNodeFlags flags = base_flags |
+        ((selectedNode.has_value() && selectedNode.value() == transform.GetEntity()) ? ImGuiTreeNodeFlags_Selected : 0) |
+        ((children.size() == 0) ? ImGuiTreeNodeFlags_Leaf : 0);
 
-    /*bool parentOpen = ImGui::TreeNodeEx("Parent##", NodeFlags(0));
-    parentOpen = ImGui::TreeNodeEx("Parent##", NodeFlags(0));
+    RenderDropZone(transform.GetParent(), index);
 
-    ImGui::TreePop();
+    bool parentOpen = ImGui::TreeNodeEx("Node", flags);
 
-    ImGui::TreePop();*/
-
-    for (auto& i : engine.scene->GetChildren())
+    if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen())
     {
-        //std::cout << (uint32_t)(i.GetEntity().GetValue()) << std::endl;
-        ImGui::PushID((uint32_t)i.GetEntity().GetValue());
-        bool parentOpen = ImGui::TreeNodeEx("Node", NodeFlags(i.GetEntity()));
-
-        if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen())
-        {
-            selectedNode.emplace(i.GetEntity());
-        }
-
-        if (parentOpen) {
-            ImGui::TreePop();
-        }
-         //i.GameObject().Data();
-        
-        ImGui::PopID();
+        selectedNode.emplace(transform.GetEntity());
     }
 
-    //// --- Parent (id = 0) ---
-    //bool parentOpen = ImGui::TreeNodeEx("Parent##0", NodeFlags(0));
-    //if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen())
-    //    selectedNode = 0;
+    if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID)) 
+    {
+        ImGui::SetDragDropPayload("SCENE_NODE", &transform, sizeof(Transform));
+        ImGui::Text("Node");
+        ImGui::EndDragDropSource();
+    }
 
-    //if (parentOpen)
-    //{
-    //    // --- Child 1 (id = 1) ---
-    //    bool child1Open = ImGui::TreeNodeEx("Child 1##1", NodeFlags(1));
-    //    if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen())
-    //        selectedNode = 1;
+    if (ImGui::BeginDragDropTarget()) {
+        // Highlight the target node
+        ImGui::GetWindowDrawList()->AddRectFilled(
+            ImGui::GetItemRectMin(), ImGui::GetItemRectMax(),
+            IM_COL32(255, 165, 0, 40));
 
-    //    if (child1Open)
-    //    {
-    //        // --- Child 1 > Child 1 (id = 2) ---
-    //        bool child1_1Open = ImGui::TreeNodeEx("Child 1##2", NodeFlags(2));
-    //        if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen())
-    //            selectedNode = 2;
+        if (auto* payload = ImGui::AcceptDragDropPayload("SCENE_NODE")) {
+            Transform dragged = *(Transform*)payload->Data;
 
-    //        if (child1_1Open)
-    //        {
-    //            // --- Child 1 > Child 1 > Child 1 (id = 3) ---
-    //            bool child1_1_1Open = ImGui::TreeNodeEx("Child 1##3", NodeFlags(3));
-    //            if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen())
-    //                selectedNode = 3;
+            if (dragged != transform) 
+            { 
+                //s_moveNodeId = draggedId;
+                //s_moveTargetParentId = node.id;
+                //s_moveTargetIndex = (int)node.children.size(); // append
+                //s_hasPendingMove = true;
+                hasPendingMove = true;
+                moveNode = dragged;
+                moveTargetParent = std::optional<Transform>(transform);
+            }
+        }
+        ImGui::EndDragDropTarget();
+    }
 
-    //            if (child1_1_1Open)
-    //                ImGui::TreePop();
+    if (parentOpen) {
 
-    //            ImGui::TreePop();
-    //        }
-    //        ImGui::TreePop();
-    //    }
+        uint32_t index = 0;
+        for (auto& i : children)
+        {
+            RenderSceneNode(i, index++);
+        }
 
-    //    // --- Child 2 (id = 4) ---
-    //    bool child2Open = ImGui::TreeNodeEx("Child 2##4", NodeFlags(4));
-    //    if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen())
-    //        selectedNode = 4;
+        RenderDropZone(std::optional<Transform>(transform), children.size());
 
-    //    if (child2Open)
-    //        ImGui::TreePop();
+        ImGui::TreePop();
+    }
 
-    //    ImGui::TreePop();
-    //}
+    ImGui::PopID();
+}
+
+void EditorUI::DrawScenePanel()
+{
+    ApplyPendingMove();
+
+    uint32_t index = 0;
+    for (auto& i : Scene::current->GetChildren())
+    {
+        RenderSceneNode(i, index++);
+    }
 }
 //{
 //    float btnWidth = ImGui::GetContentRegionAvail().x;

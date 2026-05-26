@@ -2,6 +2,8 @@
 
 #include "Components/ComponentTransform.h"
 
+#include "Scene.h"
+
 void Transform::_InternalCreate()
 {
 	entity.AddComponent<TransformData>();
@@ -25,6 +27,26 @@ glm::vec2& Transform::Position()
 glm::vec1& Transform::Rotation()
 {
 	return entity.GetComponent<TransformData>().rotation;
+}
+
+std::vector<Transform>& Transform::GetChildren()
+{
+	return entity.GetComponent<TransformData>().children;
+}
+
+std::optional<Transform> Transform::GetParent()
+{
+	return entity.GetComponent<TransformData>().parent;
+}
+
+void Transform::SetParent(std::optional<Transform> parent)
+{
+	Scene::current->ChangeTransformParent(*this, parent);
+}
+
+void Transform::SetParent(std::optional<Transform> parent, uint32_t index)
+{
+	Scene::current->ChangeTransformParent(*this, parent, index);
 }
 
 glm::vec2& Transform::Scale()

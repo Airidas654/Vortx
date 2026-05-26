@@ -47,6 +47,7 @@ private:
     void DrawMenuBar();
     void RenderDockspace();
     void DrawScenePanel();
+    void RenderSceneNode(Transform& transform, uint32_t index);
     /*void DrawPropertiesPanel();
     void DrawViewportStatusBar();
     void DrawRenderSettingsSection();
@@ -72,6 +73,7 @@ private:
     //RayTracing* raytracing;
     //EditorController* editor;
 
+    std::optional<Entity> selectedNode;
     AssetID selectedModelIDReadOnly;
     /*
     glm::vec3 cachedTranslation{ 0.0f };

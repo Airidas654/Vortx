@@ -52,9 +52,13 @@ GLFWwindow* CreateWindow()
 
 void Test(Engine& engine)
 {
-    engine.scene->CreateGameObject();
-    engine.scene->CreateGameObject();
-    engine.scene->CreateGameObject();
+    Scene::current->CreateGameObject();
+    Scene::current->CreateGameObject();
+    Transform par = Scene::current->CreateGameObject().GetComponent<Transform>();
+
+    Transform chil = Scene::current->CreateGameObject().GetComponent<Transform>();
+
+    chil.SetParent(par);
 }
 
 void Editor::Start(Engine& engine)

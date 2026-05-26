@@ -3,5 +3,5 @@
 
 Entity Registry::Create()
 {
-	return Entity(*this, registry.create());
+	return Entity(this, registry.create());
 }

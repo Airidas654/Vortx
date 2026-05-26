@@ -6,8 +6,6 @@ extern "C"
 {
     class ENGINE_API Engine {
     public:
-        std::unique_ptr<Scene> scene;
-
         void Init();
     };
 
