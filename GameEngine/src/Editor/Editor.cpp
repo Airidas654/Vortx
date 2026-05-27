@@ -2,6 +2,7 @@
 #include "EditorUI.h"
 #include "EditorInputManager.h"
 #include "Scene.h"
+#include "PropertiesLoader.h"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -50,8 +51,17 @@ GLFWwindow* CreateWindow()
     return window;
 }
 
+void LoadScene()
+{
+    Scene::current = std::unique_ptr<Scene>(new Scene());
+
+    PropertiesLoader::Reset();
+}
+
 void Test(Engine& engine)
 {
+    LoadScene();
+
     Scene::current->CreateGameObject();
     Scene::current->CreateGameObject();
     Transform par = Scene::current->CreateGameObject().GetComponent<Transform>();
@@ -59,6 +69,7 @@ void Test(Engine& engine)
     Transform chil = Scene::current->CreateGameObject().GetComponent<Transform>();
 
     chil.SetParent(par);
+    chil.GameObject().NameSet("Child");
 }
 
 void Editor::Start(Engine& engine)

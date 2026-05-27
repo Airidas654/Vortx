@@ -1,10 +1,12 @@
 #pragma once
 
+#include "EngineAPI.h"
+
 #include "entt.hpp"
 
 class Entity;
 
-class Registry
+class ENGINE_API Registry
 {
 private:
 	entt::registry registry;
@@ -15,6 +17,11 @@ public:
 	~Registry() = default;
 
 	Entity Create();
+
+	auto Registry::Storage()
+	{
+		return registry.storage();
+	}
 
 	template<typename T>
 	T& AddComponent(Entity& entity)

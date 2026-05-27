@@ -33,6 +33,8 @@ public:
 
 	entt::entity GetValue() { return entity; }
 
+	Registry& GetRegistry() { return *registry; }
+
 	bool operator== (Entity& other) { return entity == other.entity; }
 	bool operator== (const Entity& other) const { return entity == other.entity; }
 

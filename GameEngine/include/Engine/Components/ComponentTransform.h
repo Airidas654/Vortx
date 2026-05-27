@@ -4,9 +4,9 @@
 #include "SimpleAPI/GameObject.h"
 #include "SimpleAPI/Transform.h"
 
-#include <glm/glm.hpp>
+#pragma once
 
-#include "entt.hpp"
+#include <glm/glm.hpp>
 
 #include <vector>
 #include <optional>

@@ -48,8 +48,8 @@ private:
     void RenderDockspace();
     void DrawScenePanel();
     void RenderSceneNode(Transform& transform, uint32_t index);
-    /*void DrawPropertiesPanel();
-    void DrawViewportStatusBar();
+    void DrawPropertiesPanel();
+    /*void DrawViewportStatusBar();
     void DrawRenderSettingsSection();
 
     void RaytraceImageSave();

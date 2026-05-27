@@ -1,27 +1,22 @@
 #pragma once
 
 #include "ECS/Entity.h"
+#include "EngineAPI.h"
+#include "SimpleAPI/BaseComponent.h"
 
-class GameObject
+class ENGINE_API GameObject : public BaseComponent
 {
-public:
-    GameObject(Entity entity)
-        : entity(entity)
-    {
-    }
-
-    template<typename T>
-    T AddComponent()
-    {
-        return T(entity, true);
-    }
-
-    template<typename T>
-    T GetComponent()
-    {
-        return T(entity);
-    }
-
 private:
-    Entity entity;
+    void _InternalCreate() override;
+
+public:
+    GameObject(Entity entity) : BaseComponent(entity) {}
+
+    GameObject(Entity entity, bool create);
+
+    const std::string& NameGet();
+    void NameSet(const std::string& name);
+
+    const std::string& TagGet();
+    void TagSet(const std::string& tag);
 };

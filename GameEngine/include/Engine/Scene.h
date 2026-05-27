@@ -9,31 +9,25 @@
 
 #include <optional>
 
-extern "C"
+class ENGINE_API Transform;
+
+class ENGINE_API Scene
 {
-	class Transform;
+public:
 
-	class ENGINE_API Scene
-	{
-	public:
+	static std::unique_ptr<Scene> current;
 
-		static std::unique_ptr<Scene> current;
+	void ChangeTransformParent(Transform& transform, std::optional<Transform>& parent);
+	void ChangeTransformParent(Transform& transform, std::optional<Transform>& parent, uint32_t index);
 
-		void ChangeTransformParent(Transform& transform, std::optional<Transform> &parent);
-		void ChangeTransformParent(Transform& transform, std::optional<Transform> &parent, uint32_t index);
+	GameObject CreateGameObject();
 
-		
+	std::vector<Transform>& GetChildren() { return children; }
 
-		GameObject CreateGameObject();
+private:
+	Registry registry;
 
-		std::vector<Transform>& GetChildren() { return children; }
+	std::vector<Transform> children;
 
-	private:
-		Registry registry;
-
-		std::vector<Transform> children;
-
-		void DetachFromParent(Transform& transform);
-	};
-
-}
+	void DetachFromParent(Transform& transform);
+};

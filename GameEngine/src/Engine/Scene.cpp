@@ -2,6 +2,7 @@
 
 #include "SimpleAPI/Transform.h" 
 #include "Components/ComponentTransform.h" 
+#include "Components/ComponentMetadata.h" 
 
 #include <iostream>
 
@@ -13,22 +14,14 @@ void Scene::DetachFromParent(Transform& transform)
 
 	std::optional<Transform> parent = data.parent;
 
-	 std::cout << "this " << (uint32_t)transform.GetEntity().GetValue() << std::endl;
-		
 	if (!parent.has_value())
 	{
-		std::cout << "empty" << std::endl;
-
 		const auto it = std::remove(children.begin(), children.end(), transform);
 
 		children.erase(it, children.end());
 	}
 	else
 	{
-		std::cout << "parent " << (uint32_t)parent.value().GetEntity().GetValue() << std::endl;
-
-		std::cout << "not empty" << std::endl;
-
 		std::vector<Transform>& child = parent.value().GetChildren();
 
 		const auto it = std::remove(child.begin(), child.end(), transform);
@@ -47,20 +40,17 @@ void Scene::ChangeTransformParent(Transform& transform, std::optional<Transform>
 	{
 		index = std::max(0u, std::min((uint32_t)children.size(), index));
 
-		//children.emplace(children.begin() + index, transform);
-		children.emplace_back(transform);
+		children.emplace(children.begin() + index, transform);
 	}
 	else
 	{
-		TransformData& data = parent.value().Data();
+		TransformData& data_parent = parent.value().Data();
 
-		index = std::max(0u, std::min((uint32_t)data.children.size(), index));
+		index = std::max(0u, std::min((uint32_t)data_parent.children.size(), index));
 
-		//data.children.emplace(data.children.begin() + index, transform);
+		data_parent.children.emplace(data_parent.children.begin() + index, transform);
 
-		data.children.emplace_back(transform);
-
-		data.parent = parent;
+		transform.Data().parent = parent;
 	}
 }
 
@@ -74,6 +64,7 @@ GameObject Scene::CreateGameObject()
 	GameObject gameObject = { registry.Create() };
 
 	children.emplace_back(gameObject.AddComponent<Transform>());
+	gameObject.GetEntity().AddComponent<MetadataData>();
 
 	return gameObject;
 }
