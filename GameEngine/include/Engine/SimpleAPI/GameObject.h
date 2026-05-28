@@ -10,6 +10,8 @@ private:
     void _InternalCreate() override;
 
 public:
+    GameObject() : BaseComponent() {}
+
     GameObject(Entity entity) : BaseComponent(entity) {}
 
     GameObject(Entity entity, bool create);

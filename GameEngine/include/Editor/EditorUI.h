@@ -38,9 +38,9 @@ public:
     void SetLoadSceneCallback(LoadSceneCallback cb) { onLoadScene = cb; }
     void SetNewSceneCallback(NewSceneCallback cb) { onNewScene = cb; }*/
 
-    AssetID GetSelectedModelID() const { return selectedModelIDReadOnly; }
+    std::optional<Entity> GetSelected() const { return selectedNode; }
 
-    void ResetSelectedId() { ChangeSelectedID(AssetID(0)); };
+    void ResetSelected() { ChangeSelected(std::nullopt); };
 
 private:
 
@@ -64,7 +64,7 @@ private:
     std::string OpenFileDialog(const char* filterDesc, const char* filterPattern);
     std::string SaveFileDialog(const char* filterDesc, const char* filterPattern, const char* defaultExt);
     */
-    void ChangeSelectedID(const AssetID& id);
+    void ChangeSelected(const std::optional<Entity>& entity);
     
     GLFWwindow* window;
     Engine& engine;
@@ -74,7 +74,7 @@ private:
     //EditorController* editor;
 
     std::optional<Entity> selectedNode;
-    AssetID selectedModelIDReadOnly;
+
     /*
     glm::vec3 cachedTranslation{ 0.0f };
     glm::vec3 cachedRotation{ 0.0f };

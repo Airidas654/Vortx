@@ -22,6 +22,8 @@ public:
 
 	GameObject CreateGameObject();
 
+	Registry& GetRegistry() { return registry; };
+
 	std::vector<Transform>& GetChildren() { return children; }
 
 private:

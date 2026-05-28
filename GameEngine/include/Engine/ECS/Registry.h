@@ -18,9 +18,15 @@ public:
 
 	Entity Create();
 
-	auto Registry::Storage()
+	auto Storage()
 	{
 		return registry.storage();
+	}
+
+	template<typename T>
+	auto View()
+	{
+		return registry.view<T>();
 	}
 
 	template<typename T>

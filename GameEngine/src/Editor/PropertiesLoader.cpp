@@ -12,6 +12,9 @@
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
+#include "misc/cpp/imgui_stdlib.h"
+
+#include <iostream>
 
 std::unordered_map<entt::id_type, PropertiesLoader::DrawFn> PropertiesLoader::componentFunc;
 std::unordered_map<entt::id_type, std::string> PropertiesLoader::componentNames;
@@ -23,16 +26,35 @@ void PropertiesLoader::Reset()
 
     RegisterComponent<TransformData>("Transform", [](Entity entity) {
             auto& t = entity.GetComponent<TransformData>();
-            //ImGui::DragFloat3("Position", &t.position.x, 0.1f);
-            //ImGui::DragFloat3("Rotation", &t.rotation.x, 0.1f);
-            //ImGui::DragFloat3("Scale", &t.scale.x, 0.01f);
+
+            ImGui::Spacing();
+
+            ImGui::TextDisabled("Position");
+            ImGui::DragFloat2("##pos", (float*)&t.position, 0.1f, 0.0f, 0.0f, "%.2f", 0);
+            ImGui::TextDisabled("Rotation");
+            ImGui::DragFloat("##rot", (float*)&t.rotation, 0.1f, 0.0f, 0.0f, "%.2f", 0);
+            ImGui::TextDisabled("Scale");
+            ImGui::DragFloat2("##sca", (float*)&t.scale, 0.1f, 0.0f, 0.0f, "%.2f", 0);
+
+            ImGui::Spacing();
     });
 
     RegisterComponent<MetadataData>("Object", [](Entity entity) {
         auto& t = entity.GetComponent<MetadataData>();
-        //ImGui::DragFloat3("Position", &t.position.x, 0.1f);
-        //ImGui::DragFloat3("Rotation", &t.rotation.x, 0.1f);
-        //ImGui::DragFloat3("Scale", &t.scale.x, 0.01f);
+        
+        ImGui::Spacing();
+        ImGui::AlignTextToFramePadding();
+        ImGui::TextDisabled("Name");
+        ImGui::SameLine();
+        ImGui::InputText("##name", &t.name, ImGuiInputTextFlags_AutoSelectAll); 
+
+        ImGui::Spacing();
+        ImGui::AlignTextToFramePadding();
+        ImGui::TextDisabled("Tag");
+        ImGui::SameLine();
+        ImGui::InputText("##tag", &t.tag, ImGuiInputTextFlags_AutoSelectAll);
+
+        ImGui::Spacing();
     });
 }
 

@@ -3,6 +3,9 @@
 #include "EditorInputManager.h"
 #include "Scene.h"
 #include "PropertiesLoader.h"
+#include "Scripting/ScriptSystem.h"
+
+#include "GameTest.h" 
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -68,6 +71,8 @@ void Test(Engine& engine)
 
     Transform chil = Scene::current->CreateGameObject().GetComponent<Transform>();
 
+    chil.GetEntity().AddComponent<GameTest>().InnerSetGameObject(chil.GameObject());
+
     chil.SetParent(par);
     chil.GameObject().NameSet("Child");
 }
@@ -98,6 +103,8 @@ void Editor::Start(Engine& engine)
         glfwPollEvents();
 
         ImGui_ImplGlfw_NewFrame();
+
+        ScriptSystem::instance().onUpdate();
 
         editorUI.NewFrame();
 

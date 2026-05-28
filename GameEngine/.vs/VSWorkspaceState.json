@@ -15,14 +15,14 @@
     "",
     "\\include",
     "\\include\\Engine",
-    "\\include\\Engine\\Components",
-    "\\include\\Engine\\ECS",
-    "\\include\\Engine\\SimpleAPI",
+    "\\include\\Engine\\Scripting",
+    "\\include\\Game",
     "\\src",
+    "\\src\\Editor",
     "\\src\\Engine",
     "\\src\\Engine\\ECS",
     "\\src\\Engine\\SimpleAPI"
   ],
-  "SelectedNode": "\\external",
+  "SelectedNode": "\\include\\Engine\\GameEngineIncludes.h",
   "PreviewInSolutionExplorer": false
 }

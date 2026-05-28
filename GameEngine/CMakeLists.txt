@@ -49,6 +49,7 @@ target_compile_definitions(GameEngineLib
 
 target_include_directories(GameEngineLib PUBLIC
     include/Engine
+    include/Game
     external/glfw/include
     external/glad/include
     external/glm
