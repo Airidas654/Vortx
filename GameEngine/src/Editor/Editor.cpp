@@ -71,7 +71,7 @@ void Test(Engine& engine)
 
     Transform chil = Scene::current->CreateGameObject().GetComponent<Transform>();
 
-    chil.GetEntity().AddComponent<GameTest>().InnerSetGameObject(chil.GameObject());
+    chil.AddComponent<GameTest>();
 
     chil.SetParent(par);
     chil.GameObject().NameSet("Child");
@@ -104,7 +104,7 @@ void Editor::Start(Engine& engine)
 
         ImGui_ImplGlfw_NewFrame();
 
-        ScriptSystem::instance().onUpdate();
+        ScriptSystem::instance().Update();
 
         editorUI.NewFrame();
 

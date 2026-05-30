@@ -2,6 +2,10 @@
 
 #include "ECS/Entity.h"
 
+#include <type_traits>
+
+#include "Scripting\ScriptBase.h"
+
 class BaseComponent
 {
 public:
@@ -10,13 +14,29 @@ public:
     template<typename T>
     T AddComponent()
     {
-        return T(entity, true);
+        if constexpr (std::is_base_of_v<ScriptBase<T>, T>)
+        {
+            T& script = entity.AddComponent<T>();
+            script.InnerSetGameObject(GameObject(entity));
+            return script;
+        }
+        else
+        {
+            return T(entity, true);
+        }
     }
 
     template<typename T>
     T GetComponent()
     {
-        return T(entity);
+        if constexpr (std::is_base_of_v<ScriptBase<T>, T>)
+        {
+            return entity.GetComponent<T>();
+        }
+        else
+        {
+            return T(entity);
+        }
     }
 
 protected:

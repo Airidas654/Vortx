@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Scripting/ScriptBase.h"
+#include "GameEngineIncludes.h"
 
 #include <iostream>
 

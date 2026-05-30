@@ -14,15 +14,15 @@
   "ExpandedNodes": [
     "",
     "\\include",
+    "\\include\\Editor",
     "\\include\\Engine",
-    "\\include\\Engine\\Scripting",
-    "\\include\\Game",
+    "\\include\\Engine\\SimpleAPI",
     "\\src",
-    "\\src\\Editor",
     "\\src\\Engine",
     "\\src\\Engine\\ECS",
+    "\\src\\Engine\\Scripting",
     "\\src\\Engine\\SimpleAPI"
   ],
-  "SelectedNode": "\\include\\Engine\\GameEngineIncludes.h",
+  "SelectedNode": "\\src\\Editor\\PropertiesLoader.cpp",
   "PreviewInSolutionExplorer": false
 }

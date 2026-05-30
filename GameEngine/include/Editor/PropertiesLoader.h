@@ -22,11 +22,16 @@ public:
 	static void DrawPropertiesPanel(std::optional<Entity>& selected);
 
 private:
+
+	static void RegisterComponent(entt::id_type hash, const std::string& name, DrawFn fn)
+	{
+		componentFunc[hash] = std::move(fn);
+		componentNames[hash] = name;
+	}
+
 	template<typename T>
 	static void RegisterComponent(const std::string& name, DrawFn fn)
 	{
-		auto id = entt::type_hash<T>::value();
-		componentFunc[id] = std::move(fn);
-		componentNames[id] = name;
+		RegisterComponent(entt::type_hash<T>::value(), name, fn);
 	}
 };

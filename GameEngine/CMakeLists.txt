@@ -38,6 +38,7 @@ file(GLOB_RECURSE SRC_ENGINE CONFIGURE_DEPENDS
     src/Engine/*.cpp
     src/Engine/ECS/*.cpp
     src/Engine/SimpleAPI/*.cpp
+    src/Engine/Scripting/*.cpp
 )
 
 add_library(GameEngineLib SHARED ${SRC_ENGINE})

@@ -1,6 +1,8 @@
 #pragma once
 
-#include "GameEngineIncludes.h"
+#include "Scripting/ScriptSystem.h"
+
+class GameObject;
 
 template<typename Derived>
 class ScriptBase {
@@ -8,6 +10,7 @@ class ScriptBase {
 
 public:
 
+    bool _started;
     GameObject gameObject;
 
     void InnerSetGameObject(GameObject& gameObject)
@@ -19,8 +22,9 @@ public:
     void onUpdate() {}
     void onDestroy() {}
 
-    ScriptBase() = default;
-
-protected:
+    ScriptBase()
+    {
+        _started = false;
+    }
     
 };
