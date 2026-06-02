@@ -54,7 +54,7 @@ glm::vec2& Transform::Scale()
 	return entity.GetComponent<TransformData>().scale;
 }
 
-GameObject Transform::GameObject()
+GameObject Transform::GetGameObject()
 {
-	return GameObject::GameObject(entity);
+	return GameObject(entity);
 }

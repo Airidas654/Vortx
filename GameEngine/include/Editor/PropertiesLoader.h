@@ -8,7 +8,7 @@
 #include <unordered_map>
 #include <optional>
 
-static class PropertiesLoader
+class PropertiesLoader
 {
 public:
 

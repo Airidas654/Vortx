@@ -4,8 +4,6 @@
 #include "SimpleAPI/GameObject.h"
 #include "SimpleAPI/Transform.h"
 
-#pragma once
-
 #include <glm/glm.hpp>
 
 #include <vector>
@@ -24,7 +22,7 @@ struct TransformData
 
 	TransformData()
 	{
-		position = glm::vec3(0);
+		position = glm::vec2(0);
 		rotation = glm::vec1(0);
 		scale = glm::vec2(1,1);
 

@@ -4,13 +4,10 @@
 #include "Scene.h"
 
 void GameObject::_InternalCreate()
-{
-	Scene::current->CreateGameObject();
-}
+{}
 
 GameObject::GameObject(Entity entity, bool create) : BaseComponent(entity)
 {
-	_InternalCreate();
 }
 
 const std::string& GameObject::NameGet()

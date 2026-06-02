@@ -3,7 +3,7 @@
 #include "DynamicLibrary.h"
 #include "Engine.h"
 
-static class Editor
+class Editor
 {
 public:
 	static void Start(Engine& engine);

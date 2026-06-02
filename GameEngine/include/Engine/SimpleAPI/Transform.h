@@ -41,7 +41,7 @@ public:
 
 	TransformData& Data();
 
-	GameObject GameObject();
+	GameObject GetGameObject();
 
 	bool operator== (Transform& other) { return entity == other.entity; }
 	bool operator== (const Transform& other) const { return entity == other.entity; }

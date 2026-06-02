@@ -18,9 +18,9 @@ public:
         this->gameObject = gameObject;
     }
 
-    void onStart() {}
-    void onUpdate() {}
-    void onDestroy() {}
+    void Start() {}
+    void Update() {}
+    void Destroy() {}
 
     ScriptBase()
     {

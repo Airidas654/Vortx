@@ -4,20 +4,20 @@
 
 #include <iostream>
 
+using namespace Vortx;
+
 class GameTest : public ScriptBase<GameTest> {
 public:
     
-    GameTest() = default;
-
-    void onStart() {
+    void Start() {
         std::cout << "started" << std::endl;
     }
 
-    void onUpdate() {
-        gameObject.GetComponent<Transform>().Data().position.x += 0.01f;
+    void Update() {
+        gameObject.GetComponent<Transform>().Data().position.x += 1.0f * Time::deltaTime;
     }
 
-    void onDestroy() {
+    void Destroy() {
         std::cout << "destroyed" << std::endl;
     }
 

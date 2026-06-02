@@ -16,5 +16,5 @@ void Engine::Init()
 {
 	std::cout << "engine" << std::endl;
 
-	Scene::current = std::unique_ptr<Scene>(new Scene());
+	Scene::current = nullptr;
 }

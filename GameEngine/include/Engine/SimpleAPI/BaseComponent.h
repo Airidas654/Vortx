@@ -12,30 +12,33 @@ public:
 	Entity GetEntity() const { return entity; }
 
     template<typename T>
-    T AddComponent()
+    decltype(auto) AddComponent()
     {
-        if constexpr (std::is_base_of_v<ScriptBase<T>, T>)
+        if constexpr (std::is_base_of_v<BaseComponent, T>)
         {
-            T& script = entity.AddComponent<T>();
-            script.InnerSetGameObject(GameObject(entity));
-            return script;
+            return T(entity, true);
         }
         else
         {
-            return T(entity, true);
+            T& comp = entity.AddComponent<T>();
+            if constexpr (std::is_base_of_v<ScriptBase<T>, T>)
+            {
+                comp.InnerSetGameObject(GameObject(entity));
+            }
+            return comp;
         }
     }
 
     template<typename T>
-    T GetComponent()
+    decltype(auto) GetComponent()
     {
-        if constexpr (std::is_base_of_v<ScriptBase<T>, T>)
+        if constexpr (std::is_base_of_v<BaseComponent, T>)
         {
-            return entity.GetComponent<T>();
+            return T(entity);
         }
         else
         {
-            return T(entity);
+            return entity.GetComponent<T>();
         }
     }
 

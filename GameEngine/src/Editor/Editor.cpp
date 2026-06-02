@@ -4,6 +4,7 @@
 #include "Scene.h"
 #include "PropertiesLoader.h"
 #include "Scripting/ScriptSystem.h"
+#include "SimpleAPI/Time.h"
 
 #include "GameTest.h" 
 
@@ -19,8 +20,10 @@ GLFWwindow* CreateWindow()
 {
     GLFWwindow* window;
 
-    if (!glfwInit())
+    if (!glfwInit()) 
+    {
         return nullptr;
+    }
 
     GLFWmonitor* monitor = glfwGetPrimaryMonitor();
     const GLFWvidmode* mode = glfwGetVideoMode(monitor);
@@ -30,7 +33,7 @@ GLFWwindow* CreateWindow()
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
-    window = glfwCreateWindow(mode->width, mode->height, "GameEngine", NULL, NULL);
+    window = glfwCreateWindow(mode->width, mode->height, "Vortx", NULL, NULL);
 
     if (!window)
     {
@@ -74,7 +77,7 @@ void Test(Engine& engine)
     chil.AddComponent<GameTest>();
 
     chil.SetParent(par);
-    chil.GameObject().NameSet("Child");
+    chil.GetGameObject().NameSet("Child");
 }
 
 void Editor::Start(Engine& engine)
@@ -83,22 +86,17 @@ void Editor::Start(Engine& engine)
 
     GLFWwindow* window = CreateWindow();
 
+    if (!window) return;
+
     EditorInputManager input(window);
 
     EditorUI editorUI(window, engine);
 
     Test(engine);
 
-    if (!window) return;
-
-    double deltaTime = 0.0f;
-    double lastFrame = 0.0f;
-
     while (!glfwWindowShouldClose(window)) 
     {
-        double temp = glfwGetTime();
-        deltaTime = temp - lastFrame;
-        lastFrame = temp;
+        Vortx::Time::Update();
 
         glfwPollEvents();
 

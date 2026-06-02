@@ -9,8 +9,6 @@
 
 #include <optional>
 
-class ENGINE_API Transform;
-
 class ENGINE_API Scene
 {
 public:
