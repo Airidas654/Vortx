@@ -8,6 +8,9 @@ namespace Vortx
 	{
 	public:
 		static float deltaTime;
+		static float unscaledDeltaTime;
+		static float fixedDeltaTime;
+		static float unscaledFixedDeltaTime;
 		static float timeScale;
 
 		static void Update();

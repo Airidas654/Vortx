@@ -44,6 +44,7 @@ public:
 
 private:
 
+    void RenderProjectHub();
     void DrawMenuBar();
     void RenderDockspace();
     void DrawScenePanel();

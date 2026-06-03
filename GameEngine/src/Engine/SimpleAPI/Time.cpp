@@ -9,9 +9,14 @@
 namespace Vortx
 {
 	float Time::deltaTime = 0.0f;
-	float Time::lastTime = 0.0f;
+	float Time::unscaledDeltaTime = 0.0f;
+
+	float Time::fixedDeltaTime = 0.02f;
+	float Time::unscaledFixedDeltaTime = 0.02f;
 
 	float Time::timeScale = 1.0f;
+
+	float Time::lastTime = 0.0f;	
 
 	void Time::Update()
 	{
@@ -19,7 +24,9 @@ namespace Vortx
 
 		float time = glfwGetTime();
 
-		Time::deltaTime = (time - Time::lastTime) * Time::timeScale;
+		Time::unscaledDeltaTime = (time - Time::lastTime);
+
+		Time::deltaTime = Time::unscaledDeltaTime * Time::timeScale;
 
 		Time::lastTime = time;
 	}
