@@ -5,6 +5,7 @@
 #include "PropertiesLoader.h"
 #include "Scripting/ScriptSystem.h"
 #include "SimpleAPI/Time.h"
+#include "ProjectHub.h"
 
 #include "GameTest.h" 
 
@@ -87,6 +88,8 @@ void Editor::Start(Engine& engine)
     GLFWwindow* window = CreateWindow();
 
     if (!window) return;
+
+    ProjectHub projectHub;
 
     EditorInputManager input(window);
 

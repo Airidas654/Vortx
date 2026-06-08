@@ -16,7 +16,8 @@ namespace Vortx
 
 		std::vector<std::string> scenes;
 
-		static Project CreateProject(const std::string &path, const std::string &name);
+		static Project* current;
+
 		static Project LoadProject(const std::string &path);
 	};
 }

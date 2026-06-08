@@ -103,6 +103,7 @@ target_include_directories(Editor PRIVATE
     include/Common
     include/Engine
     include/Editor
+    external
     external/glfw/include
 )
 
