@@ -13,7 +13,7 @@
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 
-#include "nlohmann/json.hpp"
+#include "json.hpp"
 
 #include <iostream>
 #include <fstream>
@@ -199,7 +199,7 @@ namespace Vortx
         std::string contentCMake((std::istreambuf_iterator<char>(in)), {});
         in.close();
 
-        in = std::ifstream(projectPath / "project.json");
+        in = std::ifstream(projectPath / "project.vortx");
         std::string contentJSON((std::istreambuf_iterator<char>(in)), {});
         in.close();
 
@@ -222,11 +222,11 @@ namespace Vortx
         out << contentCMake;
         out.close();
 
-        out = std::ofstream(projectPath / "project.json");
+        out = std::ofstream(projectPath / "project.vortx");
         out << contentJSON;
         out.close();
 
-        AddProject((projectPath/"project.json").string());
+        AddProject((projectPath/"project.vortx").string());
     }
 
     void ProjectHub::AddProject()
@@ -244,6 +244,11 @@ namespace Vortx
 
         for (auto& i : projects) {
             if (path == i.path) return;
+        }
+
+        if (std::filesystem::path(path).extension().string() != ".vortx")
+        {
+            return;
         }
 
         if (std::filesystem::exists(std::filesystem::path(path)))

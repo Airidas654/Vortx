@@ -11,13 +11,13 @@ namespace Vortx
 	{
 	public:
 
-		const std::string path;
-		const std::string name;
+		std::string path;
+		std::string name;
 
 		std::vector<std::string> scenes;
 
-		static Project* current;
+		static Project current;
 
-		static Project LoadProject(const std::string &path);
+		static void LoadProject(const std::string &path);
 	};
 }
