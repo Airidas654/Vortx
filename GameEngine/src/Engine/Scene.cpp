@@ -1,12 +1,16 @@
 #include "Scene.h"
 
 #include "SimpleAPI/Transform.h" 
+#include "SimpleAPI/SceneManager.h"
 #include "Components/ComponentTransform.h" 
 #include "Components/ComponentMetadata.h" 
 
 #include <iostream>
 
-std::unique_ptr<Scene> Scene::current = nullptr;
+std::unique_ptr<Scene>& Scene::Current()
+{
+	return Vortx::SceneManager::current;
+}
 
 void Scene::DetachFromParent(Transform& transform)
 {

@@ -1,0 +1,7 @@
+{
+"Name":"{{PROJECT_NAME}}",
+"Scenes":
+[
+	"Assets/SampleScene.scene"
+]
+}

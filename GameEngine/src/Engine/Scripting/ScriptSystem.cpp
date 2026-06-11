@@ -4,10 +4,10 @@
 
 void ScriptSystem::Update() 
 { 
-	for (auto& fn : updateFns) fn(Scene::current->GetRegistry()); 
+	for (auto& fn : updateFns) fn(Scene::Current()->GetRegistry());
 }
 
 void ScriptSystem::Destroy() 
 { 
-	for (auto& fn : destroyFns) fn(Scene::current->GetRegistry()); 
+	for (auto& fn : destroyFns) fn(Scene::Current()->GetRegistry());
 }

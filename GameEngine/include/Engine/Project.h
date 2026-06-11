@@ -4,6 +4,7 @@
 
 #include <string>
 #include <vector>
+#include <unordered_map>
 
 namespace Vortx
 {
@@ -15,6 +16,8 @@ namespace Vortx
 		std::string name;
 
 		std::vector<std::string> scenes;
+
+		std::unordered_map<std::string, uint32_t> scene_name_to_index;
 
 		static Project current;
 

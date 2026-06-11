@@ -18,10 +18,12 @@
     "\\include",
     "\\include\\Editor",
     "\\include\\Engine",
+    "\\include\\Engine\\SimpleAPI",
     "\\src",
     "\\src\\Editor",
     "\\src\\Engine",
     "\\src\\Engine\\SimpleAPI"
   ],
+  "SelectedNode": "\\include\\Engine\\SimpleAPI\\Time.h",
   "PreviewInSolutionExplorer": false
 }

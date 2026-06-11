@@ -1,13 +1,13 @@
 cmake_minimum_required(VERSION 3.20)
-project({{PROJECT_NAME}})
+project(First)
 
 set(CMAKE_CXX_STANDARD 17)
-set(ENGINE_PATH "{{ENGINE_PATH}}")
+set(ENGINE_PATH "C:/Users/Airidas/Desktop/GameEngine/GameEngine/out/build/x64-debug/bin")
 
 # ---------------------------------------------------------------
 # Scan for scripts and generate RegisterScripts.cpp
 # ---------------------------------------------------------------
-file(GLOB_RECURSE GAME_SCRIPT_HEADERS src/*.h)
+file(GLOB_RECURSE GAME_SCRIPT_HEADERS Assets/*.h)
 
 set(GENERATED_FILE "${CMAKE_BINARY_DIR}/generated/RegisterScripts.cpp")
 file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/generated")
@@ -25,20 +25,20 @@ file(WRITE ${GENERATED_FILE} ${GENERATED_CONTENT})
 # ---------------------------------------------------------------
 # Game DLL
 # ---------------------------------------------------------------
-file(GLOB_RECURSE SRC_GAME src/*.cpp)
+file(GLOB_RECURSE SRC_GAME Assets/*.cpp)
 
-add_library({{PROJECT_NAME}} SHARED
+add_library(First SHARED
     ${SRC_GAME}
     ${GENERATED_FILE}
 )
 
-target_include_directories({{PROJECT_NAME}} PRIVATE
+target_include_directories(First PRIVATE
     "${ENGINE_PATH}/include/Engine"
     "${ENGINE_PATH}/include/Game"
     "${ENGINE_PATH}/external/glm"
     "${ENGINE_PATH}/external/entt"
 )
 
-target_link_libraries({{PROJECT_NAME}} PRIVATE
+target_link_libraries(First PRIVATE
     "${ENGINE_PATH}/bin/GameEngineLib"
 )

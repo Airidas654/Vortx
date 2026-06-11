@@ -1,5 +1,7 @@
 #include "Engine.h"
 
+#include "SimpleAPI/SceneManager.h"
+
 #include <iostream>
 
 Engine* GetEngine()
@@ -16,5 +18,5 @@ void Engine::Init()
 {
 	std::cout << "engine" << std::endl;
 
-	Scene::current = nullptr;
+	Vortx::SceneManager::current = std::unique_ptr<Scene>(new Scene());
 }

@@ -41,12 +41,12 @@ std::optional<Transform> Transform::GetParent()
 
 void Transform::SetParent(std::optional<Transform> parent)
 {
-	Scene::current->ChangeTransformParent(*this, parent);
+	Scene::Current()->ChangeTransformParent(*this, parent);
 }
 
 void Transform::SetParent(std::optional<Transform> parent, uint32_t index)
 {
-	Scene::current->ChangeTransformParent(*this, parent, index);
+	Scene::Current()->ChangeTransformParent(*this, parent, index);
 }
 
 glm::vec2& Transform::Scale()
