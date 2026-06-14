@@ -13,7 +13,8 @@ namespace Vortx
 		static float unscaledFixedDeltaTime;
 		static float timeScale;
 
-		static void Update();
+		static void _Update();
+		static void _SetDeltaTime(const float deltaTime);
 
 	private:
 		static float lastTime;

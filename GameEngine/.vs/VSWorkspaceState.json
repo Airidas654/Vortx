@@ -13,15 +13,14 @@
   },
   "ExpandedNodes": [
     "",
-    "\\external",
-    "\\external\\nlohmann",
     "\\include",
-    "\\include\\Editor",
     "\\include\\Engine",
+    "\\include\\Engine\\Scripting",
     "\\include\\Engine\\SimpleAPI",
     "\\src",
     "\\src\\Editor",
     "\\src\\Engine",
+    "\\src\\Engine\\Scripting",
     "\\src\\Engine\\SimpleAPI"
   ],
   "SelectedNode": "\\include\\Engine\\SimpleAPI\\Time.h",

@@ -53,6 +53,8 @@ namespace Vortx
         void DrawScenePanel();
         void RenderSceneNode(Transform& transform, uint32_t index);
         void DrawPropertiesPanel();
+
+        void DrawToolbar();
         /*void DrawViewportStatusBar();
         void DrawRenderSettingsSection();
 

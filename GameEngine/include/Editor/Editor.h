@@ -14,5 +14,7 @@ private:
 	static bool needsReload;
 	static std::string cmakePath;
 
-	static std::string FindCMake();
+	static void LoadSettings();
+
+	static void GenerateSettings();
 };

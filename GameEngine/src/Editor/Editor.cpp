@@ -8,6 +8,7 @@
 #include "SimpleAPI/SceneManager.h"
 #include "ProjectHub.h"
 #include "Project.h"
+#include "PlayModeManager.h"
 
 #include "GameTest.h" 
 
@@ -16,6 +17,7 @@
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
+#include "json.hpp"
 
 #include <iostream>
 #include <fstream>
@@ -68,32 +70,52 @@ GLFWwindow* CreateWindow()
     return window;
 }
 
-std::string Editor::FindCMake()
+void Editor::LoadSettings()
 {
-#ifdef _WIN32
-    // check common install locations
-    std::vector<std::string> candidates = {
-        "C:/Program Files/CMake/bin/cmake.exe",
-        "C:/Program Files (x86)/CMake/bin/cmake.exe",
-        "C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/bin/cmake.exe"
-    };
+    std::filesystem::path editorPath = std::filesystem::current_path();
 
-    for (const auto& path : candidates)
-        if (std::filesystem::exists(path))
-            return "\"" + path + "\"";
+    if (!std::filesystem::exists(editorPath / "config.json"))
+    {
+        GenerateSettings();
+    }
 
-    // fallback — maybe it's in PATH after all
-    return "cmake";
-#else
-    return "cmake";
-#endif
+    std::ifstream in(editorPath / "config.json");
+
+    nlohmann::json j;
+    in >> j;
+
+    in.close();
+
+    std::string cmake = j["CMakePath"];
+
+    if (cmake == "") {
+        cmakePath = (editorPath / "CMake" / "bin" / "cmake.exe").string();
+    }
+    else {
+        cmakePath = cmake;
+    }
+    
+    for (uint32_t i = 0; i < cmakePath.length(); i++) 
+        if (cmakePath[i] == '\\') 
+            cmakePath[i] = '/';
+}
+
+void Editor::GenerateSettings()
+{
+    std::filesystem::path editorPath = std::filesystem::current_path();
+
+    nlohmann::json j;
+    j["CMakePath"] = "";
+
+    std::ofstream out(editorPath / "config.json");
+    out << j.dump(4);
+    out.close();
 }
 
 void Editor::Compile()
 {
     if (isBuilding) return;
     isBuilding = true;
-    //buildLog = "";
 
     std::thread([]()
         {
@@ -106,10 +128,6 @@ void Editor::Compile()
 #endif
                     if (!pipe) return;
 
-                    char buffer[256];
-                    //while (fgets(buffer, sizeof(buffer), pipe))
-                        //buildLog += buffer;   // captured for display
-
 #ifdef _WIN32
                     _pclose(pipe);
 #else
@@ -120,18 +138,12 @@ void Editor::Compile()
             std::filesystem::path path = Vortx::Project::current.path;
             path = path.parent_path();
 
-            if (cmakePath == "") {
-                cmakePath = FindCMake();
-            }
+            std::filesystem::path editorPath = std::filesystem::current_path();
 
-            // configure — this is what regenerates RegisterScripts.cpp
-            run(cmakePath+" -S " + path.string() + " -B " + path.string() + "/build");
+            run("\"" + cmakePath + " -S \"" + path.string() + "\" -B \"" + path.string() + "/build\" -DENGINE_PATH=\""+ editorPath.string() + "\"\"");
 
-            // build
-            run(cmakePath+" --build " + path.string() + "/build --config Release");
+            run("\"" + cmakePath+" --build \"" + path.string() + "/build\" --config Release\"");
 
-            // reload on the main thread next frame
-            // use a flag so OpenGL context isn't touched from this thread
             needsReload = true;
             isBuilding = false;
 
@@ -158,6 +170,8 @@ void Editor::Start(Engine& engine)
 {
     engine.Init();
 
+    LoadSettings();
+
     GLFWwindow* window = CreateWindow();
 
     if (!window) return;
@@ -172,13 +186,23 @@ void Editor::Start(Engine& engine)
 
     while (!glfwWindowShouldClose(window)) 
     {
-        Vortx::Time::Update();
+        Vortx::Time::_Update();
 
         glfwPollEvents();
 
         ImGui_ImplGlfw_NewFrame();
 
-        ScriptSystem::instance().Update();
+        if (PlayModeManager::state == PlayState::Playing)
+        {
+            ScriptSystem::instance().Update();
+        }
+
+        if (PlayModeManager::state == PlayState::Paused && PlayModeManager::stepRequested)
+        {
+            PlayModeManager::stepRequested = false;
+            Vortx::Time::_SetDeltaTime(1.0f/60.0f);
+            ScriptSystem::instance().Update();
+        }
 
         editorUI.NewFrame();
 

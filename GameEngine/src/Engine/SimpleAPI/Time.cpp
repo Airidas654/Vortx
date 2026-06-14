@@ -18,16 +18,29 @@ namespace Vortx
 
 	float Time::lastTime = 0.0f;	
 
-	void Time::Update()
+	void Time::_SetDeltaTime(const float deltaTime)
 	{
-		Time::timeScale = std::max(Time::timeScale, 0.0f);
+		timeScale = std::max(timeScale, 0.0f);
 
 		float time = glfwGetTime();
 
-		Time::unscaledDeltaTime = (time - Time::lastTime);
+		unscaledDeltaTime = deltaTime;
 
-		Time::deltaTime = Time::unscaledDeltaTime * Time::timeScale;
+		Time::deltaTime = unscaledDeltaTime * timeScale;
 
-		Time::lastTime = time;
+		lastTime = time;
+	}
+
+	void Time::_Update()
+	{
+		timeScale = std::max(timeScale, 0.0f);
+
+		float time = glfwGetTime();
+
+		unscaledDeltaTime = (time - lastTime);
+
+		deltaTime = unscaledDeltaTime * timeScale;
+
+		lastTime = time;
 	}
 }

@@ -182,8 +182,10 @@ namespace Vortx
 
     void ProjectHub::CreateProject(const std::string& path)
     {
+        std::filesystem::path editorPath = std::filesystem::current_path();
+
         std::filesystem::path projectPath = std::filesystem::path(path);
-        std::filesystem::path templatePath = std::filesystem::current_path() / "Assets" / "ProjectTemplate";
+        std::filesystem::path templatePath = editorPath / "Assets" / "ProjectTemplate";
 
         if (std::filesystem::exists(projectPath))
         {
@@ -195,36 +197,53 @@ namespace Vortx
 
         std::filesystem::copy(templatePath, projectPath, std::filesystem::copy_options::recursive);
 
-        std::ifstream in(projectPath / "CMakeLists.txt");
-        std::string contentCMake((std::istreambuf_iterator<char>(in)), {});
+        std::ifstream in(projectPath / "project.vortx");
+
+        nlohmann::json j;
+        in >> j;
+
         in.close();
 
-        in = std::ifstream(projectPath / "project.vortx");
-        std::string contentJSON((std::istreambuf_iterator<char>(in)), {});
-        in.close();
+        j["Name"] = name;
 
-        auto replace = [](std::string& str, const std::string& from, const std::string& to)
-            {
-                size_t pos = 0;
-                while ((pos = str.find(from, pos)) != std::string::npos)
-                {
-                    str.replace(pos, from.size(), to);
-                    pos += to.size();
-                }
-            };
-
-        replace(contentCMake, "{{PROJECT_NAME}}", name);
-        replace(contentCMake, "{{ENGINE_PATH}}", std::filesystem::current_path().string());
-
-        replace(contentJSON, "{{PROJECT_NAME}}", name);
-
-        std::ofstream out(projectPath / "CMakeLists.txt");
-        out << contentCMake;
+        std::ofstream out(projectPath / "project.vortx");
+        out << j.dump(4);
         out.close();
 
-        out = std::ofstream(projectPath / "project.vortx");
-        out << contentJSON;
-        out.close();
+        //std::ifstream in(projectPath / "CMakeLists.txt");
+        //std::string contentCMake((std::istreambuf_iterator<char>(in)), {});
+        //in.close();
+
+        //in = std::ifstream(projectPath / "project.vortx");
+        //std::string contentJSON((std::istreambuf_iterator<char>(in)), {});
+        //in.close();
+
+        //auto replace = [](std::string& str, const std::string& from, const std::string& to)
+        //    {
+        //        size_t pos = 0;
+        //        while ((pos = str.find(from, pos)) != std::string::npos)
+        //        {
+        //            str.replace(pos, from.size(), to);
+        //            pos += to.size();
+        //        }
+        //    };
+
+        //std::string editorPathStr = std::filesystem::current_path().string();
+
+        //replace(editorPathStr, "\\", "/");
+
+        ////replace(contentCMake, "{{PROJECT_NAME}}", name);
+        ////replace(contentCMake, "{{ENGINE_PATH}}", editorPathStr);
+
+        ////replace(contentJSON, "{{PROJECT_NAME}}", name);
+
+        //std::ofstream out(projectPath / "CMakeLists.txt");
+        //out << contentCMake;
+        //out.close();
+
+        //out = std::ofstream(projectPath / "project.vortx");
+        //out << contentJSON;
+        //out.close();
 
         AddProject((projectPath/"project.vortx").string());
     }
