@@ -15,7 +15,7 @@
     "",
     "\\include",
     "\\include\\Engine",
-    "\\include\\Engine\\Scripting",
+    "\\include\\Engine\\Components",
     "\\include\\Engine\\SimpleAPI",
     "\\src",
     "\\src\\Editor",
@@ -23,6 +23,6 @@
     "\\src\\Engine\\Scripting",
     "\\src\\Engine\\SimpleAPI"
   ],
-  "SelectedNode": "\\include\\Engine\\SimpleAPI\\Time.h",
+  "SelectedNode": "\\src\\Editor\\PropertiesLoader.cpp",
   "PreviewInSolutionExplorer": false
 }

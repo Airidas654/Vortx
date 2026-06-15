@@ -8,6 +8,7 @@
 #include "ECS/Registry.h"
 
 #include <optional>
+#include <string>
 
 class ENGINE_API Scene
 {
@@ -23,6 +24,10 @@ public:
 	Registry& GetRegistry() { return registry; };
 
 	std::vector<Transform>& GetChildren() { return children; }
+
+	std::string Serialize();
+
+	void Deserialize(const std::string& data);
 
 private:
 	Registry registry;

@@ -5,6 +5,8 @@
 #include "Components/ComponentTransform.h" 
 #include "Components/ComponentMetadata.h" 
 
+#include "json.hpp"
+
 #include <iostream>
 
 std::unique_ptr<Scene>& Scene::Current()
@@ -71,4 +73,14 @@ GameObject Scene::CreateGameObject()
 	gameObject.GetEntity().AddComponent<MetadataData>();
 
 	return gameObject;
+}
+
+std::string Scene::Serialize()
+{
+	nlohmann::json j;
+
+	for (auto& i : registry.Storage())
+	{
+		
+	}
 }
