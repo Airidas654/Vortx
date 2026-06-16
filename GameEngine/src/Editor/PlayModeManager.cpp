@@ -12,14 +12,14 @@ namespace Vortx
 
 	void PlayModeManager::EnterPlay() 
 	{
-		//snapshot = Scene::current->Serialize();
+		snapshot = Scene::Current()->Serialize();
 		state = PlayState::Playing;
 	}
 
 	void PlayModeManager::ExitPlay() 
 	{
 		//ScriptSystem::instance().Destroy();
-		//Scene::current = Scene::Deserialize(snapshot);
+		Scene::Current()->Deserialize(snapshot);
 		//PropertiesLoader::Reset();
 		state = PlayState::Editing;
 	}

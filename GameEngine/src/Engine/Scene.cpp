@@ -4,6 +4,7 @@
 #include "SimpleAPI/SceneManager.h"
 #include "Components/ComponentTransform.h" 
 #include "Components/ComponentMetadata.h" 
+#include "SerializerLoader.h"
 
 #include "json.hpp"
 
@@ -77,10 +78,12 @@ GameObject Scene::CreateGameObject()
 
 std::string Scene::Serialize()
 {
-	nlohmann::json j;
+	return SerializerLoader::SerializeScene(*this);
+}
 
-	for (auto& i : registry.Storage())
-	{
-		
-	}
+void Scene::Deserialize(const std::string& data)
+{
+	registry.Clear();
+	children.clear();
+	SerializerLoader::DeserializeScene(*this, data);
 }

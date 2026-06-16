@@ -23,6 +23,11 @@ public:
 		return registry.storage();
 	}
 
+	void Clear()
+	{
+		registry.clear();
+	}
+
 	template<typename T>
 	auto View()
 	{
