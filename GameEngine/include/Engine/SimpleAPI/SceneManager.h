@@ -14,7 +14,11 @@ namespace Vortx
 		static std::unique_ptr<Scene> current;
 
 		static void LoadScene(const uint32_t index);
-		static void LoadScene(const std::string &name);
+		static void LoadScene(const std::string &path);
+
+		static void SaveScene(const std::string &path);
+
+		static void NewScene();
 
 		static uint32_t GetSceneIndex(const std::string& name);
 

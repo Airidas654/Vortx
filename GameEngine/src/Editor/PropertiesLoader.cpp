@@ -2,6 +2,7 @@
 
 #include "Components/ComponentTransform.h"
 #include "Components/ComponentMetadata.h"
+#include "Scene.h"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -58,13 +59,15 @@ void PropertiesLoader::Reset()
     });
 }
 
-void PropertiesLoader::DrawPropertiesPanel(std::optional<Entity>& selected)
+void PropertiesLoader::DrawPropertiesPanel(const AssetID& selected)
 {
-    if (!selected.has_value()) {
-        return;
-    }
+    if (Scene::Current() == nullptr) return;
 
-    Entity entity = selected.value();
+    auto it = Scene::Current()->gameObjectsRegister.find(selected);
+
+    if (it == Scene::Current()->gameObjectsRegister.end()) return;
+
+    Entity entity = it->second.GetEntity();
 
     for (auto&& [id, storage] : entity.GetRegistry().Storage())
     {

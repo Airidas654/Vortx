@@ -9,6 +9,7 @@
 #include "ProjectHub.h"
 #include "Project.h"
 #include "PlayModeManager.h"
+#include "SerializerLoader.h"
 
 #include "GameTest.h" 
 
@@ -152,8 +153,6 @@ void Editor::Compile()
 
 void Test(Engine& engine)
 {
-    PropertiesLoader::Reset();
-
     Scene::Current()->CreateGameObject();
     Scene::Current()->CreateGameObject();
     Transform par = Scene::Current()->CreateGameObject().GetComponent<Transform>();
@@ -164,6 +163,24 @@ void Test(Engine& engine)
 
     chil.SetParent(par);
     chil.GetGameObject().NameSet("Child");
+}
+
+void Setup(EditorUI& editorUI)
+{
+    PropertiesLoader::Reset();
+    SerializerLoader::Reset();
+
+    editorUI.SetNewSceneCallback([]() {
+        SceneManager::NewScene();
+    });
+
+    editorUI.SetSaveSceneCallback([](const std::string& path) {
+        SceneManager::SaveScene(path);
+    });
+
+    editorUI.SetLoadSceneCallback([](const std::string& path) {
+        SceneManager::LoadScene(path);
+    });
 }
 
 void Editor::Start(Engine& engine)
@@ -181,6 +198,8 @@ void Editor::Start(Engine& engine)
     EditorInputManager input(window);
 
     EditorUI editorUI(window, engine);
+
+    Setup(editorUI);
 
     Test(engine);
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ECS/Entity.h"
+#include "EngineAPI.h"
 #include "Scene.h"
 
 #include "entt.hpp"
@@ -11,20 +12,20 @@
 #include <optional>
 #include <string>
 
-static class SerializerLoader
+static class ENGINE_API SerializerLoader
 {
 public:
 	using WriteFn = std::function<void(Entity entity, nlohmann::json& out)>;
 	using ReadFn = std::function<void(Entity entity, const nlohmann::json& in)>;
 
 	static std::unordered_map<entt::id_type, WriteFn> writeFns;
-	static std::unordered_map<entt::id_type, ReadFn>  readFns;
+	static std::unordered_map<entt::id_type, ReadFn> readFns;
 
 	static void Reset();
 
-	static std::string SerializeScene(Scene& scene);
+	static std::vector<uint8_t> SerializeScene(Scene& scene);
 
-	static void DeserializeScene(Scene& scene, const std::string& json);
+	static void DeserializeScene(Scene& scene, const std::vector<uint8_t>& cbor);
 
 private:
 

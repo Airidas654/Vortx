@@ -7,7 +7,7 @@ namespace Vortx
 {
 
 	PlayState PlayModeManager::state = PlayState::Editing;
-	std::string PlayModeManager::snapshot = "";
+	std::vector<uint8_t> PlayModeManager::snapshot;
 	bool PlayModeManager::stepRequested = false;
 
 	void PlayModeManager::EnterPlay() 

@@ -3,6 +3,7 @@
 #include "ECS/Entity.h"
 #include "EngineAPI.h"
 #include "SimpleAPI/BaseComponent.h"
+#include "AssetID.h"
 
 class ENGINE_API GameObject : public BaseComponent
 {
@@ -21,4 +22,7 @@ public:
 
     const std::string& TagGet();
     void TagSet(const std::string& tag);
+
+    const AssetID& IDGet();
+    void IDSet(const AssetID& id);
 };

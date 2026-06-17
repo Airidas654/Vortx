@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ECS/Entity.h"
+#include "AssetID.h"
 
 #include "entt.hpp"
 
@@ -19,7 +20,7 @@ public:
 
 	static void Reset();
 
-	static void DrawPropertiesPanel(std::optional<Entity>& selected);
+	static void DrawPropertiesPanel(const AssetID& selected);
 
 private:
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
 namespace Vortx
 {
@@ -10,7 +11,7 @@ namespace Vortx
     class PlayModeManager {
     public:
         static PlayState state;
-        static std::string snapshot;
+        static std::vector<uint8_t> snapshot;
         static bool stepRequested;
 
         static void EnterPlay();

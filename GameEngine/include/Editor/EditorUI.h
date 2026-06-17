@@ -19,9 +19,9 @@
 
 //using ImportModelCallback = std::function<void(const std::string& path)>;
 //using ImportTextureCallback = std::function<AssetID(const std::string& path, bool sRGB)>;
-//using SaveSceneCallback = std::function<void(const std::string& path)>;
-//using LoadSceneCallback = std::function<void(const std::string& path)>;
-//using NewSceneCallback = std::function<void()>;
+using SaveSceneCallback = std::function<void(const std::string& path)>;
+using LoadSceneCallback = std::function<void(const std::string& path)>;
+using NewSceneCallback = std::function<void()>;
 
 namespace Vortx
 {
@@ -36,14 +36,14 @@ namespace Vortx
         void Shutdown();
 
         /* void SetImportModelCallback(ImportModelCallback cb) { importModel = cb; }
-         void SetImportTextureCallback(ImportTextureCallback cb) { importTexture = cb; }
+         void SetImportTextureCallback(ImportTextureCallback cb) { importTexture = cb; }*/
          void SetSaveSceneCallback(SaveSceneCallback cb) { onSaveScene = cb; }
          void SetLoadSceneCallback(LoadSceneCallback cb) { onLoadScene = cb; }
-         void SetNewSceneCallback(NewSceneCallback cb) { onNewScene = cb; }*/
+         void SetNewSceneCallback(NewSceneCallback cb) { onNewScene = cb; }
 
-        std::optional<Entity> GetSelected() const { return selectedNode; }
+        AssetID GetSelected() const { return selectedNode; }
 
-        void ResetSelected() { ChangeSelected(std::nullopt); };
+        void ResetSelected() { ChangeSelected(AssetID(0)); };
 
     private:
 
@@ -70,7 +70,7 @@ namespace Vortx
         std::string OpenFileDialog(const char* filterDesc, const char* filterPattern);
         std::string SaveFileDialog(const char* filterDesc, const char* filterPattern, const char* defaultExt);
         */
-        void ChangeSelected(const std::optional<Entity>& entity);
+        void ChangeSelected(const AssetID& entity);
 
         GLFWwindow* window;
         Engine& engine;
@@ -79,7 +79,7 @@ namespace Vortx
         //RayTracing* raytracing;
         //EditorController* editor;
 
-        std::optional<Entity> selectedNode;
+        AssetID selectedNode;
 
         /*
         glm::vec3 cachedTranslation{ 0.0f };
@@ -100,9 +100,9 @@ namespace Vortx
         bool sectionRenderOpen = true;
 
         ImportModelCallback importModel;
-        ImportTextureCallback importTexture;
+        ImportTextureCallback importTexture;*/
         SaveSceneCallback onSaveScene;
         LoadSceneCallback onLoadScene;
-        NewSceneCallback onNewScene;*/
+        NewSceneCallback onNewScene;
     };
 }

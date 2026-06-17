@@ -1,5 +1,6 @@
 #include "SimpleAPI/GameObject.h"
 #include "Components/ComponentMetadata.h"
+#include "Scene.h"
 
 #include "Scene.h"
 
@@ -28,4 +29,26 @@ const std::string& GameObject::TagGet()
 void GameObject::TagSet(const std::string& tag)
 {
 	entity.GetComponent<MetadataData>().tag = tag;
+}
+
+const AssetID& GameObject::IDGet()
+{
+	return entity.GetComponent<MetadataData>().id;
+}
+
+void GameObject::IDSet(const AssetID& id)
+{
+	if (Scene::Current() == nullptr) return;
+
+	MetadataData& meta = entity.GetComponent<MetadataData>();
+
+	auto it = Scene::Current()->gameObjectsRegister.find(meta.id);
+
+	if (it != Scene::Current()->gameObjectsRegister.end())
+	{
+		it = Scene::Current()->gameObjectsRegister.erase(it);
+
+		meta.id = id;
+		Scene::Current()->gameObjectsRegister.emplace(id, it->second);
+	}
 }

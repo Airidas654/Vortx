@@ -14,6 +14,10 @@ class ENGINE_API Scene
 {
 public:
 
+	std::string path;
+
+	std::unordered_map<AssetID, GameObject> gameObjectsRegister;
+
 	void ChangeTransformParent(Transform& transform, std::optional<Transform>& parent);
 	void ChangeTransformParent(Transform& transform, std::optional<Transform>& parent, uint32_t index);
 
@@ -25,9 +29,9 @@ public:
 
 	std::vector<Transform>& GetChildren() { return children; }
 
-	std::string Serialize();
+	std::vector<uint8_t> Serialize();
 
-	void Deserialize(const std::string& data);
+	void Deserialize(const std::vector<uint8_t>& data);
 
 private:
 	Registry registry;

@@ -12,6 +12,11 @@ namespace Vortx
 {
 	std::unique_ptr<Scene> SceneManager::current = nullptr;
 
+	void SceneManager::NewScene()
+	{
+		current.reset(new Scene());
+	}
+
 	void SceneManager::LoadScene(const uint32_t index)
 	{
 		if (Project::current.scenes.size() >= index) return;
@@ -26,13 +31,38 @@ namespace Vortx
 		}
 	}
 
-	void SceneManager::LoadScene(const std::string& name)
+	void SceneManager::LoadScene(const std::string& path)
 	{
-		uint32_t index = GetSceneIndex(name);
+		std::filesystem::path inPath(path);
 
-		if (index != -1)
+		if (std::filesystem::exists(inPath))
 		{
-			LoadScene(index);
+			std::ifstream in(inPath, std::ios::binary);
+
+			std::vector<uint8_t> bytes(
+				std::istreambuf_iterator<char>(in),
+				{}
+			);
+
+			current.reset(new Scene());
+
+			current->Deserialize(bytes);
+
+			current->path = path;
+		}
+	}
+
+	void SceneManager::SaveScene(const std::string& path)
+	{
+		if (current != nullptr)
+		{
+			std::ofstream out(path, std::ios::binary);
+
+			std::vector<uint8_t> data = current->Serialize();
+
+			out.write(reinterpret_cast<char*>(data.data()), data.size());
+
+			out.close();
 		}
 	}
 

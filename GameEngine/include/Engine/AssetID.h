@@ -1,9 +1,11 @@
 #pragma once
 
+#include "EngineAPI.h"
+
 #include <cstdint>
 #include <random>
 
-struct AssetID
+struct ENGINE_API AssetID
 {
     uint64_t value[2];
 
@@ -35,10 +37,15 @@ struct AssetID
     {
         return value[0] == other.value[0] && value[1] == other.value[1];
     }
+
+    bool operator!=(const AssetID& other) const
+    {
+        return value[0] != other.value[0] || value[1] != other.value[1];
+    }
 };
 
 template <>
-struct std::hash<AssetID>
+struct ENGINE_API std::hash<AssetID>
 {
     std::size_t operator()(const AssetID& k) const
     {

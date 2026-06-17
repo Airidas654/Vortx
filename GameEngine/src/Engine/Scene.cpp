@@ -5,10 +5,13 @@
 #include "Components/ComponentTransform.h" 
 #include "Components/ComponentMetadata.h" 
 #include "SerializerLoader.h"
+#include "Core/File.h"
 
 #include "json.hpp"
 
 #include <iostream>
+#include <fstream>
+#include <filesystem>
 
 std::unique_ptr<Scene>& Scene::Current()
 {
@@ -45,7 +48,7 @@ void Scene::ChangeTransformParent(Transform& transform, std::optional<Transform>
 
 	if (!parent.has_value())
 	{
-		index = std::max(0u, std::min((uint32_t)children.size(), index));
+		index = max(0u, min((uint32_t)children.size(), index));
 
 		children.emplace(children.begin() + index, transform);
 	}
@@ -53,7 +56,7 @@ void Scene::ChangeTransformParent(Transform& transform, std::optional<Transform>
 	{
 		TransformData& data_parent = parent.value().Data();
 
-		index = std::max(0u, std::min((uint32_t)data_parent.children.size(), index));
+		index = max(0u, min((uint32_t)data_parent.children.size(), index));
 
 		data_parent.children.emplace(data_parent.children.begin() + index, transform);
 
@@ -71,17 +74,19 @@ GameObject Scene::CreateGameObject()
 	GameObject gameObject = { registry.Create() };
 
 	children.emplace_back(gameObject.AddComponent<Transform>());
-	gameObject.GetEntity().AddComponent<MetadataData>();
+	MetadataData meta = gameObject.GetEntity().AddComponent<MetadataData>();
+
+	gameObjectsRegister.emplace(meta.id, gameObject);
 
 	return gameObject;
 }
 
-std::string Scene::Serialize()
+std::vector<uint8_t> Scene::Serialize()
 {
 	return SerializerLoader::SerializeScene(*this);
 }
 
-void Scene::Deserialize(const std::string& data)
+void Scene::Deserialize(const std::vector<uint8_t>& data)
 {
 	registry.Clear();
 	children.clear();
