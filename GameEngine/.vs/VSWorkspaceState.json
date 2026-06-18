@@ -14,15 +14,15 @@
   "ExpandedNodes": [
     "",
     "\\include",
-    "\\include\\Common",
-    "\\include\\Editor",
+    "\\include\\Engine",
+    "\\include\\Game",
     "\\src",
-    "\\src\\Common",
     "\\src\\Editor",
     "\\src\\Engine",
+    "\\src\\Engine\\ECS",
     "\\src\\Engine\\Scripting",
     "\\src\\Engine\\SimpleAPI"
   ],
-  "SelectedNode": "\\src\\Editor\\PlayModeManager.cpp",
+  "SelectedNode": "\\src\\Editor\\EditorUI.cpp",
   "PreviewInSolutionExplorer": false
 }

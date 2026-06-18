@@ -120,34 +120,57 @@ void Editor::Compile()
 
     std::thread([]()
         {
-            auto run = [](const std::string& cmd)
+            auto run = [](const std::string& cmd) -> bool
                 {
+                   // buildLog.clear(); // std::string buildLog — store output somewhere accessible
+
 #ifdef _WIN32
-                    FILE* pipe = _popen(cmd.c_str(), "r");
+                    std::string fullCmd = "cmd /C \"" + cmd + "\"";
+                    FILE* pipe = _popen(fullCmd.c_str(), "r");
 #else
                     FILE* pipe = popen(cmd.c_str(), "r");
 #endif
-                    if (!pipe) return;
+                    if (!pipe)
+                    {
+                        std::cout << "[ERROR] Failed to open pipe for: " + cmd << std::endl;
+                        //buildLog += "[ERROR] Failed to open pipe for: " + cmd + "\n";
+                        return false;
+                    }
+
+                    char buffer[256];
+                    while (fgets(buffer, sizeof(buffer), pipe))
+                    {
+                        std::cout << buffer << std::endl;
+                        //buildLog += buffer; // capture stdout line by line
+                    }
 
 #ifdef _WIN32
-                    _pclose(pipe);
+                    int exitCode = _pclose(pipe);
 #else
-                    pclose(pipe);
+                    int status = pclose(pipe);
+                    int exitCode = WEXITSTATUS(status); // on Linux/macOS, unwrap the exit code
 #endif
+                    return exitCode == 0;
                 };
 
-            std::filesystem::path path = Vortx::Project::current.path;
-            path = path.parent_path();
-
+            std::filesystem::path path = std::filesystem::path(Vortx::Project::current.path).parent_path();
             std::filesystem::path editorPath = std::filesystem::current_path();
 
-            run("\"" + cmakePath + " -S \"" + path.string() + "\" -B \"" + path.string() + "/build\" -DENGINE_PATH=\""+ editorPath.string() + "\"\"");
+            std::string configCmd =
+                "\"" + cmakePath + "\" -S \"" + path.string() +
+                "\" -B \"" + path.string() + "/build\" -DENGINE_PATH=\"" +
+                editorPath.string() + "\"";
 
-            run("\"" + cmakePath+" --build \"" + path.string() + "/build\" --config Release\"");
+            std::string buildCmd =
+                "\"" + cmakePath + "\" --build \"" + path.string() +
+                "/build\" --config Release";
 
-            needsReload = true;
+            bool configOk = run(configCmd);
+            bool buildOk = configOk && run(buildCmd);
+
+            //buildSucceeded = buildOk; // atomic<bool> or checked on main thread
+            needsReload = buildOk; // only reload if actually succeeded
             isBuilding = false;
-
         }).detach();
 }
 

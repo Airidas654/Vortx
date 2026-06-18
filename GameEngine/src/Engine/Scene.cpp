@@ -90,5 +90,6 @@ void Scene::Deserialize(const std::vector<uint8_t>& data)
 {
 	registry.Clear();
 	children.clear();
+	gameObjectsRegister.clear();
 	SerializerLoader::DeserializeScene(*this, data);
 }

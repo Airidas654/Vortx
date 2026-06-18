@@ -17,6 +17,9 @@ foreach(HEADER ${GAME_SCRIPT_HEADERS})
         string(APPEND GENERATED_CONTENT "#include \"${REL}\"\n")
     endif()
 endforeach()
+string(APPEND GENERATED_CONTENT "
+extern \"C\" ENGINE_API void RegisterScripts() {}
+")
 file(WRITE ${GENERATED_FILE} ${GENERATED_CONTENT})
 
 file(GLOB_RECURSE SRC_GAME Assets/*.cpp)
@@ -27,10 +30,12 @@ add_library(Game SHARED
 )
 
 target_include_directories(Game PRIVATE
-    "${ENGINE_PATH}/include/Engine"
+	"${ENGINE_PATH}/include/Engine"
     "${ENGINE_PATH}/include/Game"
     "${ENGINE_PATH}/external/glm"
     "${ENGINE_PATH}/external/entt"
+	"Assets"
+	"${CMAKE_SOURCE_DIR}"
 )
 
 target_link_libraries(Game PRIVATE

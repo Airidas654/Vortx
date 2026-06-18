@@ -46,9 +46,11 @@ void GameObject::IDSet(const AssetID& id)
 
 	if (it != Scene::Current()->gameObjectsRegister.end())
 	{
-		it = Scene::Current()->gameObjectsRegister.erase(it);
+		GameObject obj = it->second;
+
+		Scene::Current()->gameObjectsRegister.erase(it);
 
 		meta.id = id;
-		Scene::Current()->gameObjectsRegister.emplace(id, it->second);
+		Scene::Current()->gameObjectsRegister.emplace(id, obj);
 	}
 }
