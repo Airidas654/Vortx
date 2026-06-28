@@ -11,8 +11,6 @@
 #include "PlayModeManager.h"
 #include "SerializerLoader.h"
 
-#include "GameTest.h" 
-
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "imgui.h"
@@ -26,140 +24,145 @@
 #include <string>
 #include <thread>
 
-bool Editor::isBuilding = false;
-bool Editor::needsReload = false;
-std::string Editor::cmakePath = "";
-
-GLFWwindow* CreateWindow()
+namespace Vortx
 {
-    GLFWwindow* window;
 
-    if (!glfwInit()) 
+    bool Editor::isBuilding = false;
+    bool Editor::needsReload = false;
+    std::string Editor::cmakePath = "";
+    DynamicLibrary Editor::gameLib;
+
+    GLFWwindow* CreateWindow()
     {
-        return nullptr;
+        GLFWwindow* window;
+
+        if (!glfwInit())
+        {
+            return nullptr;
+        }
+
+        GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+        const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+
+        window = glfwCreateWindow(mode->width, mode->height, "Vortx", NULL, NULL);
+
+        if (!window)
+        {
+            glfwTerminate();
+            return nullptr;
+        }
+
+        glfwMakeContextCurrent(window);
+
+        if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+            return nullptr;
+        }
+
+        IMGUI_CHECKVERSION();
+        ImGui::CreateContext();
+        ImGuiIO& io = ImGui::GetIO();
+        io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+        io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+        //io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
+
+        return window;
     }
 
-    GLFWmonitor* monitor = glfwGetPrimaryMonitor();
-    const GLFWvidmode* mode = glfwGetVideoMode(monitor);
-
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-
-    window = glfwCreateWindow(mode->width, mode->height, "Vortx", NULL, NULL);
-
-    if (!window)
+    void Editor::LoadSettings()
     {
-        glfwTerminate();
-        return nullptr;
+        std::filesystem::path editorPath = std::filesystem::current_path();
+
+        if (!std::filesystem::exists(editorPath / "config.json"))
+        {
+            GenerateSettings();
+        }
+
+        std::ifstream in(editorPath / "config.json");
+
+        nlohmann::json j;
+        in >> j;
+
+        in.close();
+
+        std::string cmake = j["CMakePath"];
+
+        if (cmake == "") {
+            cmakePath = (editorPath / "CMake" / "bin" / "cmake.exe").string();
+        }
+        else {
+            cmakePath = cmake;
+        }
+
+        for (uint32_t i = 0; i < cmakePath.length(); i++)
+            if (cmakePath[i] == '\\')
+                cmakePath[i] = '/';
     }
 
-    glfwMakeContextCurrent(window);
-
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-        return nullptr;
-    }
-
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO();
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
-    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-    //io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
-
-    return window;
-}
-
-void Editor::LoadSettings()
-{
-    std::filesystem::path editorPath = std::filesystem::current_path();
-
-    if (!std::filesystem::exists(editorPath / "config.json"))
+    void Editor::GenerateSettings()
     {
-        GenerateSettings();
+        std::filesystem::path editorPath = std::filesystem::current_path();
+
+        nlohmann::json j;
+        j["CMakePath"] = "";
+
+        std::ofstream out(editorPath / "config.json");
+        out << j.dump(4);
+        out.close();
     }
 
-    std::ifstream in(editorPath / "config.json");
+    void Editor::Compile()
+    {
+        if (isBuilding) return;
+        isBuilding = true;
 
-    nlohmann::json j;
-    in >> j;
-
-    in.close();
-
-    std::string cmake = j["CMakePath"];
-
-    if (cmake == "") {
-        cmakePath = (editorPath / "CMake" / "bin" / "cmake.exe").string();
-    }
-    else {
-        cmakePath = cmake;
-    }
-    
-    for (uint32_t i = 0; i < cmakePath.length(); i++) 
-        if (cmakePath[i] == '\\') 
-            cmakePath[i] = '/';
-}
-
-void Editor::GenerateSettings()
-{
-    std::filesystem::path editorPath = std::filesystem::current_path();
-
-    nlohmann::json j;
-    j["CMakePath"] = "";
-
-    std::ofstream out(editorPath / "config.json");
-    out << j.dump(4);
-    out.close();
-}
-
-void Editor::Compile()
-{
-    if (isBuilding) return;
-    isBuilding = true;
-
-    std::thread([]()
+        std::thread([]()
         {
             auto run = [](const std::string& cmd) -> bool
+            {
+                // buildLog.clear(); // std::string buildLog — store output somewhere accessible
+
+#ifdef _WIN32
+                std::string fullCmd = "cmd /C \"" + cmd + "\"";
+                FILE* pipe = _popen(fullCmd.c_str(), "r");
+#else
+                FILE* pipe = popen(cmd.c_str(), "r");
+#endif
+                if (!pipe)
                 {
-                   // buildLog.clear(); // std::string buildLog — store output somewhere accessible
+                    std::cout << "[ERROR] Failed to open pipe for: " + cmd << std::endl;
+                    //buildLog += "[ERROR] Failed to open pipe for: " + cmd + "\n";
+                    return false;
+                }
+
+                char buffer[256];
+                while (fgets(buffer, sizeof(buffer), pipe))
+                {
+                    std::cout << buffer << std::endl;
+                    //buildLog += buffer; // capture stdout line by line
+                }
 
 #ifdef _WIN32
-                    std::string fullCmd = "cmd /C \"" + cmd + "\"";
-                    FILE* pipe = _popen(fullCmd.c_str(), "r");
+                int exitCode = _pclose(pipe);
 #else
-                    FILE* pipe = popen(cmd.c_str(), "r");
+                int status = pclose(pipe);
+                int exitCode = WEXITSTATUS(status); // on Linux/macOS, unwrap the exit code
 #endif
-                    if (!pipe)
-                    {
-                        std::cout << "[ERROR] Failed to open pipe for: " + cmd << std::endl;
-                        //buildLog += "[ERROR] Failed to open pipe for: " + cmd + "\n";
-                        return false;
-                    }
-
-                    char buffer[256];
-                    while (fgets(buffer, sizeof(buffer), pipe))
-                    {
-                        std::cout << buffer << std::endl;
-                        //buildLog += buffer; // capture stdout line by line
-                    }
-
-#ifdef _WIN32
-                    int exitCode = _pclose(pipe);
-#else
-                    int status = pclose(pipe);
-                    int exitCode = WEXITSTATUS(status); // on Linux/macOS, unwrap the exit code
-#endif
-                    return exitCode == 0;
-                };
+                return exitCode == 0;
+            };
 
             std::filesystem::path path = std::filesystem::path(Vortx::Project::current.path).parent_path();
             std::filesystem::path editorPath = std::filesystem::current_path();
 
             std::string configCmd =
                 "\"" + cmakePath + "\" -S \"" + path.string() +
-                "\" -B \"" + path.string() + "/build\" -DENGINE_PATH=\"" +
-                editorPath.string() + "\"";
+                "\" -B \"" + path.string() + "/build\" "+
+                "-DENGINE_BIN_PATH=\"" + editorPath.string() + "\" " +
+                "-DENGINE_PATH=\"" + "C:/Users/airid/Desktop/GameEngine/GameEngine" + '\"';
 
             std::string buildCmd =
                 "\"" + cmakePath + "\" --build \"" + path.string() +
@@ -172,90 +175,132 @@ void Editor::Compile()
             needsReload = buildOk; // only reload if actually succeeded
             isBuilding = false;
         }).detach();
-}
-
-void Test(Engine& engine)
-{
-    Scene::Current()->CreateGameObject();
-    Scene::Current()->CreateGameObject();
-    Transform par = Scene::Current()->CreateGameObject().GetComponent<Transform>();
-
-    Transform chil = Scene::Current()->CreateGameObject().GetComponent<Transform>();
-
-    chil.AddComponent<GameTest>();
-
-    chil.SetParent(par);
-    chil.GetGameObject().NameSet("Child");
-}
-
-void Setup(EditorUI& editorUI)
-{
-    PropertiesLoader::Reset();
-    SerializerLoader::Reset();
-
-    editorUI.SetNewSceneCallback([]() {
-        SceneManager::NewScene();
-    });
-
-    editorUI.SetSaveSceneCallback([](const std::string& path) {
-        SceneManager::SaveScene(path);
-    });
-
-    editorUI.SetLoadSceneCallback([](const std::string& path) {
-        SceneManager::LoadScene(path);
-    });
-}
-
-void Editor::Start(Engine& engine)
-{
-    engine.Init();
-
-    LoadSettings();
-
-    GLFWwindow* window = CreateWindow();
-
-    if (!window) return;
-
-    ProjectHub projectHub;
-
-    EditorInputManager input(window);
-
-    EditorUI editorUI(window, engine);
-
-    Setup(editorUI);
-
-    Test(engine);
-
-    while (!glfwWindowShouldClose(window)) 
-    {
-        Vortx::Time::_Update();
-
-        glfwPollEvents();
-
-        ImGui_ImplGlfw_NewFrame();
-
-        if (PlayModeManager::state == PlayState::Playing)
-        {
-            ScriptSystem::instance().Update();
-        }
-
-        if (PlayModeManager::state == PlayState::Paused && PlayModeManager::stepRequested)
-        {
-            PlayModeManager::stepRequested = false;
-            Vortx::Time::_SetDeltaTime(1.0f/60.0f);
-            ScriptSystem::instance().Update();
-        }
-
-        editorUI.NewFrame();
-
-        glClearColor(0.07f, 0.07f, 0.08f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        editorUI.Render();
-
-        glfwSwapBuffers(window);
     }
 
-    glfwDestroyWindow(window);
-    glfwTerminate();
+    void Test(Engine& engine)
+    {
+        Scene::Current()->CreateGameObject();
+        Scene::Current()->CreateGameObject();
+        Transform par = Scene::Current()->CreateGameObject().GetComponent<Transform>();
+
+        Transform chil = Scene::Current()->CreateGameObject().GetComponent<Transform>();
+
+        //chil.AddComponent<GameTest>();
+
+        chil.SetParent(par);
+        chil.GetGameObject().NameSet("Child");
+    }
+
+    void Setup(EditorUI& editorUI)
+    {
+        PropertiesLoader::Reset();
+        SerializerLoader::Reset();
+
+        editorUI.SetNewSceneCallback([]() {
+            SceneManager::NewScene();
+        });
+
+        editorUI.SetSaveSceneCallback([](const std::string& path) {
+            SceneManager::SaveScene(path);
+        });
+
+        editorUI.SetLoadSceneCallback([](const std::string& path) {
+            SceneManager::LoadScene(path);
+        });
+    }
+
+    void Editor::Start(Engine& engine)
+    {
+        engine.Init();
+
+        LoadSettings();
+
+        GLFWwindow* window = CreateWindow();
+
+        if (!window) return;
+
+        ProjectHub projectHub;
+
+        EditorInputManager input(window);
+
+        EditorUI editorUI(window, engine);
+
+        Setup(editorUI);
+
+        Test(engine);
+
+        while (!glfwWindowShouldClose(window))
+        {
+            Vortx::Time::_Update();
+
+            glfwPollEvents();
+
+            ImGui_ImplGlfw_NewFrame();
+
+            if (!isBuilding && needsReload)
+            {
+                needsReload = 0;
+
+                ScriptSystem::Instance().Reset();
+                
+                if (gameLib.IsLoaded())
+                {
+                    gameLib.Unload();
+                }
+
+                std::filesystem::path gameLibPath = Project::current.path;
+
+                gameLibPath = gameLibPath.parent_path() / "build" / "Release" / "Game.dll";
+
+                std::cout << "load project " << gameLibPath << std::endl;
+
+                try
+                {
+                    if (!gameLib.Load(gameLibPath.string()))
+                        std::cerr << "[Editor] Game library failed to load.\n";
+                }
+                catch (const std::exception& e)
+                {
+                    std::cerr << "[Editor] Exception during library load: " << e.what() << "\n";
+                }
+                catch (...)
+                {
+                    std::cerr << "[Editor] Unknown exception during library load.\n";
+                }
+
+                /*auto getEngine = lib.GetSymbol<GetEngineT>("GetEngine");
+                auto destroyEngine = lib.GetSymbol<DestroyEngineT>("DestroyEngine");
+
+                if (!getEngine || !destroyEngine)
+                {
+                    std::cerr << "Failed to load symbol\n";
+                    return 1;
+                }*/
+            }
+
+            if (PlayModeManager::state == PlayState::Playing)
+            {
+                ScriptSystem::Instance().Update();
+            }
+
+            if (PlayModeManager::state == PlayState::Paused && PlayModeManager::stepRequested)
+            {
+                PlayModeManager::stepRequested = false;
+                Vortx::Time::_SetDeltaTime(1.0f / 60.0f);
+                ScriptSystem::Instance().Update();
+            }
+
+            editorUI.NewFrame();
+
+            glClearColor(0.07f, 0.07f, 0.08f, 1.0f);
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+            editorUI.Render();
+
+            glfwSwapBuffers(window);
+        }
+
+        glfwDestroyWindow(window);
+        glfwTerminate();
+    }
 }

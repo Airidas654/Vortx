@@ -23,6 +23,11 @@ public:
 		return registry.storage();
 	}
 
+	auto Storage(entt::id_type id)
+	{
+		return registry.storage(id);
+	}
+
 	void Clear()
 	{
 		registry.clear();

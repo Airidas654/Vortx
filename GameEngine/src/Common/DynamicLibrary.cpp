@@ -6,6 +6,8 @@
 #include <dlfcn.h>
 #endif
 
+#include <iostream>
+
 DynamicLibrary::~DynamicLibrary()
 {
     Unload();
@@ -13,13 +15,29 @@ DynamicLibrary::~DynamicLibrary()
 
 bool DynamicLibrary::Load(const std::string& path)
 {
+    Unload(); // ensure clean state if called twice
+
 #ifdef _WIN32
     handle = (void*)LoadLibraryA(path.c_str());
+    if (!handle)
+    {
+        DWORD err = GetLastError();
+        std::cerr << "[DynamicLibrary] Failed to load '" << path
+            << "' — WinError: " << err << "\n";
+        return false;
+    }
 #else
     handle = dlopen(path.c_str(), RTLD_NOW);
+    if (!handle)
+    {
+        std::cerr << "[DynamicLibrary] Failed to load '" << path
+            << "' — " << dlerror() << "\n";
+        return false;
+    }
 #endif
 
-    return handle != nullptr;
+    std::cout << "[DynamicLibrary] Loaded '" << path << "'\n";
+    return true;
 }
 
 void DynamicLibrary::Unload()

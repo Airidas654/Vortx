@@ -20,7 +20,7 @@ namespace Vortx
 
 		static void NewScene();
 
-		static uint32_t GetSceneIndex(const std::string& name);
+		static int32_t GetSceneIndex(const std::string& name);
 
 	private:
 		

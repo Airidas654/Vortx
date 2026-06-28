@@ -19,7 +19,7 @@ namespace Vortx
 
 	void SceneManager::LoadScene(const uint32_t index)
 	{
-		if (Project::current.scenes.size() >= index) return;
+		if (index >= Project::current.scenes.size()) return;
 
 		std::string path = Project::current.scenes[index];
 
@@ -27,7 +27,8 @@ namespace Vortx
 
 		if (std::filesystem::exists(pathObj) && pathObj.extension().string() == ".scene")
 		{
-			current.reset(new Scene());
+			//current.reset(new Scene());
+			LoadScene(path);
 		}
 	}
 
@@ -66,7 +67,7 @@ namespace Vortx
 		}
 	}
 
-	uint32_t SceneManager::GetSceneIndex(const std::string& name)
+	int32_t SceneManager::GetSceneIndex(const std::string& name)
 	{
 		auto it = Project::current.scene_name_to_index.find(name);
 

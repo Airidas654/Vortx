@@ -1,49 +1,38 @@
 #pragma once
 
 #include "ECS/Registry.h"
+#include "ECS\Entity.h"
 
 #include "EngineAPI.h"
 //#include "PropertiesLoader.h"
 
+#include <iostream>
+
+struct ScriptEntry
+{
+    entt::id_type typeId;
+    void (*addComponent)(Registry& reg, Entity e);
+    void (*start)(void* script);
+    void (*update)(void* script);
+    void (*destroy)(void* script);
+};
+
 class ENGINE_API ScriptSystem {
 public:
-    static ScriptSystem& instance() {
-        static ScriptSystem sys;
-        return sys;
-    }
+    static ScriptSystem& Instance();
 
-    template<typename T>
-    bool autoRegister() {
-        /*PropertiesLoader::RegisterComponent<T>(
-            typeid(T).name(),
-            [](Entity entity) {
-            ImGui::Text("Script active");
-        }
-        );*/
-        updateFns.push_back([](Registry& reg) {
-            reg.View<T>().each([&](auto entity, T& script) {
-                if (!script._started) {
-                    script.Start();
-                    script._started = true;
-                }
-                else
-                {
-                    script.Update();
-                }
-            });
-        });
-        destroyFns.push_back([](Registry& reg) {
-            reg.View<T>().each([&](auto entity, T& script) {
-                script.Destroy();
-                });
-            });
-        return true;
-    }
+    void Register(ScriptEntry entry);
 
     void Update();
     void Destroy();
+    void Reset();
 
 private:
-    std::vector<std::function<void(Registry&)>> updateFns;
-    std::vector<std::function<void(Registry&)>> destroyFns;
+    ScriptSystem();
+    ~ScriptSystem();
+
+    struct Impl;     // forward declare — Game.dll never sees the fields
+    Impl* impl;      // pImpl: only a pointer, always same size
+
+    static ScriptSystem* instance;
 };

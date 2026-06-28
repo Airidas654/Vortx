@@ -55,8 +55,11 @@ file(GLOB_RECURSE SRC_ENGINE CONFIGURE_DEPENDS
     src/Engine/*.cpp
     src/Engine/ECS/*.cpp
     src/Engine/SimpleAPI/*.cpp
-    src/Engine/Scripting/*.cpp
+    src/Engine/Scripting/*.cpp 
 )
+
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 add_library(GameEngineLib SHARED ${SRC_ENGINE})
 
@@ -67,7 +70,6 @@ target_compile_definitions(GameEngineLib
 
 target_include_directories(GameEngineLib PUBLIC
     include/Engine
-    include/Game
     external/glfw/include
     external/glad/include
     external/glm

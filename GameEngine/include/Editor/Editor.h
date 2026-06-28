@@ -3,18 +3,24 @@
 #include "DynamicLibrary.h"
 #include "Engine.h"
 
-class Editor
+namespace Vortx
 {
-public:
-	static void Start(Engine& engine);
-	static void Compile();
 
-private:
-	static bool isBuilding;
-	static bool needsReload;
-	static std::string cmakePath;
+	class Editor
+	{
+	public:
+		static void Start(Engine& engine);
+		static void Compile();
 
-	static void LoadSettings();
+	private:
+		static bool isBuilding;
+		static bool needsReload;
+		static std::string cmakePath;
+		static DynamicLibrary gameLib;
 
-	static void GenerateSettings();
-};
+		static void LoadSettings();
+
+		static void GenerateSettings();
+	};
+
+}

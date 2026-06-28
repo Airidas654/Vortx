@@ -12,7 +12,7 @@
 #include <optional>
 #include <string>
 
-static class ENGINE_API SerializerLoader
+class ENGINE_API SerializerLoader
 {
 public:
 	using WriteFn = std::function<void(Entity entity, nlohmann::json& out)>;

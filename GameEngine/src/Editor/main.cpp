@@ -35,7 +35,7 @@ int main()
 
     Engine* engine = getEngine();
 
-    Editor::Start(*engine);
+    Vortx::Editor::Start(*engine);
 
     destroyEngine(engine);
 
