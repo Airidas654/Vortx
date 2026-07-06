@@ -2,42 +2,58 @@
 
 #include "ECS/Registry.h"
 
-class Entity
+namespace Vortx
 {
-private:
 
-	entt::entity entity;
-	Registry* registry;
-
-public:
-
-	Entity() = default;
-
-	Entity(const Entity&) = default;
-	Entity& operator=(const Entity&) = default;
-
-	Entity(Registry* registry, entt::entity entity) : registry(registry), entity(entity) {}
-	~Entity() = default;
-
-	template<typename T>
-	T& AddComponent()
+	class Entity
 	{
-		return registry->AddComponent<T>(*this);
-	}
+	private:
 
-	template<typename T>
-	T& GetComponent()
-	{
-		return registry->GetComponent<T>(*this);
-	}
+		entt::entity entity;
+		Registry* registry;
 
-	entt::entity GetValue() { return entity; }
+	public:
 
-	Registry& GetRegistry() { return *registry; }
+		Entity() = default;
 
-	bool operator== (Entity& other) { return entity == other.entity; }
-	bool operator== (const Entity& other) const { return entity == other.entity; }
+		Entity(const Entity&) = default;
+		Entity& operator=(const Entity&) = default;
 
-	bool operator!= (Entity& other) { return entity != other.entity; }
-	bool operator!= (const Entity& other) const { return entity != other.entity; }
-};
+		Entity(Registry* registry, entt::entity entity) : registry(registry), entity(entity) {}
+		~Entity() = default;
+
+		template<typename T>
+		T& AddComponent()
+		{
+			return registry->AddComponent<T>(*this);
+		}
+
+		template<typename T>
+		T& GetComponent()
+		{
+			return registry->GetComponent<T>(*this);
+		}
+
+		template<typename T>
+		void RemoveComponent()
+		{
+			return registry->RemoveComponent<T>(*this);
+		}
+
+		template<typename T>
+		bool HasComponent()
+		{
+			return registry->HasComponent<T>(*this);
+		}
+
+		entt::entity GetValue() { return entity; }
+
+		Registry& GetRegistry() { return *registry; }
+
+		bool operator== (Entity& other) { return entity == other.entity; }
+		bool operator== (const Entity& other) const { return entity == other.entity; }
+
+		bool operator!= (Entity& other) { return entity != other.entity; }
+		bool operator!= (const Entity& other) const { return entity != other.entity; }
+	};
+}

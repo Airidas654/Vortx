@@ -21,292 +21,289 @@
 #include <string>
 #include <unordered_set>
 
-namespace Vortx
+ProjectHub* ProjectHub::instance = nullptr;
+
+ProjectHub::ProjectHub()
 {
-	ProjectHub* ProjectHub::instance = nullptr;
+    projectLoaded = false;
+	ProjectHub::instance = this;
 
-	ProjectHub::ProjectHub()
-	{
-        projectLoaded = false;
-		ProjectHub::instance = this;
+	Setup();
+}
 
-		Setup();
-	}
+ProjectHub::~ProjectHub()
+{
+	ProjectHub::instance = nullptr;
+}
 
-	ProjectHub::~ProjectHub()
-	{
-		ProjectHub::instance = nullptr;
-	}
+void ProjectHub::Setup()
+{
+    if (std::filesystem::exists(std::filesystem::path(hubPath))) 
+    {
+        try {
+            std::ifstream file(hubPath);
 
-	void ProjectHub::Setup()
-	{
-        if (std::filesystem::exists(std::filesystem::path(hubPath))) 
-        {
-            try {
-                std::ifstream file(hubPath);
+            nlohmann::json j;
+            file >> j;
 
-                nlohmann::json j;
-                file >> j;
+            file.close();
 
-                file.close();
+            projects.clear();
 
-                projects.clear();
+            std::unordered_set<std::string> been;
 
-                std::unordered_set<std::string> been;
+            for (auto i : j["Projects"]) {
+                if (std::filesystem::exists(std::filesystem::path((std::string)i["Path"])) && been.find(i["Path"]) == been.end())
+                {
+                    std::string name;
+                    try {
+                        std::ifstream file((std::string)i["Path"]);
 
-                for (auto i : j["Projects"]) {
-                    if (std::filesystem::exists(std::filesystem::path((std::string)i["Path"])) && been.find(i["Path"]) == been.end())
-                    {
-                        std::string name;
-                        try {
-                            std::ifstream file((std::string)i["Path"]);
+                        nlohmann::json j_proj;
+                        file >> j_proj;
 
-                            nlohmann::json j_proj;
-                            file >> j_proj;
+                        file.close();
 
-                            file.close();
-
-                            if (!j_proj.contains("Name")) {
-                                return;
-                            }
-
-                            name = j_proj["Name"];
-                        }
-                        catch (nlohmann::json::exception e) {
-                            std::cerr << e.what() << std::endl;
-
-                            continue;
+                        if (!j_proj.contains("Name")) {
+                            return;
                         }
 
-                        ProjectShowcase obj;
-                        obj.name = name;
-                        obj.path = i["Path"];
-
-                        been.emplace(i["Path"]);
-
-                        projects.emplace_back(obj);
+                        name = j_proj["Name"];
                     }
+                    catch (nlohmann::json::exception e) {
+                        std::cerr << e.what() << std::endl;
+
+                        continue;
+                    }
+
+                    ProjectShowcase obj;
+                    obj.name = name;
+                    obj.path = i["Path"];
+
+                    been.emplace(i["Path"]);
+
+                    projects.emplace_back(obj);
                 }
             }
-            catch (nlohmann::json::exception e) {
-                std::cerr << e.what() << std::endl;
-
-                projects.clear();
-            }
         }
-	}
+        catch (nlohmann::json::exception e) {
+            std::cerr << e.what() << std::endl;
 
-    void ProjectHub::SaveProjects()
-    {
-        nlohmann::json j;
-
-        for (auto& i : projects)
-        {
-            nlohmann::json obj;
-            obj["Path"] = i.path;
-
-            j["Projects"].emplace_back(obj);
-        }
-
-        std::ofstream file(hubPath);
-        file << j.dump(4);
-        file.close();
-    }
-
-	void ProjectHub::Render()
-	{
-        const ImGuiViewport* viewport =
-            ImGui::GetMainViewport();
-
-        ImGui::SetNextWindowPos(viewport->WorkPos);
-        ImGui::SetNextWindowSize(viewport->WorkSize);
-        ImGui::SetNextWindowViewport(viewport->ID);
-
-        ImGui::Begin("Projects", nullptr,
-            ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_AlwaysAutoResize);
-
-        if (ImGui::Button("Create Project"))
-        {
-            CreateProject();
-            //OpenCreateProjectPopup();
-        }
-
-        ImGui::SameLine();
-
-        if (ImGui::Button("Add Existing Project"))
-        {
-            AddProject();
-        }
-
-        ImGui::Separator();
-
-        for (size_t i = 0; i < projects.size(); i++)
-        {
-            auto& project = projects[i];
-
-            ImGui::PushID((int)i);
-
-            ImGui::BeginChild(
-                "ProjectCard",
-                ImVec2(0, 70),
-                true);
-
-            ImGui::Text("%s", project.name.c_str());
-            ImGui::TextDisabled("%s", project.path.c_str());
-
-            if (ImGui::IsItemClicked() ||
-                ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
-            {
-                LoadProject(project.path);
-            }
-
-            ImGui::EndChild();
-
-            ImGui::PopID();
-        }
-
-        ImGui::End();
-	}
-
-    void ProjectHub::CreateProject()
-    {
-        std::string path = File::SaveFileDialog("");
-
-        std::filesystem::path projectPath = std::filesystem::path(path);
-
-        if (!projectPath.has_extension() && !projectPath.empty())
-        {
-            CreateProject(path);
+            projects.clear();
         }
     }
+}
 
-    void ProjectHub::CreateProject(const std::string& path)
+void ProjectHub::SaveProjects()
+{
+    nlohmann::json j;
+
+    for (auto& i : projects)
     {
-        std::filesystem::path editorPath = std::filesystem::current_path();
+        nlohmann::json obj;
+        obj["Path"] = i.path;
 
-        std::filesystem::path projectPath = std::filesystem::path(path);
-        std::filesystem::path templatePath = editorPath / "Assets" / "ProjectTemplate";
-
-        if (std::filesystem::exists(projectPath))
-        {
-            std::cerr << "Project already exists" << std::endl;
-            return;
-        }
-
-        std::string name = projectPath.filename().string();
-
-        std::filesystem::copy(templatePath, projectPath, std::filesystem::copy_options::recursive);
-
-        std::ifstream in(projectPath / "project.vortx");
-
-        nlohmann::json j;
-        in >> j;
-
-        in.close();
-
-        j["Name"] = name;
-
-        std::ofstream out(projectPath / "project.vortx");
-        out << j.dump(4);
-        out.close();
-
-        //std::ifstream in(projectPath / "CMakeLists.txt");
-        //std::string contentCMake((std::istreambuf_iterator<char>(in)), {});
-        //in.close();
-
-        //in = std::ifstream(projectPath / "project.vortx");
-        //std::string contentJSON((std::istreambuf_iterator<char>(in)), {});
-        //in.close();
-
-        //auto replace = [](std::string& str, const std::string& from, const std::string& to)
-        //    {
-        //        size_t pos = 0;
-        //        while ((pos = str.find(from, pos)) != std::string::npos)
-        //        {
-        //            str.replace(pos, from.size(), to);
-        //            pos += to.size();
-        //        }
-        //    };
-
-        //std::string editorPathStr = std::filesystem::current_path().string();
-
-        //replace(editorPathStr, "\\", "/");
-
-        ////replace(contentCMake, "{{PROJECT_NAME}}", name);
-        ////replace(contentCMake, "{{ENGINE_PATH}}", editorPathStr);
-
-        ////replace(contentJSON, "{{PROJECT_NAME}}", name);
-
-        //std::ofstream out(projectPath / "CMakeLists.txt");
-        //out << contentCMake;
-        //out.close();
-
-        //out = std::ofstream(projectPath / "project.vortx");
-        //out << contentJSON;
-        //out.close();
-
-        AddProject((projectPath/"project.vortx").string());
+        j["Projects"].emplace_back(obj);
     }
 
-    void ProjectHub::AddProject()
-    {
-        std::string path = File::OpenFileDialog();
+    std::ofstream file(hubPath);
+    file << j.dump(4);
+    file.close();
+}
 
-        if (path != "") {
-            AddProject(path);
-        }
+void ProjectHub::Render()
+{
+    const ImGuiViewport* viewport =
+        ImGui::GetMainViewport();
+
+    ImGui::SetNextWindowPos(viewport->WorkPos);
+    ImGui::SetNextWindowSize(viewport->WorkSize);
+    ImGui::SetNextWindowViewport(viewport->ID);
+
+    ImGui::Begin("Projects", nullptr,
+        ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_AlwaysAutoResize);
+
+    if (ImGui::Button("Create Project"))
+    {
+        CreateProject();
+        //OpenCreateProjectPopup();
     }
 
-    void ProjectHub::AddProject(const std::string& path)
+    ImGui::SameLine();
+
+    if (ImGui::Button("Add Existing Project"))
     {
-        std::string name;
+        AddProject();
+    }
 
-        for (auto& i : projects) {
-            if (path == i.path) return;
+    ImGui::Separator();
+
+    for (size_t i = 0; i < projects.size(); i++)
+    {
+        auto& project = projects[i];
+
+        ImGui::PushID((int)i);
+
+        ImGui::BeginChild(
+            "ProjectCard",
+            ImVec2(0, 70),
+            true);
+
+        ImGui::Text("%s", project.name.c_str());
+        ImGui::TextDisabled("%s", project.path.c_str());
+
+        if (ImGui::IsItemClicked() ||
+            ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
+        {
+            LoadProject(project.path);
         }
 
-        if (std::filesystem::path(path).extension().string() != ".vortx")
-        {
-            return;
-        }
+        ImGui::EndChild();
 
-        if (std::filesystem::exists(std::filesystem::path(path)))
-        {
-            try {
-                std::ifstream file(path);
+        ImGui::PopID();
+    }
 
-                nlohmann::json j;
-                file >> j;
+    ImGui::End();
+}
 
-                file.close();
+void ProjectHub::CreateProject()
+{
+    std::string path = Vortx::File::SaveFileDialog("");
 
-                if (!j.contains("Name")) {
-                    return;
-                }
+    std::filesystem::path projectPath = std::filesystem::path(path);
 
-                name = j["Name"];
-            }
-            catch (nlohmann::json::exception e) {
-                std::cerr << e.what() << std::endl;
+    if (!projectPath.has_extension() && !projectPath.empty())
+    {
+        CreateProject(path);
+    }
+}
 
+void ProjectHub::CreateProject(const std::string& path)
+{
+    std::filesystem::path editorPath = std::filesystem::current_path();
+
+    std::filesystem::path projectPath = std::filesystem::path(path);
+    std::filesystem::path templatePath = editorPath / "Assets" / "ProjectTemplate";
+
+    if (std::filesystem::exists(projectPath))
+    {
+        std::cerr << "Project already exists" << std::endl;
+        return;
+    }
+
+    std::string name = projectPath.filename().string();
+
+    std::filesystem::copy(templatePath, projectPath, std::filesystem::copy_options::recursive);
+
+    std::ifstream in(projectPath / "project.vortx");
+
+    nlohmann::json j;
+    in >> j;
+
+    in.close();
+
+    j["Name"] = name;
+
+    std::ofstream out(projectPath / "project.vortx");
+    out << j.dump(4);
+    out.close();
+
+    //std::ifstream in(projectPath / "CMakeLists.txt");
+    //std::string contentCMake((std::istreambuf_iterator<char>(in)), {});
+    //in.close();
+
+    //in = std::ifstream(projectPath / "project.vortx");
+    //std::string contentJSON((std::istreambuf_iterator<char>(in)), {});
+    //in.close();
+
+    //auto replace = [](std::string& str, const std::string& from, const std::string& to)
+    //    {
+    //        size_t pos = 0;
+    //        while ((pos = str.find(from, pos)) != std::string::npos)
+    //        {
+    //            str.replace(pos, from.size(), to);
+    //            pos += to.size();
+    //        }
+    //    };
+
+    //std::string editorPathStr = std::filesystem::current_path().string();
+
+    //replace(editorPathStr, "\\", "/");
+
+    ////replace(contentCMake, "{{PROJECT_NAME}}", name);
+    ////replace(contentCMake, "{{ENGINE_PATH}}", editorPathStr);
+
+    ////replace(contentJSON, "{{PROJECT_NAME}}", name);
+
+    //std::ofstream out(projectPath / "CMakeLists.txt");
+    //out << contentCMake;
+    //out.close();
+
+    //out = std::ofstream(projectPath / "project.vortx");
+    //out << contentJSON;
+    //out.close();
+
+    AddProject((projectPath/"project.vortx").string());
+}
+
+void ProjectHub::AddProject()
+{
+    std::string path = Vortx::File::OpenFileDialog();
+
+    if (path != "") {
+        AddProject(path);
+    }
+}
+
+void ProjectHub::AddProject(const std::string& path)
+{
+    std::string name;
+
+    for (auto& i : projects) {
+        if (path == i.path) return;
+    }
+
+    if (std::filesystem::path(path).extension().string() != ".vortx")
+    {
+        return;
+    }
+
+    if (std::filesystem::exists(std::filesystem::path(path)))
+    {
+        try {
+            std::ifstream file(path);
+
+            nlohmann::json j;
+            file >> j;
+
+            file.close();
+
+            if (!j.contains("Name")) {
                 return;
             }
+
+            name = j["Name"];
         }
+        catch (nlohmann::json::exception e) {
+            std::cerr << e.what() << std::endl;
 
-        ProjectShowcase obj;
-        obj.name = name;
-        obj.path = path;
-
-        projects.emplace_back(obj);
-
-        SaveProjects();
+            return;
+        }
     }
 
-    void ProjectHub::LoadProject(const std::string& path)
-    {
-        Project::LoadProject(path);
+    ProjectShowcase obj;
+    obj.name = name;
+    obj.path = path;
 
-        ProjectHub::instance->projectLoaded = true;
-    }
+    projects.emplace_back(obj);
+
+    SaveProjects();
+}
+
+void ProjectHub::LoadProject(const std::string& path)
+{
+    Vortx::Project::LoadProject(path);
+
+    ProjectHub::instance->projectLoaded = true;
 }
 

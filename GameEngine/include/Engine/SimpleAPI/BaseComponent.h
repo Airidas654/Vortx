@@ -4,50 +4,54 @@
 
 #include <type_traits>
 
-#include "Scripting\ScriptBase.h"
+//#include "Scripting\ScriptBase.h"
 
-class BaseComponent
+namespace Vortx
 {
-public:
-	Entity GetEntity() const { return entity; }
 
-    template<typename T>
-    decltype(auto) AddComponent()
+    class BaseComponent
     {
-        if constexpr (std::is_base_of_v<BaseComponent, T>)
+    public:
+        Entity GetEntity() const { return entity; }
+
+        template<typename T>
+        decltype(auto) AddComponent()
         {
-            return T(entity, true);
-        }
-        else
-        {
-            T& comp = entity.AddComponent<T>();
-            if constexpr (std::is_base_of_v<ScriptBase<T>, T>)
+            if constexpr (std::is_base_of_v<BaseComponent, T>)
             {
-                comp.InnerSetGameObject(GameObject(entity));
+                return T(entity, true);
             }
-            return comp;
+            else
+            {
+                /*T& comp = entity.AddComponent<T>();
+                if constexpr (std::is_base_of_v<ScriptBase<T>, T>)
+                {
+                    comp.InnerSetGameObject(GameObject(entity));
+                }*/
+                return comp;
+            }
         }
-    }
 
-    template<typename T>
-    decltype(auto) GetComponent()
-    {
-        if constexpr (std::is_base_of_v<BaseComponent, T>)
+        template<typename T>
+        decltype(auto) GetComponent()
         {
-            return T(entity);
+            if constexpr (std::is_base_of_v<BaseComponent, T>)
+            {
+                return T(entity);
+            }
+            else
+            {
+                return entity.GetComponent<T>();
+            }
         }
-        else
-        {
-            return entity.GetComponent<T>();
-        }
-    }
 
-protected:
-	Entity entity;
+    protected:
+        Entity entity;
 
-	virtual void _InternalCreate() = 0;
+        virtual void _InternalCreate() = 0;
 
-    BaseComponent() { entity = Entity(); };
-	BaseComponent(Entity entity) : entity(entity) {}
-	~BaseComponent() = default;
-};
+        BaseComponent() { entity = Entity(); };
+        BaseComponent(Entity entity) : entity(entity) {}
+        ~BaseComponent() = default;
+    };
+}

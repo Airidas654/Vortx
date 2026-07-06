@@ -5,24 +5,28 @@
 #include "SimpleAPI/BaseComponent.h"
 #include "AssetID.h"
 
-class ENGINE_API GameObject : public BaseComponent
+namespace Vortx
 {
-private:
-    void _InternalCreate() override;
 
-public:
-    GameObject() : BaseComponent() {}
+    class ENGINE_API GameObject : public BaseComponent
+    {
+    private:
+        void _InternalCreate() override;
 
-    GameObject(Entity entity) : BaseComponent(entity) {}
+    public:
+        GameObject() : BaseComponent() {}
 
-    GameObject(Entity entity, bool create);
+        GameObject(Entity entity) : BaseComponent(entity) {}
 
-    const std::string& NameGet();
-    void NameSet(const std::string& name);
+        GameObject(Entity entity, bool create);
 
-    const std::string& TagGet();
-    void TagSet(const std::string& tag);
+        const std::string& NameGet();
+        void NameSet(const std::string& name);
 
-    const AssetID& IDGet();
-    void IDSet(const AssetID& id);
-};
+        const std::string& TagGet();
+        void TagSet(const std::string& tag);
+
+        const AssetID& IDGet();
+        void IDSet(const AssetID& id);
+    };
+}

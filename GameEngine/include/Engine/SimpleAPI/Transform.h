@@ -9,43 +9,46 @@
 
 #include <optional>
 
-struct ENGINE_API TransformData;
-
-class ENGINE_API Transform : public BaseComponent
+namespace Vortx
 {
-protected:
-	void _InternalCreate() override;
+	struct ENGINE_API TransformData;
 
-public:
+	class ENGINE_API Transform : public BaseComponent
+	{
+	protected:
+		void _InternalCreate() override;
 
-	Transform() = default;
+	public:
 
-	Transform(const Transform&) = default;
-	Transform& operator=(const Transform&) = default;
+		Transform() = default;
 
-	Transform(Transform&&) = default;
-	Transform& operator=(Transform&&) = default;
+		Transform(const Transform&) = default;
+		Transform& operator=(const Transform&) = default;
 
-	Transform(Entity entity) : BaseComponent(entity) {}
+		Transform(Transform&&) = default;
+		Transform& operator=(Transform&&) = default;
 
-	Transform(Entity entity, bool create);
+		Transform(Entity entity) : BaseComponent(entity) {}
 
-	glm::vec2& Position();
-	glm::vec1& Rotation();
-	glm::vec2& Scale();
+		Transform(Entity entity, bool create);
 
-	std::vector<Transform>& GetChildren();
-	std::optional<Transform> GetParent();
-	void SetParent(std::optional<Transform> parent);
-	void SetParent(std::optional<Transform> parent, uint32_t index);
+		glm::vec2& Position();
+		glm::vec1& Rotation();
+		glm::vec2& Scale();
 
-	TransformData& Data();
+		std::vector<Transform>& GetChildren();
+		std::optional<Transform> GetParent();
+		void SetParent(std::optional<Transform> parent);
+		void SetParent(std::optional<Transform> parent, uint32_t index);
 
-	GameObject GetGameObject();
+		TransformData& Data();
 
-	bool operator== (Transform& other) { return entity == other.entity; }
-	bool operator== (const Transform& other) const { return entity == other.entity; }
-		
-	bool operator!= (Transform& other) { return entity != other.entity; }
-	bool operator!= (const Transform& other) const { return entity != other.entity; }
-};
+		GameObject GetGameObject();
+
+		bool operator== (Transform& other) { return entity == other.entity; }
+		bool operator== (const Transform& other) const { return entity == other.entity; }
+
+		bool operator!= (Transform& other) { return entity != other.entity; }
+		bool operator!= (const Transform& other) const { return entity != other.entity; }
+	};
+}

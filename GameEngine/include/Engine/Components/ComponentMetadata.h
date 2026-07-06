@@ -4,15 +4,19 @@
 
 #include <string>
 
-struct MetadataData
+namespace Vortx
 {
-	std::string name;
-	std::string tag;
-	AssetID id;
 
-	MetadataData()
+	struct MetadataData
 	{
-		name = "GameObject";
-		tag = "default";
-	}
-};
+		std::string name;
+		std::string tag;
+		AssetID id;
+
+		MetadataData()
+		{
+			name = "GameObject";
+			tag = "default";
+		}
+	};
+}

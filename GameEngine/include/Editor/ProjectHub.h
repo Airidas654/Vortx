@@ -3,43 +3,40 @@
 #include <vector>
 #include <string>
 
-namespace Vortx
+struct ProjectShowcase
 {
-	struct ProjectShowcase
-	{
-		std::string name;
-		std::string path;
-	};
+	std::string name;
+	std::string path;
+};
 
-	class ProjectHub
-	{
-	private:
+class ProjectHub
+{
+private:
 
-		const std::string hubPath = "HubProjects.json";
+	const std::string hubPath = "HubProjects.json";
 
-		void Setup();
+	void Setup();
 
-	public:
+public:
 
-		static ProjectHub* instance;
+	static ProjectHub* instance;
 
-		bool projectLoaded;
+	bool projectLoaded;
 
-		std::vector<ProjectShowcase> projects;
+	std::vector<ProjectShowcase> projects;
 
-		void Render();
+	void Render();
 
-		ProjectHub();
-		~ProjectHub();
+	ProjectHub();
+	~ProjectHub();
 
-		void SaveProjects();
+	void SaveProjects();
 
-		void CreateProject();
-		void CreateProject(const std::string& path);
+	void CreateProject();
+	void CreateProject(const std::string& path);
 
-		void AddProject();
-		void AddProject(const std::string& path);
+	void AddProject();
+	void AddProject(const std::string& path);
 
-		void LoadProject(const std::string& path);
-	};
-}
+	void LoadProject(const std::string& path);
+};

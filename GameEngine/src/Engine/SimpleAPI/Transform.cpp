@@ -4,57 +4,61 @@
 
 #include "Scene.h"
 
-void Transform::_InternalCreate()
+namespace Vortx
 {
-	entity.AddComponent<TransformData>();
-}
 
-Transform::Transform(Entity entity, bool create) : BaseComponent(entity)
-{
-	_InternalCreate();
-}
+	void Transform::_InternalCreate()
+	{
+		entity.AddComponent<TransformData>();
+	}
 
-TransformData& Transform::Data()
-{
-	return entity.GetComponent<TransformData>();
-}
+	Transform::Transform(Entity entity, bool create) : BaseComponent(entity)
+	{
+		_InternalCreate();
+	}
 
-glm::vec2& Transform::Position()
-{
-	return entity.GetComponent<TransformData>().position;
-}
+	TransformData& Transform::Data()
+	{
+		return entity.GetComponent<TransformData>();
+	}
 
-glm::vec1& Transform::Rotation()
-{
-	return entity.GetComponent<TransformData>().rotation;
-}
+	glm::vec2& Transform::Position()
+	{
+		return entity.GetComponent<TransformData>().position;
+	}
 
-std::vector<Transform>& Transform::GetChildren()
-{
-	return entity.GetComponent<TransformData>().children;
-}
+	glm::vec1& Transform::Rotation()
+	{
+		return entity.GetComponent<TransformData>().rotation;
+	}
 
-std::optional<Transform> Transform::GetParent()
-{
-	return entity.GetComponent<TransformData>().parent;
-}
+	std::vector<Transform>& Transform::GetChildren()
+	{
+		return entity.GetComponent<TransformData>().children;
+	}
 
-void Transform::SetParent(std::optional<Transform> parent)
-{
-	Scene::Current()->ChangeTransformParent(*this, parent);
-}
+	std::optional<Transform> Transform::GetParent()
+	{
+		return entity.GetComponent<TransformData>().parent;
+	}
 
-void Transform::SetParent(std::optional<Transform> parent, uint32_t index)
-{
-	Scene::Current()->ChangeTransformParent(*this, parent, index);
-}
+	void Transform::SetParent(std::optional<Transform> parent)
+	{
+		Scene::Current()->ChangeTransformParent(*this, parent);
+	}
 
-glm::vec2& Transform::Scale()
-{
-	return entity.GetComponent<TransformData>().scale;
-}
+	void Transform::SetParent(std::optional<Transform> parent, uint32_t index)
+	{
+		Scene::Current()->ChangeTransformParent(*this, parent, index);
+	}
 
-GameObject Transform::GetGameObject()
-{
-	return GameObject(entity);
+	glm::vec2& Transform::Scale()
+	{
+		return entity.GetComponent<TransformData>().scale;
+	}
+
+	GameObject Transform::GetGameObject()
+	{
+		return GameObject(entity);
+	}
 }

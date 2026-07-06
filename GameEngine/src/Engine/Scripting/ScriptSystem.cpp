@@ -1,87 +1,156 @@
-#include "Scripting\ScriptSystem.h"
-
-#include "Scripting\ScriptBase.h"
-
+#include "Scripting/ScriptSystem.h"
+#include "Scripting/ScriptRegistry.h"
+#include "SimpleAPI/SceneManager.h"
 #include "Scene.h"
-
 #include <iostream>
 
-struct ScriptSystem::Impl
+namespace Vortx
 {
-    std::vector<ScriptEntry> entries;
-};
 
-ScriptSystem::ScriptSystem() : impl(new Impl()) {}
-ScriptSystem::~ScriptSystem() { delete impl; }
-
-ScriptSystem* ScriptSystem::instance = nullptr;
-
-void ScriptSystem::Register(ScriptEntry entry)
-{
-    impl->entries.push_back(entry);
-
-    entry.addComponent(Scene::Current()->GetRegistry(), Scene::Current()->GetChildren()[0].GetEntity());
-    //Scene::Current()->GetRegistry().
-    //Scene::Current()->GetChildren()[0].AddComponent<>();
-}
-
-ScriptSystem& ScriptSystem::Instance()
-{
-    if (!instance)
+    ScriptSystem& ScriptSystem::Instance()
     {
-        instance = new ScriptSystem();
-
-        std::atexit([]()
+        static ScriptSystem* instance = nullptr;
+        if (!instance)
         {
-            delete instance;
-            instance = nullptr;
-        });
-        std::cout << "instance created " << instance << std::endl;
+            instance = new ScriptSystem();
+            std::atexit([]() { delete instance; instance = nullptr; });
+        }
+        return *instance;
     }
 
-
-    return *instance;
-}
-
-// ScriptSystem.cpp
-void ScriptSystem::Update()
-{
-    auto& registry = Scene::Current()->GetRegistry();
-
-    for (auto& entry : impl->entries)
+    void ScriptSystem::Update()
     {
-        auto* storage = registry.Storage(entry.typeId);
-        if (!storage) continue;
+        if (!Vortx::SceneManager::current) return;
 
-        for (auto entity : *storage)
+        Vortx::SceneManager::current->GetRegistry()
+            .View<ScriptComponent>()
+            .each([](ScriptComponent& sc)
         {
-            void* raw = storage->value(entity);
-            
-            if (!raw) continue;
-            
-
-            ScriptInstanceBase* base = reinterpret_cast<ScriptInstanceBase*>(raw);
-
-            if (!base->_started)
+            for (auto& entry : sc.scripts)
             {
-                entry.start(base);
-                base->_started = true;
+                if (!entry.instance) continue;
+
+                if (!entry.instance->_started)
+                {
+                    entry.instance->Start();
+                    entry.instance->_started = true;
+                }
+                else
+                {
+                    entry.instance->Update();
+                }
             }
-            else
+        });
+    }
+
+    void ScriptSystem::DestroyAll()
+    {
+        if (!Vortx::SceneManager::current) return;
+
+        Vortx::SceneManager::current->GetRegistry()
+            .View<ScriptComponent>()
+            .each([](ScriptComponent& sc)
+        {
+            for (auto& entry : sc.scripts)
             {
-                entry.update(base);
+                if (!entry.instance) continue;
+
+                entry.instance->Destroy();
+
+                auto& all = ScriptRegistry::Instance().GetAll();
+                auto it = all.find(entry.name);
+                if (it != all.end())
+                    it->second.destroy(entry.instance);
+                else
+                    delete entry.instance;
+
+                entry.instance = nullptr;
             }
+        });
+    }
+
+    void ScriptSystem::CreateOne(Entity& entity, ScriptComponent::Entry &entry)
+    {
+        GameObject go(entity);
+
+        if (entry.instance) return;
+
+        entry.instance = ScriptRegistry::Instance().Create(entry.name);
+        if (!entry.instance) return;
+
+        entry.instance->_started = false;
+        entry.instance->gameObject = go;
+    }
+
+    void ScriptSystem::CreateAll()
+    {
+        if (!Vortx::SceneManager::current) return;
+
+        Registry& reg = Vortx::SceneManager::current->GetRegistry();
+
+        reg.View<ScriptComponent>().each([&reg](entt::entity e, ScriptComponent& sc)
+        {
+            Entity entity(&reg, e);
+            GameObject go(entity);
+
+            for (auto& entry : sc.scripts)
+            {
+                if (entry.instance) continue; 
+
+                entry.instance = ScriptRegistry::Instance().Create(entry.name);
+                if (!entry.instance) continue;
+
+                entry.instance->_started = false;
+                entry.instance->gameObject = go;
+            }
+        });
+    }
+
+    void ScriptSystem::AddScript(Entity& entity, const std::string& name)
+    {
+        if (!entity.HasComponent<ScriptComponent>())
+            entity.AddComponent<ScriptComponent>();
+
+        auto& sc = entity.GetComponent<ScriptComponent>();
+
+        ScriptComponent::Entry entry;
+        entry.name = name;
+        entry.instance = nullptr;
+
+        sc.scripts.push_back(std::move(entry));
+
+        CreateOne(entity, sc.scripts[sc.scripts.size() - 1]);
+    }
+
+    void ScriptSystem::RemoveScript(Entity& entity, const std::string& name)
+    {
+        if (!entity.HasComponent<ScriptComponent>()) return;
+
+        auto& sc = entity.GetComponent<ScriptComponent>();
+
+        for (auto it = sc.scripts.begin(); it != sc.scripts.end(); ++it)
+        {
+            if (it->name != name) continue;
+
+            if (it->instance)
+            {
+                it->instance->Destroy();
+                auto& all = ScriptRegistry::Instance().GetAll();
+                auto fit = all.find(name);
+                if (fit != all.end())
+                    fit->second.destroy(it->instance);
+                else
+                    delete it->instance;
+            }
+
+            sc.scripts.erase(it);
+
+            if (sc.scripts.size() == 0) 
+            {
+                entity.RemoveComponent<ScriptComponent>();
+            }
+
+            return;
         }
     }
-}
-
-void ScriptSystem::Destroy()
-{
-    //for (auto& fn : impl->destroyFns) 
-       // fn(Scene::Current()->GetRegistry());
-}
-
-void ScriptSystem::Reset()
-{
-    impl->entries.clear();
 }

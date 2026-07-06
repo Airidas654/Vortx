@@ -102,7 +102,6 @@ file(GLOB_RECURSE SRC_EDITOR CONFIGURE_DEPENDS
 add_executable(Editor ${SRC_EDITOR})
 
 target_include_directories(Editor PRIVATE
-    include/Common
     include/Engine
     include/Editor
     external/nlohmann

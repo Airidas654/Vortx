@@ -13,83 +13,87 @@
 #include <fstream>
 #include <filesystem>
 
-std::unique_ptr<Scene>& Scene::Current()
+namespace Vortx
 {
-	return Vortx::SceneManager::current;
-}
 
-void Scene::DetachFromParent(Transform& transform)
-{
-	TransformData& data = transform.Data();
-
-	std::optional<Transform> parent = data.parent;
-
-	if (!parent.has_value())
+	std::unique_ptr<Scene>& Scene::Current()
 	{
-		const auto it = std::remove(children.begin(), children.end(), transform);
-
-		children.erase(it, children.end());
-	}
-	else
-	{
-		std::vector<Transform>& child = parent.value().GetChildren();
-
-		const auto it = std::remove(child.begin(), child.end(), transform);
-
-		child.erase(it, child.end());
+		return Vortx::SceneManager::current;
 	}
 
-	data.parent = std::nullopt;
-}
-
-void Scene::ChangeTransformParent(Transform& transform, std::optional<Transform> &parent, uint32_t index)
-{
-	DetachFromParent(transform);
-
-	if (!parent.has_value())
+	void Scene::DetachFromParent(Transform& transform)
 	{
-		index = max(0u, min((uint32_t)children.size(), index));
+		TransformData& data = transform.Data();
 
-		children.emplace(children.begin() + index, transform);
+		std::optional<Transform> parent = data.parent;
+
+		if (!parent.has_value())
+		{
+			const auto it = std::remove(children.begin(), children.end(), transform);
+
+			children.erase(it, children.end());
+		}
+		else
+		{
+			std::vector<Transform>& child = parent.value().GetChildren();
+
+			const auto it = std::remove(child.begin(), child.end(), transform);
+
+			child.erase(it, child.end());
+		}
+
+		data.parent = std::nullopt;
 	}
-	else
+
+	void Scene::ChangeTransformParent(Transform& transform, std::optional<Transform>& parent, uint32_t index)
 	{
-		TransformData& data_parent = parent.value().Data();
+		DetachFromParent(transform);
 
-		index = max(0u, min((uint32_t)data_parent.children.size(), index));
+		if (!parent.has_value())
+		{
+			index = max(0u, min((uint32_t)children.size(), index));
 
-		data_parent.children.emplace(data_parent.children.begin() + index, transform);
+			children.emplace(children.begin() + index, transform);
+		}
+		else
+		{
+			TransformData& data_parent = parent.value().Data();
 
-		transform.Data().parent = parent;
+			index = max(0u, min((uint32_t)data_parent.children.size(), index));
+
+			data_parent.children.emplace(data_parent.children.begin() + index, transform);
+
+			transform.Data().parent = parent;
+		}
 	}
-}
 
-void Scene::ChangeTransformParent(Transform& transform, std::optional<Transform> &parent)
-{
-	ChangeTransformParent(transform, parent, UINT32_MAX);
-}
+	void Scene::ChangeTransformParent(Transform& transform, std::optional<Transform>& parent)
+	{
+		ChangeTransformParent(transform, parent, UINT32_MAX);
+	}
 
-GameObject Scene::CreateGameObject()
-{
-	GameObject gameObject = { registry.Create() };
+	GameObject Scene::CreateGameObject()
+	{
+		GameObject gameObject = { registry.Create() };
 
-	children.emplace_back(gameObject.AddComponent<Transform>());
-	MetadataData meta = gameObject.GetEntity().AddComponent<MetadataData>();
+		children.emplace_back(gameObject.AddComponent<Transform>());
+		MetadataData meta = gameObject.GetEntity().AddComponent<MetadataData>();
 
-	gameObjectsRegister.emplace(meta.id, gameObject);
+		gameObjectsRegister.emplace(meta.id, gameObject);
 
-	return gameObject;
-}
+		return gameObject;
+	}
 
-std::vector<uint8_t> Scene::Serialize()
-{
-	return SerializerLoader::SerializeScene(*this);
-}
+	std::vector<uint8_t> Scene::Serialize()
+	{
+		return SerializerLoader::SerializeScene(*this);
+	}
 
-void Scene::Deserialize(const std::vector<uint8_t>& data)
-{
-	registry.Clear();
-	children.clear();
-	gameObjectsRegister.clear();
-	SerializerLoader::DeserializeScene(*this, data);
+	void Scene::Deserialize(const std::vector<uint8_t>& data)
+	{
+		registry.Clear();
+		children.clear();
+		gameObjectsRegister.clear();
+		SerializerLoader::DeserializeScene(*this, data);
+	}
 }

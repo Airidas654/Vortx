@@ -4,19 +4,23 @@
 
 #include <iostream>
 
-Engine* GetEngine()
+namespace Vortx
 {
-	return new Engine();
-}
 
-void DestroyEngine(Engine* engine)
-{
-	delete engine;
-}
+	Engine* GetEngine()
+	{
+		return new Engine();
+	}
 
-void Engine::Init()
-{
-	std::cout << "engine" << std::endl;
+	void DestroyEngine(Engine* engine)
+	{
+		delete engine;
+	}
 
-	Vortx::SceneManager::current = std::unique_ptr<Scene>(new Scene());
+	void Engine::Init()
+	{
+		std::cout << "engine" << std::endl;
+
+		Vortx::SceneManager::current = std::unique_ptr<Scene>(new Scene());
+	}
 }

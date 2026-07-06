@@ -3,7 +3,11 @@
 
 #include <iostream>
 
-Entity Registry::Create()
+namespace Vortx
 {
-	return Entity(this, registry.create());
+
+	Entity Registry::Create()
+	{
+		return Entity(this, registry.create());
+	}
 }

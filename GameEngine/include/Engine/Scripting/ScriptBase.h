@@ -1,54 +1,32 @@
 #pragma once
-
-#include "Scripting/ScriptSystem.h"
-
-#include "Scripting\ScriptInstanceBase.h"
+#include "Scripting/ScriptInstance.h"
+#include "Scripting/ScriptRegistry.h"
+#include <typeinfo>
 
 #include <iostream>
 
-class GameObject;
-
-template<typename Derived>
-class ScriptBase : ScriptInstanceBase {
-
-    static void DoStart(void* ptr) { static_cast<Derived*>(ptr)->Start(); }
-    static void DoUpdate(void* ptr) { static_cast<Derived*>(ptr)->Update(); }
-    static void DoDestroy(void* ptr) { static_cast<Derived*>(ptr)->Destroy(); }
-
-    static void AddComponent(Registry &reg, Entity e)
+namespace Vortx
+{
+    template<typename T>
+    class ScriptBase : public ScriptInstance
     {
-        e.AddComponent<Derived>();
-        //reg.AddComponent<Derived>(e);
-    }
+    public:
+        
+        static bool Register()
+        {
+            ScriptRegistry::ScriptInfo info;
+            info.name = typeid(T).name();
+            info.create = []() -> ScriptInstance* { return new T(); };
+            info.destroy = [](ScriptInstance* s) { delete static_cast<T*>(s); };
 
-    inline static bool _ = []()
-    {
-        ScriptEntry entry;
-        entry.typeId = entt::type_hash<Derived>::value();
-        entry.start = &DoStart;
-        entry.update = &DoUpdate;
-        entry.destroy = &DoDestroy;
-        entry.addComponent = &AddComponent;
-        ScriptSystem::Instance().Register(entry);
-        return true;
-    }();
+            ScriptRegistry::Instance().Register(std::move(info));
+            return true;
+        }
 
-public:
+        void Start() override {}
+        void Update() override {}
+        void Destroy() override {}
+    };
+}
 
-    GameObject gameObject;
-
-    void InnerSetGameObject(GameObject& gameObject)
-    {
-        this->gameObject = gameObject;
-    }
-
-    void Start() {}
-    void Update() {}
-    void Destroy() {}
-
-    ScriptBase()
-    {
-        std::cout << "constructor" << std::endl;
-    }
-    
-};
+#define REGISTER_SCRIPT(T) inline bool T##_registered = Vortx::ScriptBase<T>::Register();

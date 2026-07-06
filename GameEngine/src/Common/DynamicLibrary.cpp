@@ -1,4 +1,4 @@
-#include "DynamicLibrary.h"
+#include "Core/DynamicLibrary.h"
 
 #ifdef _WIN32
 #include <windows.h>
@@ -8,65 +8,69 @@
 
 #include <iostream>
 
-DynamicLibrary::~DynamicLibrary()
+namespace Vortx
 {
-    Unload();
-}
 
-bool DynamicLibrary::Load(const std::string& path)
-{
-    Unload(); // ensure clean state if called twice
-
-#ifdef _WIN32
-    handle = (void*)LoadLibraryA(path.c_str());
-    if (!handle)
+    DynamicLibrary::~DynamicLibrary()
     {
-        DWORD err = GetLastError();
-        std::cerr << "[DynamicLibrary] Failed to load '" << path
-            << "' — WinError: " << err << "\n";
-        return false;
+        Unload();
     }
-#else
-    handle = dlopen(path.c_str(), RTLD_NOW);
-    if (!handle)
+
+    bool DynamicLibrary::Load(const std::string& path)
     {
-        std::cerr << "[DynamicLibrary] Failed to load '" << path
-            << "' — " << dlerror() << "\n";
-        return false;
+        Unload();
+
+#ifdef _WIN32
+        handle = (void*)LoadLibraryA(path.c_str());
+        if (!handle)
+        {
+            DWORD err = GetLastError();
+            std::cerr << "[DynamicLibrary] Failed to load '" << path
+                << "' — WinError: " << err << "\n";
+            return false;
+        }
+#else
+        handle = dlopen(path.c_str(), RTLD_NOW);
+        if (!handle)
+        {
+            std::cerr << "[DynamicLibrary] Failed to load '" << path
+                << "' — " << dlerror() << "\n";
+            return false;
+        }
+#endif
+
+        std::cout << "[DynamicLibrary] Loaded '" << path << "'\n";
+        return true;
     }
-#endif
 
-    std::cout << "[DynamicLibrary] Loaded '" << path << "'\n";
-    return true;
-}
-
-void DynamicLibrary::Unload()
-{
-    if (!handle)
-        return;
+    void DynamicLibrary::Unload()
+    {
+        if (!handle)
+            return;
 
 #ifdef _WIN32
-    FreeLibrary((HMODULE)handle);
+        FreeLibrary((HMODULE)handle);
 #else
-    dlclose(handle);
+        dlclose(handle);
 #endif
 
-    handle = nullptr;
-}
+        handle = nullptr;
+    }
 
-void* DynamicLibrary::GetSymbolInternal(const std::string& name)
-{
-    if (!handle)
-        return nullptr;
+    void* DynamicLibrary::GetSymbolInternal(const std::string& name)
+    {
+        if (!handle)
+            return nullptr;
 
 #ifdef _WIN32
-    return (void*)GetProcAddress((HMODULE)handle, name.c_str());
+        return (void*)GetProcAddress((HMODULE)handle, name.c_str());
 #else
-    return dlsym(handle, name.c_str());
+        return dlsym(handle, name.c_str());
 #endif
-}
+    }
 
-bool DynamicLibrary::IsLoaded() const
-{
-    return handle != nullptr;
+    bool DynamicLibrary::IsLoaded() const
+    {
+        return handle != nullptr;
+    }
 }

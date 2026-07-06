@@ -17,92 +17,90 @@
 #include <memory>
 #include <functional>
 
+using namespace Vortx;
+
 //using ImportModelCallback = std::function<void(const std::string& path)>;
 //using ImportTextureCallback = std::function<AssetID(const std::string& path, bool sRGB)>;
 using SaveSceneCallback = std::function<void(const std::string& path)>;
 using LoadSceneCallback = std::function<void(const std::string& path)>;
 using NewSceneCallback = std::function<void()>;
 
-namespace Vortx
-{
+class EditorUI {
+public:
+    EditorUI(GLFWwindow* window, Engine& engine);
+    ~EditorUI();
 
-    class EditorUI {
-    public:
-        EditorUI(GLFWwindow* window, Engine& engine);
-        ~EditorUI();
+    void NewFrame();
+    void Render();
+    void Shutdown();
 
-        void NewFrame();
-        void Render();
-        void Shutdown();
+    /* void SetImportModelCallback(ImportModelCallback cb) { importModel = cb; }
+        void SetImportTextureCallback(ImportTextureCallback cb) { importTexture = cb; }*/
+        void SetSaveSceneCallback(SaveSceneCallback cb) { onSaveScene = cb; }
+        void SetLoadSceneCallback(LoadSceneCallback cb) { onLoadScene = cb; }
+        void SetNewSceneCallback(NewSceneCallback cb) { onNewScene = cb; }
 
-        /* void SetImportModelCallback(ImportModelCallback cb) { importModel = cb; }
-         void SetImportTextureCallback(ImportTextureCallback cb) { importTexture = cb; }*/
-         void SetSaveSceneCallback(SaveSceneCallback cb) { onSaveScene = cb; }
-         void SetLoadSceneCallback(LoadSceneCallback cb) { onLoadScene = cb; }
-         void SetNewSceneCallback(NewSceneCallback cb) { onNewScene = cb; }
+    AssetID GetSelected() const { return selectedNode; }
 
-        AssetID GetSelected() const { return selectedNode; }
+    void ResetSelected() { ChangeSelected(AssetID(0)); };
 
-        void ResetSelected() { ChangeSelected(AssetID(0)); };
+private:
 
-    private:
+    void RenderEditorView();
+    void DrawMenuBar();
+    void RenderDockspace();
+    void DrawScenePanel();
+    void RenderSceneNode(Vortx::Transform& transform, uint32_t index);
+    void DrawPropertiesPanel();
 
-        void RenderEditorView();
-        void DrawMenuBar();
-        void RenderDockspace();
-        void DrawScenePanel();
-        void RenderSceneNode(Transform& transform, uint32_t index);
-        void DrawPropertiesPanel();
+    void DrawToolbar();
+    /*void DrawViewportStatusBar();
+    void DrawRenderSettingsSection();
 
-        void DrawToolbar();
-        /*void DrawViewportStatusBar();
-        void DrawRenderSettingsSection();
+    void RaytraceImageSave();
 
-        void RaytraceImageSave();
+    void DrawCameraTransformSection();
+    void DrawCameraSceneSection();
+    void DrawCameraSection();
+    void DrawTransformSection(Model* model);
+    void DrawMaterialSection(Model* model);
+    void DrawTextureSlot(const char* label, std::function<void(AssetID)> texture_replace, AssetID texID, bool needSRGB, const char* hint);
 
-        void DrawCameraTransformSection();
-        void DrawCameraSceneSection();
-        void DrawCameraSection();
-        void DrawTransformSection(Model* model);
-        void DrawMaterialSection(Model* model);
-        void DrawTextureSlot(const char* label, std::function<void(AssetID)> texture_replace, AssetID texID, bool needSRGB, const char* hint);
+    std::string OpenFileDialog(const char* filterDesc, const char* filterPattern);
+    std::string SaveFileDialog(const char* filterDesc, const char* filterPattern, const char* defaultExt);
+    */
+    void ChangeSelected(const AssetID& entity);
 
-        std::string OpenFileDialog(const char* filterDesc, const char* filterPattern);
-        std::string SaveFileDialog(const char* filterDesc, const char* filterPattern, const char* defaultExt);
-        */
-        void ChangeSelected(const AssetID& entity);
+    GLFWwindow* window;
+    Engine& engine;
 
-        GLFWwindow* window;
-        Engine& engine;
+    //std::unique_ptr<Scene>& scene;
+    //RayTracing* raytracing;
+    //EditorController* editor;
 
-        //std::unique_ptr<Scene>& scene;
-        //RayTracing* raytracing;
-        //EditorController* editor;
+    AssetID selectedNode;
 
-        AssetID selectedNode;
+    /*
+    glm::vec3 cachedTranslation{ 0.0f };
+    glm::vec3 cachedRotation{ 0.0f };
+    glm::vec3 cachedScale{ 1.0f };
 
-        /*
-        glm::vec3 cachedTranslation{ 0.0f };
-        glm::vec3 cachedRotation{ 0.0f };
-        glm::vec3 cachedScale{ 1.0f };
+    int uiRayBounces = 3;
+    int uiShadowBounces = 1;
+    int uiBatchSize = 1;
+    int uiTargetSamples = 512;
+    float uiExposure = 1.0f;
+    bool uiApplyGamma = false;
+    glm::ivec2 uiresolution = { 1280, 720 };
+    float uifov = 45;
 
-        int uiRayBounces = 3;
-        int uiShadowBounces = 1;
-        int uiBatchSize = 1;
-        int uiTargetSamples = 512;
-        float uiExposure = 1.0f;
-        bool uiApplyGamma = false;
-        glm::ivec2 uiresolution = { 1280, 720 };
-        float uifov = 45;
+    bool sectionTransformOpen = true;
+    bool sectionMaterialOpen = true;
+    bool sectionRenderOpen = true;
 
-        bool sectionTransformOpen = true;
-        bool sectionMaterialOpen = true;
-        bool sectionRenderOpen = true;
-
-        ImportModelCallback importModel;
-        ImportTextureCallback importTexture;*/
-        SaveSceneCallback onSaveScene;
-        LoadSceneCallback onLoadScene;
-        NewSceneCallback onNewScene;
-    };
-}
+    ImportModelCallback importModel;
+    ImportTextureCallback importTexture;*/
+    SaveSceneCallback onSaveScene;
+    LoadSceneCallback onLoadScene;
+    NewSceneCallback onNewScene;
+};

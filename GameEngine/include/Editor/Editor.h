@@ -1,26 +1,23 @@
 #pragma once
 
-#include "DynamicLibrary.h"
+#include "Core/DynamicLibrary.h"
 #include "Engine.h"
 
-namespace Vortx
+using namespace Vortx;
+
+class Editor
 {
+public:
+	static void Start(Engine& engine);
+	static void Compile();
 
-	class Editor
-	{
-	public:
-		static void Start(Engine& engine);
-		static void Compile();
+private:
+	static bool isBuilding;
+	static bool needsReload;
+	static std::string cmakePath;
+	static DynamicLibrary gameLib;
 
-	private:
-		static bool isBuilding;
-		static bool needsReload;
-		static std::string cmakePath;
-		static DynamicLibrary gameLib;
+	static void LoadSettings();
 
-		static void LoadSettings();
-
-		static void GenerateSettings();
-	};
-
-}
+	static void GenerateSettings();
+};

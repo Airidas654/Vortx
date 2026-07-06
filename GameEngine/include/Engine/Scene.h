@@ -10,33 +10,37 @@
 #include <optional>
 #include <string>
 
-class ENGINE_API Scene
+namespace Vortx
 {
-public:
 
-	std::string path;
+	class ENGINE_API Scene
+	{
+	public:
 
-	std::unordered_map<AssetID, GameObject> gameObjectsRegister;
+		std::string path;
 
-	void ChangeTransformParent(Transform& transform, std::optional<Transform>& parent);
-	void ChangeTransformParent(Transform& transform, std::optional<Transform>& parent, uint32_t index);
+		std::unordered_map<AssetID, GameObject> gameObjectsRegister;
 
-	GameObject CreateGameObject();
+		void ChangeTransformParent(Transform& transform, std::optional<Transform>& parent);
+		void ChangeTransformParent(Transform& transform, std::optional<Transform>& parent, uint32_t index);
 
-	static std::unique_ptr<Scene>& Current();
+		GameObject CreateGameObject();
 
-	Registry& GetRegistry() { return registry; };
+		static std::unique_ptr<Scene>& Current();
 
-	std::vector<Transform>& GetChildren() { return children; }
+		Registry& GetRegistry() { return registry; };
 
-	std::vector<uint8_t> Serialize();
+		std::vector<Transform>& GetChildren() { return children; }
 
-	void Deserialize(const std::vector<uint8_t>& data);
+		std::vector<uint8_t> Serialize();
 
-private:
-	Registry registry;
+		void Deserialize(const std::vector<uint8_t>& data);
 
-	std::vector<Transform> children;
+	private:
+		Registry registry;
 
-	void DetachFromParent(Transform& transform);
-};
+		std::vector<Transform> children;
+
+		void DetachFromParent(Transform& transform);
+	};
+}

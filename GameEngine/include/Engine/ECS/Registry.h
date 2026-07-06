@@ -4,51 +4,71 @@
 
 #include "entt.hpp"
 
-class Entity;
-
-class ENGINE_API Registry
+namespace Vortx
 {
-private:
-	entt::registry registry;
 
-public:
+	class Entity;
 
-	Registry() = default;
-	~Registry() = default;
-
-	Entity Create();
-
-	auto Storage()
+	class ENGINE_API Registry
 	{
-		return registry.storage();
-	}
+	private:
+		entt::registry registry;
 
-	auto Storage(entt::id_type id)
-	{
-		return registry.storage(id);
-	}
+	public:
 
-	void Clear()
-	{
-		registry.clear();
-	}
+		Registry() = default;
+		~Registry() = default;
 
-	template<typename T>
-	auto View()
-	{
-		return registry.view<T>();
-	}
+		Entity Create();
 
-	template<typename T>
-	T& AddComponent(Entity& entity)
-	{
-		return registry.emplace<T>(entity.GetValue());
-	}
+		auto Storage()
+		{
+			return registry.storage();
+		}
 
-	template<typename T>
-	T& GetComponent(Entity& entity)
-	{
-		return registry.get<T>(entity.GetValue());
-	}
+		auto Storage(entt::id_type id)
+		{
+			return registry.storage(id);
+		}
 
-};
+		void Clear()
+		{
+			registry.clear();
+		}
+
+		template<typename T>
+		auto View()
+		{
+			return registry.view<T>();
+		}
+
+		template<typename T>
+		T& AddComponent(Entity& entity)
+		{
+			return registry.emplace<T>(entity.GetValue());
+		}
+
+		template<typename T>
+		T& GetComponent(Entity& entity)
+		{
+			return registry.get<T>(entity.GetValue());
+		}
+
+		template<typename T>
+		void RemoveComponent(Entity& entity)
+		{
+			registry.remove<T>(entity.GetValue());
+		}
+
+		template<typename T>
+		bool HasComponent(Entity& entity)
+		{
+			if (registry.try_get<T>(entity.GetValue()))
+			{
+				return 1;
+			}
+			return 0;
+		}
+
+	};
+}

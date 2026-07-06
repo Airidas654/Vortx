@@ -13,15 +13,16 @@
   },
   "ExpandedNodes": [
     "",
-    "\\external",
-    "\\external\\entt",
     "\\include",
+    "\\include\\Editor",
     "\\include\\Engine",
-    "\\include\\Engine\\ECS",
     "\\include\\Engine\\Scripting",
+    "\\include\\Engine\\SimpleAPI",
     "\\src",
     "\\src\\Engine",
+    "\\src\\Engine\\Scripting",
     "\\src\\Engine\\SimpleAPI"
   ],
+  "SelectedNode": "\\include\\Engine\\GameEngineIncludes.h",
   "PreviewInSolutionExplorer": false
 }

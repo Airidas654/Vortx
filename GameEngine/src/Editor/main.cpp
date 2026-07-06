@@ -1,4 +1,4 @@
-#include "DynamicLibrary.h"
+#include "Core/DynamicLibrary.h"
 #include "Editor.h"
 
 #include <iostream>
@@ -35,7 +35,7 @@ int main()
 
     Engine* engine = getEngine();
 
-    Vortx::Editor::Start(*engine);
+    Editor::Start(*engine);
 
     destroyEngine(engine);
 
