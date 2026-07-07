@@ -46,12 +46,23 @@ public:
 
 private:
 
+    bool sceneWindowOpen = true;
+    bool propertiesWindowOpen = true;
+    bool consoleWindowOpen = true;
+    bool assetsWindowOpen = true;
+
+    bool consoleSelectMode = false;
+    std::string consoleCachedText;
+    size_t consoleCachedLineCount = 0;
+
     void RenderEditorView();
     void DrawMenuBar();
     void RenderDockspace();
     void DrawScenePanel();
     void RenderSceneNode(Vortx::Transform& transform, uint32_t index);
     void DrawPropertiesPanel();
+    void DrawConsolePanel();
+    void DrawAssetsPanel();
 
     void DrawToolbar();
     /*void DrawViewportStatusBar();

@@ -1,5 +1,6 @@
 #include "Core/DynamicLibrary.h"
 #include "Editor.h"
+#include "Logger.h"
 
 #include <iostream>
 
@@ -8,6 +9,11 @@ using DestroyEngineT = void(*)(Engine*);
 
 int main()
 {
+    static Vortx::LoggerStreamBuf outBuf(std::cout.rdbuf(), Vortx::LogLevel::Info);
+    static Vortx::LoggerStreamBuf errBuf(std::cerr.rdbuf(), Vortx::LogLevel::Error);
+    std::cout.rdbuf(&outBuf);
+    std::cerr.rdbuf(&errBuf);
+
 #ifdef _WIN32
     const char* libName = "GameEngineLib.dll";
 #elif __APPLE__

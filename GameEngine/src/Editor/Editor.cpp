@@ -132,7 +132,7 @@ void Editor::Compile()
 #endif
             if (!pipe)
             {
-                std::cout << "[ERROR] Failed to open pipe for: " + cmd << std::endl;
+                std::cerr << "Failed to open pipe for: " + cmd << std::endl;
                 
                 return false;
             }
@@ -159,7 +159,7 @@ void Editor::Compile()
             "\"" + cmakePath + "\" -S \"" + path.string() +
             "\" -B \"" + path.string() + "/build\" "+
             "-DENGINE_BIN_PATH=\"" + editorPath.string() + "\" " +
-            "-DENGINE_PATH=\"" + "C:/Users/airid/Desktop/GameEngine/GameEngine" + '\"';
+            "-DENGINE_PATH=\"" + "C:/Users/Airidas/Desktop/GameEngine/GameEngine" + '\"';
 
         std::string buildCmd =
             "\"" + cmakePath + "\" --build \"" + path.string() +
@@ -258,7 +258,7 @@ void Editor::Start(Engine& engine)
 #endif
 
             if (!gameLib.Load(gameLibPath.string()))
-                std::cerr << "[Editor] Failed to reload Game.dll\n";
+                std::cerr << "Failed to reload Game.dll\n";
 
         }
 

@@ -15,14 +15,14 @@
     "",
     "\\include",
     "\\include\\Engine",
-    "\\include\\Engine\\Core",
+    "\\include\\Engine\\Scripting",
+    "\\include\\Engine\\SimpleAPI",
     "\\src",
-    "\\src\\Common",
     "\\src\\Editor",
     "\\src\\Engine",
     "\\src\\Engine\\Scripting",
     "\\src\\Engine\\SimpleAPI"
   ],
-  "SelectedNode": "\\src\\Editor\\PropertiesLoader.cpp",
+  "SelectedNode": "\\src\\Editor\\Editor.cpp",
   "PreviewInSolutionExplorer": false
 }
