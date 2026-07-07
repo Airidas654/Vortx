@@ -1,0 +1,5 @@
+# ninja log v6
+42	92	8040272151196953	C:/Users/airid/Desktop/My Projects/First/out/build/x64-Debug/CMakeFiles/cmake.verify_globs	a9281c76c8e8f6
+95	1947	8040272151717667	CMakeFiles/Game.dir/generated/RegisterScripts.cpp.obj	78dba756db5fea02
+1950	2412	8040272170274708	Game.dll	37fc4b6cb8358339
+1950	2412	8040272170274708	Game.lib	37fc4b6cb8358339

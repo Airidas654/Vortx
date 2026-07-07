@@ -1,0 +1,10 @@
+^C:\USERS\AIRID\DESKTOP\MY PROJECTS\FIRST\CMAKELISTS.TXT
+setlocal
+C:\Users\airid\Desktop\GameEngine\GameEngine\out\build\x64-debug\bin\CMake\bin\cmake.exe "-SC:/Users/airid/Desktop/My Projects/First" "-BC:/Users/airid/Desktop/My Projects/First/build" --check-stamp-file "C:/Users/airid/Desktop/My Projects/First/build/CMakeFiles/generate.stamp"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
