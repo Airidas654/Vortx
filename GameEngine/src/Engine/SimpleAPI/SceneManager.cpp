@@ -15,6 +15,7 @@ namespace Vortx
 	void SceneManager::NewScene()
 	{
 		current.reset(new Scene());
+		current->SyncAssets();
 	}
 
 	void SceneManager::LoadScene(const uint32_t index)

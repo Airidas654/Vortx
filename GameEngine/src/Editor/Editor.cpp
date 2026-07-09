@@ -6,11 +6,15 @@
 #include "Scripting/ScriptSystem.h"
 #include "SimpleAPI/Time.h"
 #include "SimpleAPI/SceneManager.h"
+#include "SimpleAPI/SpriteRenderer.h"
 #include "ProjectHub.h"
 #include "Project.h"
 #include "PlayModeManager.h"
 #include "SerializerLoader.h"
 #include "Scripting\ScriptRegistry.h"
+#include "Assets/AudioAsset.h"
+#include "Assets/FontAsset.h"
+#include "Assets/TextureAsset.h"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -185,6 +189,8 @@ void Test(Engine& engine)
     Transform par = Scene::Current()->CreateGameObject().GetComponent<Transform>();
 
     Transform chil = Scene::Current()->CreateGameObject().GetComponent<Transform>();
+
+    chil.AddComponent<SpriteRenderer>();
 
     //chil.AddComponent<GameTest>();
 

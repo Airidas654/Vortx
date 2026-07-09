@@ -6,6 +6,7 @@
 #include "Components/ComponentMetadata.h" 
 #include "SerializerLoader.h"
 #include "Core/File.h"
+#include "Core/AssetDatabase.h"
 
 #include "json.hpp"
 
@@ -95,5 +96,12 @@ namespace Vortx
 		children.clear();
 		gameObjectsRegister.clear();
 		SerializerLoader::DeserializeScene(*this, data);
+		SyncAssets();
+	}
+
+	void Scene::SyncAssets()
+	{
+		std::vector<AssetID> refs = SerializerLoader::CollectSceneAssets(*this);
+		AssetDatabase::SyncActiveSet(refs);
 	}
 }

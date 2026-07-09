@@ -36,6 +36,8 @@ namespace Vortx
 
 		void Deserialize(const std::vector<uint8_t>& data);
 
+		void SyncAssets();
+
 	private:
 		Registry registry;
 

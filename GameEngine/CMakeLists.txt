@@ -56,6 +56,7 @@ file(GLOB_RECURSE SRC_ENGINE CONFIGURE_DEPENDS
     src/Engine/ECS/*.cpp
     src/Engine/SimpleAPI/*.cpp
     src/Engine/Scripting/*.cpp 
+    src/Engine/Core/*.cpp
 )
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
@@ -96,6 +97,7 @@ endif()
 # ===============================================================
 file(GLOB_RECURSE SRC_EDITOR CONFIGURE_DEPENDS
     src/Editor/*.cpp
+    src/Editor/Assets/*.cpp
     src/Common/*.cpp
 )
 
@@ -125,7 +127,7 @@ endif()
 if(MSVC)
     target_link_options(Editor PRIVATE
         $<$<NOT:$<CONFIG:Debug>>:/SUBSYSTEM:WINDOWS>
-        $<$<NOT:$<CONFIG:Debug>>:/ENTRY:mainCRTStartup>
+        $<$<NOT:$<CONFIG:Debug>>:/ENTRY:mainCRTStartup> 
     )
 endif()
 

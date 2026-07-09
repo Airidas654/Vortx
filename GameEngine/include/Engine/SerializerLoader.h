@@ -3,6 +3,7 @@
 #include "ECS/Entity.h"
 #include "EngineAPI.h"
 #include "Scene.h"
+#include "AssetID.h"
 
 #include "entt.hpp"
 #include "json.hpp"
@@ -20,9 +21,11 @@ namespace Vortx
 	public:
 		using WriteFn = std::function<void(Entity entity, nlohmann::json& out)>;
 		using ReadFn = std::function<void(Entity entity, const nlohmann::json& in)>;
+		using CollectFn = std::function<void(Entity entity, std::vector<AssetID>& out)>;
 
 		static std::unordered_map<entt::id_type, WriteFn> writeFns;
 		static std::unordered_map<entt::id_type, ReadFn> readFns;
+		static std::unordered_map<entt::id_type, CollectFn> collectFns;
 
 		static void Reset();
 
@@ -30,18 +33,21 @@ namespace Vortx
 
 		static void DeserializeScene(Scene& scene, const std::vector<uint8_t>& cbor);
 
+		static std::vector<AssetID> CollectSceneAssets(Scene& scene);
+
 	private:
 
-		static void RegisterComponent(entt::id_type hash, WriteFn write, ReadFn read)
+		static void RegisterComponent(entt::id_type hash, WriteFn write, ReadFn read, CollectFn collect = nullptr)
 		{
 			writeFns[hash] = std::move(write);
 			readFns[hash] = std::move(read);
+			if (collect) collectFns[hash] = std::move(collect);
 		}
 
 		template<typename T>
-		static void RegisterComponent(WriteFn write, ReadFn read)
+		static void RegisterComponent(WriteFn write, ReadFn read, CollectFn collect = nullptr)
 		{
-			RegisterComponent(entt::type_hash<T>::value(), std::move(write), std::move(read));
+			RegisterComponent(entt::type_hash<T>::value(), std::move(write), std::move(read), std::move(collect));
 		}
 	};
 }

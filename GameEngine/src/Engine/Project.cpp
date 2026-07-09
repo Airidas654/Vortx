@@ -2,6 +2,7 @@
 
 #include "Core/File.h"
 #include "SimpleAPI/SceneManager.h"
+#include "Core/AssetDatabase.h"
 
 #include <iostream>
 #include <fstream>
@@ -51,6 +52,9 @@ namespace Vortx
                 index++;
             }
         }
+
+        std::filesystem::path assetsRoot = std::filesystem::path(path).parent_path() / "Assets";
+        AssetDatabase::Refresh(assetsRoot.string());
 
         SceneManager::LoadScene(0);
 	}

@@ -175,6 +175,33 @@ build imgui.lib: CXX_STATIC_LIBRARY_LINKER__imgui_Debug CMakeFiles\imgui.dir\ext
 
 build cmake_object_order_depends_target_GameEngineLib: phony || cmake_object_order_depends_target_glad cmake_object_order_depends_target_glfw
 
+build CMakeFiles\GameEngineLib.dir\src\Engine\Core\Asset.cpp.obj: CXX_COMPILER__GameEngineLib_unscanned_Debug C$:\Users\Airidas\Desktop\GameEngine\GameEngine\src\Engine\Core\Asset.cpp || cmake_object_order_depends_target_GameEngineLib
+  DEFINES = -DENGINE_BUILD_DLL -DGLFW_DLL -DGLM_ENABLE_EXPERIMENTAL -DGameEngineLib_EXPORTS
+  FLAGS = /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -std:c++17 -MDd
+  INCLUDES = -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\include\Engine -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\include -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glad\include -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glm -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\miniaudio -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\nlohmann -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\stb_image -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\stb_truetype -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\entt
+  OBJECT_DIR = CMakeFiles\GameEngineLib.dir
+  OBJECT_FILE_DIR = CMakeFiles\GameEngineLib.dir\src\Engine\Core
+  TARGET_COMPILE_PDB = CMakeFiles\GameEngineLib.dir\
+  TARGET_PDB = bin\GameEngineLib.pdb
+
+build CMakeFiles\GameEngineLib.dir\src\Engine\Core\AssetDatabase.cpp.obj: CXX_COMPILER__GameEngineLib_unscanned_Debug C$:\Users\Airidas\Desktop\GameEngine\GameEngine\src\Engine\Core\AssetDatabase.cpp || cmake_object_order_depends_target_GameEngineLib
+  DEFINES = -DENGINE_BUILD_DLL -DGLFW_DLL -DGLM_ENABLE_EXPERIMENTAL -DGameEngineLib_EXPORTS
+  FLAGS = /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -std:c++17 -MDd
+  INCLUDES = -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\include\Engine -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\include -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glad\include -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glm -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\miniaudio -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\nlohmann -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\stb_image -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\stb_truetype -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\entt
+  OBJECT_DIR = CMakeFiles\GameEngineLib.dir
+  OBJECT_FILE_DIR = CMakeFiles\GameEngineLib.dir\src\Engine\Core
+  TARGET_COMPILE_PDB = CMakeFiles\GameEngineLib.dir\
+  TARGET_PDB = bin\GameEngineLib.pdb
+
+build CMakeFiles\GameEngineLib.dir\src\Engine\Core\AssetMeta.cpp.obj: CXX_COMPILER__GameEngineLib_unscanned_Debug C$:\Users\Airidas\Desktop\GameEngine\GameEngine\src\Engine\Core\AssetMeta.cpp || cmake_object_order_depends_target_GameEngineLib
+  DEFINES = -DENGINE_BUILD_DLL -DGLFW_DLL -DGLM_ENABLE_EXPERIMENTAL -DGameEngineLib_EXPORTS
+  FLAGS = /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -std:c++17 -MDd
+  INCLUDES = -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\include\Engine -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\include -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glad\include -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glm -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\miniaudio -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\nlohmann -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\stb_image -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\stb_truetype -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\entt
+  OBJECT_DIR = CMakeFiles\GameEngineLib.dir
+  OBJECT_FILE_DIR = CMakeFiles\GameEngineLib.dir\src\Engine\Core
+  TARGET_COMPILE_PDB = CMakeFiles\GameEngineLib.dir\
+  TARGET_PDB = bin\GameEngineLib.pdb
+
 build CMakeFiles\GameEngineLib.dir\src\Engine\ECS\Entity.cpp.obj: CXX_COMPILER__GameEngineLib_unscanned_Debug C$:\Users\Airidas\Desktop\GameEngine\GameEngine\src\Engine\ECS\Entity.cpp || cmake_object_order_depends_target_GameEngineLib
   DEFINES = -DENGINE_BUILD_DLL -DGLFW_DLL -DGLM_ENABLE_EXPERIMENTAL -DGameEngineLib_EXPORTS
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -std:c++17 -MDd
@@ -283,6 +310,15 @@ build CMakeFiles\GameEngineLib.dir\src\Engine\SimpleAPI\SceneManager.cpp.obj: CX
   TARGET_COMPILE_PDB = CMakeFiles\GameEngineLib.dir\
   TARGET_PDB = bin\GameEngineLib.pdb
 
+build CMakeFiles\GameEngineLib.dir\src\Engine\SimpleAPI\SpriteRenderer.cpp.obj: CXX_COMPILER__GameEngineLib_unscanned_Debug C$:\Users\Airidas\Desktop\GameEngine\GameEngine\src\Engine\SimpleAPI\SpriteRenderer.cpp || cmake_object_order_depends_target_GameEngineLib
+  DEFINES = -DENGINE_BUILD_DLL -DGLFW_DLL -DGLM_ENABLE_EXPERIMENTAL -DGameEngineLib_EXPORTS
+  FLAGS = /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -std:c++17 -MDd
+  INCLUDES = -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\include\Engine -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\include -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glad\include -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glm -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\miniaudio -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\nlohmann -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\stb_image -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\stb_truetype -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\entt
+  OBJECT_DIR = CMakeFiles\GameEngineLib.dir
+  OBJECT_FILE_DIR = CMakeFiles\GameEngineLib.dir\src\Engine\SimpleAPI
+  TARGET_COMPILE_PDB = CMakeFiles\GameEngineLib.dir\
+  TARGET_PDB = bin\GameEngineLib.pdb
+
 build CMakeFiles\GameEngineLib.dir\src\Engine\SimpleAPI\Time.cpp.obj: CXX_COMPILER__GameEngineLib_unscanned_Debug C$:\Users\Airidas\Desktop\GameEngine\GameEngine\src\Engine\SimpleAPI\Time.cpp || cmake_object_order_depends_target_GameEngineLib
   DEFINES = -DENGINE_BUILD_DLL -DGLFW_DLL -DGLM_ENABLE_EXPERIMENTAL -DGameEngineLib_EXPORTS
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -std:c++17 -MDd
@@ -309,7 +345,7 @@ build CMakeFiles\GameEngineLib.dir\src\Engine\SimpleAPI\Transform.cpp.obj: CXX_C
 #############################################
 # Link the shared library bin\GameEngineLib.dll
 
-build bin\GameEngineLib.dll bin\GameEngineLib.lib: CXX_SHARED_LIBRARY_LINKER__GameEngineLib_Debug CMakeFiles\GameEngineLib.dir\src\Engine\ECS\Entity.cpp.obj CMakeFiles\GameEngineLib.dir\src\Engine\ECS\Registry.cpp.obj CMakeFiles\GameEngineLib.dir\src\Engine\Engine.cpp.obj CMakeFiles\GameEngineLib.dir\src\Engine\Project.cpp.obj CMakeFiles\GameEngineLib.dir\src\Engine\Scene.cpp.obj CMakeFiles\GameEngineLib.dir\src\Engine\Scripting\ScriptBase.cpp.obj CMakeFiles\GameEngineLib.dir\src\Engine\Scripting\ScriptRegistry.cpp.obj CMakeFiles\GameEngineLib.dir\src\Engine\Scripting\ScriptSystem.cpp.obj CMakeFiles\GameEngineLib.dir\src\Engine\SerializerLoader.cpp.obj CMakeFiles\GameEngineLib.dir\src\Engine\SimpleAPI\BaseComponent.cpp.obj CMakeFiles\GameEngineLib.dir\src\Engine\SimpleAPI\GameObject.cpp.obj CMakeFiles\GameEngineLib.dir\src\Engine\SimpleAPI\SceneManager.cpp.obj CMakeFiles\GameEngineLib.dir\src\Engine\SimpleAPI\Time.cpp.obj CMakeFiles\GameEngineLib.dir\src\Engine\SimpleAPI\Transform.cpp.obj | glad.lib external\glfw\src\glfw3dll.lib || bin\glfw3.dll glad.lib
+build bin\GameEngineLib.dll bin\GameEngineLib.lib: CXX_SHARED_LIBRARY_LINKER__GameEngineLib_Debug CMakeFiles\GameEngineLib.dir\src\Engine\Core\Asset.cpp.obj CMakeFiles\GameEngineLib.dir\src\Engine\Core\AssetDatabase.cpp.obj CMakeFiles\GameEngineLib.dir\src\Engine\Core\AssetMeta.cpp.obj CMakeFiles\GameEngineLib.dir\src\Engine\ECS\Entity.cpp.obj CMakeFiles\GameEngineLib.dir\src\Engine\ECS\Registry.cpp.obj CMakeFiles\GameEngineLib.dir\src\Engine\Engine.cpp.obj CMakeFiles\GameEngineLib.dir\src\Engine\Project.cpp.obj CMakeFiles\GameEngineLib.dir\src\Engine\Scene.cpp.obj CMakeFiles\GameEngineLib.dir\src\Engine\Scripting\ScriptBase.cpp.obj CMakeFiles\GameEngineLib.dir\src\Engine\Scripting\ScriptRegistry.cpp.obj CMakeFiles\GameEngineLib.dir\src\Engine\Scripting\ScriptSystem.cpp.obj CMakeFiles\GameEngineLib.dir\src\Engine\SerializerLoader.cpp.obj CMakeFiles\GameEngineLib.dir\src\Engine\SimpleAPI\BaseComponent.cpp.obj CMakeFiles\GameEngineLib.dir\src\Engine\SimpleAPI\GameObject.cpp.obj CMakeFiles\GameEngineLib.dir\src\Engine\SimpleAPI\SceneManager.cpp.obj CMakeFiles\GameEngineLib.dir\src\Engine\SimpleAPI\SpriteRenderer.cpp.obj CMakeFiles\GameEngineLib.dir\src\Engine\SimpleAPI\Time.cpp.obj CMakeFiles\GameEngineLib.dir\src\Engine\SimpleAPI\Transform.cpp.obj | glad.lib external\glfw\src\glfw3dll.lib || bin\glfw3.dll glad.lib
   LANGUAGE_COMPILE_FLAGS = /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -MDd
   LINK_FLAGS = /machine:x64 /debug /INCREMENTAL
   LINK_LIBRARIES = opengl32.lib  glad.lib  external\glfw\src\glfw3dll.lib  opengl32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
@@ -337,6 +373,33 @@ build CMakeFiles\Editor.dir\src\Common\DynamicLibrary.cpp.obj: CXX_COMPILER__Edi
   INCLUDES = -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\include\Engine -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\include\Editor -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\nlohmann -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\include -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glad\include -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glm -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\miniaudio -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\stb_image -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\stb_truetype -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\entt -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\imgui-docking -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\imgui-docking\backends
   OBJECT_DIR = CMakeFiles\Editor.dir
   OBJECT_FILE_DIR = CMakeFiles\Editor.dir\src\Common
+  TARGET_COMPILE_PDB = CMakeFiles\Editor.dir\
+  TARGET_PDB = bin\Editor.pdb
+
+build CMakeFiles\Editor.dir\src\Editor\Assets\AudioAsset.cpp.obj: CXX_COMPILER__Editor_unscanned_Debug C$:\Users\Airidas\Desktop\GameEngine\GameEngine\src\Editor\Assets\AudioAsset.cpp || cmake_object_order_depends_target_Editor
+  DEFINES = -DGLFW_DLL -DGLM_ENABLE_EXPERIMENTAL
+  FLAGS = /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -std:c++17 -MDd
+  INCLUDES = -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\include\Engine -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\include\Editor -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\nlohmann -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\include -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glad\include -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glm -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\miniaudio -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\stb_image -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\stb_truetype -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\entt -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\imgui-docking -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\imgui-docking\backends
+  OBJECT_DIR = CMakeFiles\Editor.dir
+  OBJECT_FILE_DIR = CMakeFiles\Editor.dir\src\Editor\Assets
+  TARGET_COMPILE_PDB = CMakeFiles\Editor.dir\
+  TARGET_PDB = bin\Editor.pdb
+
+build CMakeFiles\Editor.dir\src\Editor\Assets\FontAsset.cpp.obj: CXX_COMPILER__Editor_unscanned_Debug C$:\Users\Airidas\Desktop\GameEngine\GameEngine\src\Editor\Assets\FontAsset.cpp || cmake_object_order_depends_target_Editor
+  DEFINES = -DGLFW_DLL -DGLM_ENABLE_EXPERIMENTAL
+  FLAGS = /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -std:c++17 -MDd
+  INCLUDES = -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\include\Engine -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\include\Editor -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\nlohmann -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\include -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glad\include -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glm -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\miniaudio -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\stb_image -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\stb_truetype -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\entt -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\imgui-docking -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\imgui-docking\backends
+  OBJECT_DIR = CMakeFiles\Editor.dir
+  OBJECT_FILE_DIR = CMakeFiles\Editor.dir\src\Editor\Assets
+  TARGET_COMPILE_PDB = CMakeFiles\Editor.dir\
+  TARGET_PDB = bin\Editor.pdb
+
+build CMakeFiles\Editor.dir\src\Editor\Assets\TextureAsset.cpp.obj: CXX_COMPILER__Editor_unscanned_Debug C$:\Users\Airidas\Desktop\GameEngine\GameEngine\src\Editor\Assets\TextureAsset.cpp || cmake_object_order_depends_target_Editor
+  DEFINES = -DGLFW_DLL -DGLM_ENABLE_EXPERIMENTAL
+  FLAGS = /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -std:c++17 -MDd
+  INCLUDES = -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\include\Engine -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\include\Editor -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\nlohmann -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glfw\include -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glad\include -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\glm -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\miniaudio -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\stb_image -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\stb_truetype -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\entt -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\imgui-docking -IC:\Users\Airidas\Desktop\GameEngine\GameEngine\external\imgui-docking\backends
+  OBJECT_DIR = CMakeFiles\Editor.dir
+  OBJECT_FILE_DIR = CMakeFiles\Editor.dir\src\Editor\Assets
   TARGET_COMPILE_PDB = CMakeFiles\Editor.dir\
   TARGET_PDB = bin\Editor.pdb
 
@@ -420,7 +483,7 @@ build CMakeFiles\Editor.dir\src\Editor\main.cpp.obj: CXX_COMPILER__Editor_unscan
 #############################################
 # Link the executable bin\Editor.exe
 
-build bin\Editor.exe: CXX_EXECUTABLE_LINKER__Editor_Debug CMakeFiles\Editor.dir\src\Common\DynamicLibrary.cpp.obj CMakeFiles\Editor.dir\src\Editor\Editor.cpp.obj CMakeFiles\Editor.dir\src\Editor\EditorInputManager.cpp.obj CMakeFiles\Editor.dir\src\Editor\EditorUI.cpp.obj CMakeFiles\Editor.dir\src\Editor\Logger.cpp.obj CMakeFiles\Editor.dir\src\Editor\PlayModeManager.cpp.obj CMakeFiles\Editor.dir\src\Editor\ProjectHub.cpp.obj CMakeFiles\Editor.dir\src\Editor\PropertiesLoader.cpp.obj CMakeFiles\Editor.dir\src\Editor\main.cpp.obj | bin\GameEngineLib.lib imgui.lib external\glfw\src\glfw3dll.lib glad.lib || bin\GameEngineLib.dll bin\glfw3.dll glad.lib imgui.lib
+build bin\Editor.exe: CXX_EXECUTABLE_LINKER__Editor_Debug CMakeFiles\Editor.dir\src\Common\DynamicLibrary.cpp.obj CMakeFiles\Editor.dir\src\Editor\Assets\AudioAsset.cpp.obj CMakeFiles\Editor.dir\src\Editor\Assets\FontAsset.cpp.obj CMakeFiles\Editor.dir\src\Editor\Assets\TextureAsset.cpp.obj CMakeFiles\Editor.dir\src\Editor\Editor.cpp.obj CMakeFiles\Editor.dir\src\Editor\EditorInputManager.cpp.obj CMakeFiles\Editor.dir\src\Editor\EditorUI.cpp.obj CMakeFiles\Editor.dir\src\Editor\Logger.cpp.obj CMakeFiles\Editor.dir\src\Editor\PlayModeManager.cpp.obj CMakeFiles\Editor.dir\src\Editor\ProjectHub.cpp.obj CMakeFiles\Editor.dir\src\Editor\PropertiesLoader.cpp.obj CMakeFiles\Editor.dir\src\Editor\main.cpp.obj | bin\GameEngineLib.lib imgui.lib external\glfw\src\glfw3dll.lib glad.lib || bin\GameEngineLib.dll bin\glfw3.dll glad.lib imgui.lib
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -MDd
   LINK_FLAGS = /machine:x64 /debug /INCREMENTAL /subsystem:console
   LINK_LIBRARIES = bin\GameEngineLib.lib  imgui.lib  external\glfw\src\glfw3dll.lib  opengl32.lib  opengl32.lib  glad.lib  kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib

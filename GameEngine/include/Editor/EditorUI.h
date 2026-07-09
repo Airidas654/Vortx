@@ -16,6 +16,7 @@
 #include <string>
 #include <memory>
 #include <functional>
+#include <unordered_set>
 
 using namespace Vortx;
 
@@ -54,6 +55,9 @@ private:
     bool consoleSelectMode = false;
     std::string consoleCachedText;
     size_t consoleCachedLineCount = 0;
+
+    std::string currentAssetFolder;
+    std::unordered_set<Vortx::AssetID> previewAcquired;
 
     void RenderEditorView();
     void DrawMenuBar();

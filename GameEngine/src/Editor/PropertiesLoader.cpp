@@ -6,6 +6,9 @@
 #include "Scene.h"
 #include "Scripting\ScriptSystem.h"
 #include "Scripting\ScriptRegistry.h"
+#include "Components/ComponentSpriteRenderer.h"
+#include "Core/AssetDatabase.h"
+#include "Assets/TextureAsset.h"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -95,6 +98,41 @@ void PropertiesLoader::Reset()
             ImGui::TextDisabled("No scripts attached");
 
        // ImGui::Spacing();
+    });
+
+    RegisterComponent<SpriteRendererData>("Sprite Renderer", true, [](Entity entity) {
+        auto& sr = entity.GetComponent<SpriteRendererData>();
+
+        ImGui::Spacing();
+        ImGui::TextDisabled("Texture");
+        ImGui::SameLine();
+
+        Vortx::TextureAsset* tex = Vortx::AssetDatabase::GetLoaded<Vortx::TextureAsset>(sr.textureID);
+
+        if (tex)
+            ImGui::ImageButton("##texPreview", (ImTextureID)(intptr_t)tex->glHandle, ImVec2(48, 48));
+        else
+            ImGui::Button("None", ImVec2(48, 48));
+
+        if (ImGui::BeginDragDropTarget())
+        {
+            if (auto* payload = ImGui::AcceptDragDropPayload("ASSET_TEXTURE"))
+            {
+                sr.textureID = *(Vortx::AssetID*)payload->Data;
+                if (Vortx::Scene::Current())
+                    Vortx::Scene::Current()->SyncAssets();
+            }
+            ImGui::EndDragDropTarget();
+        }
+
+        ImGui::Spacing();
+        ImGui::TextDisabled("Tint");
+        ImGui::ColorEdit4("##tint", (float*)&sr.color);
+
+        ImGui::Checkbox("Flip X", &sr.flipX);
+        ImGui::SameLine();
+        ImGui::Checkbox("Flip Y", &sr.flipY);
+        ImGui::Spacing();
     });
 }
 
