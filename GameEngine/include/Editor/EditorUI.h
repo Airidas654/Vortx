@@ -59,6 +59,8 @@ private:
     std::string currentAssetFolder;
     std::unordered_set<Vortx::AssetID> previewAcquired;
 
+    float cellSize = 100;
+
     void RenderEditorView();
     void DrawMenuBar();
     void RenderDockspace();
