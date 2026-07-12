@@ -14,16 +14,15 @@
   "ExpandedNodes": [
     "",
     "\\include",
-    "\\include\\Engine",
-    "\\include\\Engine\\Components",
-    "\\include\\Engine\\Scripting",
-    "\\include\\Engine\\SimpleAPI",
+    "\\include\\Editor",
+    "\\include\\Executable",
+    "\\include\\Executable\\Renderer",
     "\\src",
-    "\\src\\Editor",
-    "\\src\\Editor\\Assets",
-    "\\src\\Engine",
-    "\\src\\Engine\\Scripting"
+    "\\src\\Engine\\Scripting",
+    "\\src\\Executable",
+    "\\src\\Executable\\Assets",
+    "\\src\\Executable\\Renderer"
   ],
-  "SelectedNode": "\\src\\Engine\\SerializerLoader.cpp",
+  "SelectedNode": "\\include\\Executable\\Renderer\\RenderTypes.h",
   "PreviewInSolutionExplorer": false
 }

@@ -29,8 +29,7 @@ namespace Vortx
 
         if (!pixels)
         {
-            std::cerr << "[TextureAsset] Failed to load '" << path << "': "
-                       << stbi_failure_reason() << "\n";
+            std::cerr << "Failed to load '" << path << "': " << stbi_failure_reason() << "\n";
             return nullptr;
         }
 

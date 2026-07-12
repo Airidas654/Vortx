@@ -2,6 +2,7 @@
 
 #include "AssetID.h"
 #include "Engine.h"
+#include "Renderer\RenderTypes.h"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -37,13 +38,16 @@ public:
 
     /* void SetImportModelCallback(ImportModelCallback cb) { importModel = cb; }
         void SetImportTextureCallback(ImportTextureCallback cb) { importTexture = cb; }*/
-        void SetSaveSceneCallback(SaveSceneCallback cb) { onSaveScene = cb; }
-        void SetLoadSceneCallback(LoadSceneCallback cb) { onLoadScene = cb; }
-        void SetNewSceneCallback(NewSceneCallback cb) { onNewScene = cb; }
+    void SetSaveSceneCallback(SaveSceneCallback cb) { onSaveScene = cb; }
+    void SetLoadSceneCallback(LoadSceneCallback cb) { onLoadScene = cb; }
+    void SetNewSceneCallback(NewSceneCallback cb) { onNewScene = cb; }
 
     AssetID GetSelected() const { return selectedNode; }
 
     void ResetSelected() { ChangeSelected(AssetID(0)); };
+
+    RenderTargetHandle& GetSceneRenderTarget() { return sceneRenderTarget; };
+    RenderTargetHandle& GetGameRenderTarget() { return gameRenderTarget; };
 
 private:
 
@@ -51,6 +55,8 @@ private:
     bool propertiesWindowOpen = true;
     bool consoleWindowOpen = true;
     bool assetsWindowOpen = true;
+    bool sceneViewWindowOpen = true;
+    bool gameViewWindowOpen = true;
 
     bool consoleSelectMode = false;
     std::string consoleCachedText;
@@ -61,6 +67,11 @@ private:
 
     float cellSize = 100;
 
+    RenderTargetHandle sceneRenderTarget;
+    RenderTargetHandle gameRenderTarget;
+    uint32_t sceneViewWidth = 0, sceneViewHeight = 0;
+    uint32_t gameViewWidth = 0, gameViewHeight = 0;
+
     void RenderEditorView();
     void DrawMenuBar();
     void RenderDockspace();
@@ -69,23 +80,13 @@ private:
     void DrawPropertiesPanel();
     void DrawConsolePanel();
     void DrawAssetsPanel();
+    void DrawSceneViewPanel();
+    void DrawGameViewPanel();
 
     void DrawToolbar();
-    /*void DrawViewportStatusBar();
-    void DrawRenderSettingsSection();
 
-    void RaytraceImageSave();
+    
 
-    void DrawCameraTransformSection();
-    void DrawCameraSceneSection();
-    void DrawCameraSection();
-    void DrawTransformSection(Model* model);
-    void DrawMaterialSection(Model* model);
-    void DrawTextureSlot(const char* label, std::function<void(AssetID)> texture_replace, AssetID texID, bool needSRGB, const char* hint);
-
-    std::string OpenFileDialog(const char* filterDesc, const char* filterPattern);
-    std::string SaveFileDialog(const char* filterDesc, const char* filterPattern, const char* defaultExt);
-    */
     void ChangeSelected(const AssetID& entity);
 
     GLFWwindow* window;

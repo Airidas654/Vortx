@@ -53,10 +53,6 @@ target_link_libraries(imgui PUBLIC glad)
 # ===============================================================
 file(GLOB_RECURSE SRC_ENGINE CONFIGURE_DEPENDS
     src/Engine/*.cpp
-    src/Engine/ECS/*.cpp
-    src/Engine/SimpleAPI/*.cpp
-    src/Engine/Scripting/*.cpp 
-    src/Engine/Core/*.cpp
 )
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
@@ -97,14 +93,15 @@ endif()
 # ===============================================================
 file(GLOB_RECURSE SRC_EDITOR CONFIGURE_DEPENDS
     src/Editor/*.cpp
-    src/Editor/Assets/*.cpp
     src/Common/*.cpp
+    src/Executable/*.cpp
 )
 
 add_executable(Editor ${SRC_EDITOR})
 
 target_include_directories(Editor PRIVATE
     include/Engine
+    include/Executable
     include/Editor
     external/nlohmann
     external/glfw/include

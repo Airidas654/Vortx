@@ -15,6 +15,8 @@
 #include "Assets/AudioAsset.h"
 #include "Assets/FontAsset.h"
 #include "Assets/TextureAsset.h"
+#include "Renderer/OpenGLRenderDevice.h"
+#include "Renderer/Renderer2D.h"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -48,6 +50,8 @@ GLFWwindow* CreateWindow()
     GLFWmonitor* monitor = glfwGetPrimaryMonitor();
     const GLFWvidmode* mode = glfwGetVideoMode(monitor);
 
+    OpenGLRenderDevice::PrepareGLFWHints();
+
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -61,11 +65,14 @@ GLFWwindow* CreateWindow()
         return nullptr;
     }
 
-    glfwMakeContextCurrent(window);
+    auto device = std::make_unique<OpenGLRenderDevice>();
+    if (!Renderer2D::Init(std::move(device), window)) return nullptr;
+
+    /*glfwMakeContextCurrent(window);
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
         return nullptr;
-    }
+    }*/
 
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -280,12 +287,30 @@ void Editor::Start(Engine& engine)
             ScriptSystem::Instance().Update();
         }
 
+        Renderer2D::NewFrame();
+
+        glm::mat4 viewProjMatrix(0.25f, 0,0,0,0,0.333f,0,0,0,0, -0.02f, 0,0,0, -1.202f, 1);
+
+        Renderer2D::BeginScene(viewProjMatrix);
+
+        //Renderer2D::BeginScene(viewProjMatrix, glm::vec4(0.07f, 0.07f, 0.08f, 1.0f), editorUI.GetSceneRenderTarget());
+        //DrawSceneSprites();   // whatever iterates your ECS and calls Renderer2D::DrawSprite
+        Renderer2D::EndScene();
+
+       // Renderer2D::BeginScene(viewProjMatrix, glm::vec4(0.07f, 0.07f, 0.08f, 1.0f), editorUI.GetGameRenderTarget());
+        //DrawSceneSprites();
+        //Renderer2D::EndScene();
+
+        Renderer2D::BindBackbuffer();
+
         editorUI.NewFrame();
 
-        glClearColor(0.07f, 0.07f, 0.08f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        //glClearColor(0.07f, 0.07f, 0.08f, 1.0f);
+        //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         editorUI.Render();
+
+        Renderer2D::Present();
 
         glfwSwapBuffers(window);
     }
