@@ -3,6 +3,7 @@
 #include "Components/ComponentTransform.h"
 #include "Components/ComponentMetadata.h"
 #include "Components\ComponentScript.h"
+#include "Components\ComponentCamera.h"
 #include "Scene.h"
 #include "Scripting\ScriptSystem.h"
 #include "Scripting\ScriptRegistry.h"
@@ -134,6 +135,17 @@ void PropertiesLoader::Reset()
         ImGui::Checkbox("Flip Y", &sr.flipY);
         ImGui::Spacing();
     });
+
+    RegisterComponent<Vortx::CameraData>("Camera", true, [](Entity entity) {
+        auto& t = entity.GetComponent<Vortx::CameraData>();
+
+        ImGui::Spacing();
+
+        ImGui::TextDisabled("Size");
+        ImGui::DragFloat("##siz", (float*)&t.size, 0.1f, 0.0f, 0.0f, "%.2f", 0);
+
+        ImGui::Spacing();
+        });
 }
 
 std::string PropertiesLoader::CleanScriptName(const std::string& raw)

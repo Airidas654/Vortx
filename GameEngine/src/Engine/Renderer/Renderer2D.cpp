@@ -19,7 +19,7 @@ namespace Vortx
         {
             glm::vec2 position;
             glm::vec2 size;
-            float rotation;
+            glm::vec1 rotation;
             TextureHandle texture;
             glm::vec4 tint;
             int32_t layer;
@@ -127,8 +127,8 @@ namespace Vortx
             float texIndex = GetOrAddTextureSlot(cmd.texture);
 
             glm::vec2 half = cmd.size * 0.5f;
-            float c = cosf(cmd.rotation);
-            float s = sinf(cmd.rotation);
+            float c = cosf(cmd.rotation.x);
+            float s = sinf(cmd.rotation.x);
 
             glm::vec2 corners[4] = {
                 { -half.x, -half.y },
@@ -240,13 +240,13 @@ namespace Vortx
         s_device->EndFrame();
     }
 
-    void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, float rotation, const glm::vec4& color,
+    void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, glm::vec1 rotation, const glm::vec4& color,
         int32_t layer, int32_t orderInLayer)
     {
         DrawSprite(position, size, rotation, s_whiteTexture, color, layer, orderInLayer);
     }
 
-    void Renderer2D::DrawSprite(const glm::vec2& position, const glm::vec2& size, float rotation,
+    void Renderer2D::DrawSprite(const glm::vec2& position, const glm::vec2& size, glm::vec1 rotation,
         TextureHandle texture, const glm::vec4& tint,
         int32_t layer, int32_t orderInLayer)
     {

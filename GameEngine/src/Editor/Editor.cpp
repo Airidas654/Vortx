@@ -7,6 +7,7 @@
 #include "SimpleAPI/Time.h"
 #include "SimpleAPI/SceneManager.h"
 #include "SimpleAPI/SpriteRenderer.h"
+#include "SimpleAPI/Camera.h"
 #include "ProjectHub.h"
 #include "Project.h"
 #include "PlayModeManager.h"
@@ -51,11 +52,6 @@ GLFWwindow* CreateWindow()
     const GLFWvidmode* mode = glfwGetVideoMode(monitor);
 
     OpenGLRenderDevice::PrepareGLFWHints();
-
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
     window = glfwCreateWindow(mode->width, mode->height, "Vortx", NULL, NULL);
 
@@ -191,7 +187,8 @@ void Editor::Compile()
 
 void Test(Engine& engine)
 {
-    Scene::Current()->CreateGameObject();
+    GameObject fir = Scene::Current()->CreateGameObject();
+    fir.AddComponent<Camera>();
     Scene::Current()->CreateGameObject();
     Transform par = Scene::Current()->CreateGameObject().GetComponent<Transform>();
 
@@ -292,27 +289,25 @@ void Editor::Start(Engine& engine)
         glm::mat4 viewProjMatrix(0.25f, 0,0,0,0,0.333f,0,0,0,0, -0.02f, 0,0,0, -1.202f, 1);
 
         Renderer2D::BeginScene(viewProjMatrix);
-
-        //Renderer2D::BeginScene(viewProjMatrix, glm::vec4(0.07f, 0.07f, 0.08f, 1.0f), editorUI.GetSceneRenderTarget());
-        //DrawSceneSprites();   // whatever iterates your ECS and calls Renderer2D::DrawSprite
         Renderer2D::EndScene();
 
-       // Renderer2D::BeginScene(viewProjMatrix, glm::vec4(0.07f, 0.07f, 0.08f, 1.0f), editorUI.GetGameRenderTarget());
-        //DrawSceneSprites();
+        editorUI.TryDrawScene();
+
+        //Renderer2D::BeginScene(viewProjMatrix, glm::vec4(0.07f, 0.07f, 0.08f, 1.0f), editorUI.GetSceneRenderTarget());
+        ////DrawSceneSprites();   // whatever iterates your ECS and calls Renderer2D::DrawSprite
         //Renderer2D::EndScene();
+
+        Renderer2D::BeginScene(viewProjMatrix, glm::vec4(0.07f, 0.07f, 0.08f, 1.0f), editorUI.GetGameRenderTarget());
+        //DrawSceneSprites();
+        Renderer2D::EndScene();
 
         Renderer2D::BindBackbuffer();
 
         editorUI.NewFrame();
 
-        //glClearColor(0.07f, 0.07f, 0.08f, 1.0f);
-        //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
         editorUI.Render();
 
         Renderer2D::Present();
-
-        glfwSwapBuffers(window);
     }
 
     glfwDestroyWindow(window);

@@ -38,7 +38,7 @@ namespace Vortx
         tex->height = height;
         tex->channels = 4;
 
-        glGenTextures(1, &tex->glHandle);
+        /*glGenTextures(1, &tex->glHandle);
         glBindTexture(GL_TEXTURE_2D, tex->glHandle);
 
         GLenum internalFormat = srgb ? GL_SRGB8_ALPHA8 : GL_RGBA8;
@@ -57,7 +57,7 @@ namespace Vortx
         if (generateMips)
             glGenerateMipmap(GL_TEXTURE_2D);
 
-        glBindTexture(GL_TEXTURE_2D, 0);
+        glBindTexture(GL_TEXTURE_2D, 0);*/
 
         stbi_image_free(pixels);
 

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "EngineAPI.h"
 #include "Renderer/RenderTypes.h"
 
 #include <glm/glm.hpp>
@@ -16,7 +17,7 @@ namespace Vortx
     // else), you write one new class implementing IRenderDevice and change
     // one line where the device gets constructed. Renderer2D, Scene,
     // EditorUI etc. don't change at all.
-    class IRenderDevice
+    class ENGINE_API IRenderDevice
     {
     public:
         virtual ~IRenderDevice() = default;

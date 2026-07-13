@@ -36,6 +36,8 @@ public:
     void Render();
     void Shutdown();
 
+    void TryDrawScene();
+
     /* void SetImportModelCallback(ImportModelCallback cb) { importModel = cb; }
         void SetImportTextureCallback(ImportTextureCallback cb) { importTexture = cb; }*/
     void SetSaveSceneCallback(SaveSceneCallback cb) { onSaveScene = cb; }
@@ -85,7 +87,9 @@ private:
 
     void DrawToolbar();
 
-    
+    glm::mat4 GetCameraProjectionMatrix();
+
+    void DrawSceneSprites();
 
     void ChangeSelected(const AssetID& entity);
 

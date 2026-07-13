@@ -1,5 +1,6 @@
 #pragma once
 
+#include "EngineAPI.h"
 #include "Renderer/IRenderDevice.h"
 
 #include <glm/glm.hpp>
@@ -25,7 +26,7 @@ namespace Vortx
     // no 3D lighting) and it only ever talks to IRenderDevice. Swapping GL
     // for WebGPU later means writing a new IRenderDevice and changing the
     // one call to Init() below - nothing in here changes.
-    class Renderer2D
+    class ENGINE_API Renderer2D
     {
     public:
         static bool Init(std::unique_ptr<IRenderDevice> device, GLFWwindow* window);
@@ -63,11 +64,11 @@ namespace Vortx
         static void Present();
 
         // Solid-color quad, centered at position, rotation in radians.
-        static void DrawQuad(const glm::vec2& position, const glm::vec2& size, float rotation, const glm::vec4& color,
+        static void DrawQuad(const glm::vec2& position, const glm::vec2& size, glm::vec1 rotation, const glm::vec4& color,
             int32_t layer = RenderLayer::World, int32_t orderInLayer = 0);
 
         // Textured quad ("sprite"). tint multiplies the texture (white = untouched).
-        static void DrawSprite(const glm::vec2& position, const glm::vec2& size, float rotation,
+        static void DrawSprite(const glm::vec2& position, const glm::vec2& size, glm::vec1 rotation,
             TextureHandle texture, const glm::vec4& tint = glm::vec4(1.0f),
             int32_t layer = RenderLayer::World, int32_t orderInLayer = 0);
 

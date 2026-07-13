@@ -6,7 +6,7 @@
 
 namespace Vortx
 {
-    class OpenGLRenderDevice : public IRenderDevice
+    class ENGINE_API OpenGLRenderDevice : public IRenderDevice
     {
     public:
         // Must be called BEFORE glfwCreateWindow (GLFW requires client-API

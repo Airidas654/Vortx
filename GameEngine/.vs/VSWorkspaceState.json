@@ -14,15 +14,15 @@
   "ExpandedNodes": [
     "",
     "\\include",
-    "\\include\\Editor",
-    "\\include\\Executable",
-    "\\include\\Executable\\Renderer",
+    "\\include\\Engine",
+    "\\include\\Engine\\Core",
+    "\\include\\Engine\\Renderer",
     "\\src",
-    "\\src\\Engine\\Scripting",
-    "\\src\\Executable",
-    "\\src\\Executable\\Assets",
-    "\\src\\Executable\\Renderer"
+    "\\src\\Engine",
+    "\\src\\Engine\\Core",
+    "\\src\\Engine\\Renderer",
+    "\\src\\Engine\\SimpleAPI"
   ],
-  "SelectedNode": "\\include\\Executable\\Renderer\\RenderTypes.h",
+  "SelectedNode": "\\include\\Engine\\Renderer\\IRenderDevice.h",
   "PreviewInSolutionExplorer": false
 }
