@@ -14,15 +14,15 @@
   "ExpandedNodes": [
     "",
     "\\include",
-    "\\include\\Engine",
-    "\\include\\Engine\\Core",
-    "\\include\\Engine\\Renderer",
+    "\\include\\Editor",
+    "\\include\\Executable",
+    "\\include\\Executable\\Assets",
     "\\src",
+    "\\src\\Editor",
     "\\src\\Engine",
-    "\\src\\Engine\\Core",
-    "\\src\\Engine\\Renderer",
-    "\\src\\Engine\\SimpleAPI"
+    "\\src\\Executable",
+    "\\src\\Executable\\Assets"
   ],
-  "SelectedNode": "\\include\\Engine\\Renderer\\IRenderDevice.h",
+  "SelectedNode": "\\src\\Engine\\Renderer\\OpenGLRenderDevice.cpp",
   "PreviewInSolutionExplorer": false
 }

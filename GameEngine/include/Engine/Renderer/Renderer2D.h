@@ -73,6 +73,7 @@ namespace Vortx
             int32_t layer = RenderLayer::World, int32_t orderInLayer = 0);
 
         static TextureHandle CreateTexture(const TextureDesc& desc);
+        static void DestroyTexture(TextureHandle handle);
 
         // Passthroughs for editor viewport panels ("Scene", "Game View", ...).
         static RenderTargetHandle CreateRenderTarget(uint32_t width, uint32_t height);

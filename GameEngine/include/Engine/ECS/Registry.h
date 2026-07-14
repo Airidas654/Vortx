@@ -42,6 +42,12 @@ namespace Vortx
 			return registry.view<T>();
 		}
 
+		template<typename T1, typename T2>
+		auto View()
+		{
+			return registry.view<T1,T2>();
+		}
+
 		template<typename T>
 		T& AddComponent(Entity& entity)
 		{

@@ -10,6 +10,7 @@
 #include "Components/ComponentSpriteRenderer.h"
 #include "Core/AssetDatabase.h"
 #include "Assets/TextureAsset.h"
+#include "Renderer/Renderer2D.h"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -111,7 +112,7 @@ void PropertiesLoader::Reset()
         Vortx::TextureAsset* tex = Vortx::AssetDatabase::GetLoaded<Vortx::TextureAsset>(sr.textureID);
 
         if (tex)
-            ImGui::ImageButton("##texPreview", (ImTextureID)(intptr_t)tex->glHandle, ImVec2(48, 48));
+            ImGui::ImageButton("##texPreview", (ImTextureID)(intptr_t)Vortx::Renderer2D::GetNativeTextureHandle(tex->handle), ImVec2(48, 48));
         else
             ImGui::Button("None", ImVec2(48, 48));
 

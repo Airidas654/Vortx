@@ -258,6 +258,11 @@ namespace Vortx
         return s_device->CreateTexture(desc);
     }
 
+    void Renderer2D::DestroyTexture(TextureHandle handle)
+    {
+        s_device->DestroyTexture(handle);
+    }
+
     RenderTargetHandle Renderer2D::CreateRenderTarget(uint32_t width, uint32_t height)
     {
         return s_device->CreateRenderTarget(width, height);
