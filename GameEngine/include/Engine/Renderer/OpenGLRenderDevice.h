@@ -9,9 +9,6 @@ namespace Vortx
     class ENGINE_API OpenGLRenderDevice : public IRenderDevice
     {
     public:
-        // Must be called BEFORE glfwCreateWindow (GLFW requires client-API
-        // hints to be set pre-creation). A future WebGPURenderDevice would
-        // have its own version of this that hints GLFW_NO_API instead.
         static void PrepareGLFWHints();
 
         bool Init(GLFWwindow* window) override;
@@ -37,13 +34,9 @@ namespace Vortx
         ShaderHandle CreateShader(const std::string& vertexSrc, const std::string& fragmentSrc) override;
         void DestroyShader(ShaderHandle handle) override;
 
-        void SubmitBatch(const QuadVertex* vertices, uint32_t quadCount,
-            const TextureHandle* textures, uint32_t textureCount,
-            ShaderHandle shader) override;
+        void SubmitBatch(const QuadVertex* vertices, uint32_t quadCount, const TextureHandle* textures, uint32_t textureCount, ShaderHandle shader) override;
 
     private:
-        // Cached alongside the linked program so SubmitBatch never has to
-        // call glGetUniformLocation (a string hash-map lookup) per draw.
         struct GLShaderInfo
         {
             uint32_t program = 0;
@@ -68,9 +61,9 @@ namespace Vortx
         uint32_t nextTextureId = 1;
         uint32_t nextShaderId = 1;
         uint32_t nextRenderTargetId = 1;
-        std::unordered_map<uint32_t, uint32_t> glTextures;             // handle id -> GL texture object
-        std::unordered_map<uint32_t, GLShaderInfo> glShaders;          // handle id -> program + cached uniform locations
-        std::unordered_map<uint32_t, GLRenderTargetInfo> glRenderTargets; // handle id -> fbo + attachments
+        std::unordered_map<uint32_t, uint32_t> glTextures;
+        std::unordered_map<uint32_t, GLShaderInfo> glShaders;
+        std::unordered_map<uint32_t, GLRenderTargetInfo> glRenderTargets;
 
         uint32_t quadVAO = 0;
         uint32_t quadVBO = 0;

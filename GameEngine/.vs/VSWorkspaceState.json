@@ -14,15 +14,15 @@
   "ExpandedNodes": [
     "",
     "\\include",
-    "\\include\\Editor",
-    "\\include\\Executable",
-    "\\include\\Executable\\Assets",
+    "\\include\\Engine",
+    "\\include\\Engine\\ECS",
+    "\\include\\Engine\\Renderer",
     "\\src",
-    "\\src\\Editor",
     "\\src\\Engine",
-    "\\src\\Executable",
-    "\\src\\Executable\\Assets"
+    "\\src\\Engine\\ECS",
+    "\\src\\Engine\\Renderer",
+    "\\src\\Engine\\SimpleAPI"
   ],
-  "SelectedNode": "\\src\\Engine\\Renderer\\OpenGLRenderDevice.cpp",
+  "SelectedNode": "\\src\\Engine\\SerializerLoader.cpp",
   "PreviewInSolutionExplorer": false
 }

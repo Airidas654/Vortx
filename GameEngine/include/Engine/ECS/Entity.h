@@ -46,6 +46,11 @@ namespace Vortx
 			return registry->HasComponent<T>(*this);
 		}
 
+		bool HasComponent(entt::id_type id)
+		{
+			return registry->HasComponent(*this, id);
+		}
+
 		entt::entity GetValue() { return entity; }
 
 		Registry& GetRegistry() { return *registry; }

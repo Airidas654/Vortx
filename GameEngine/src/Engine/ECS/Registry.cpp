@@ -10,4 +10,10 @@ namespace Vortx
 	{
 		return Entity(this, registry.create());
 	}
+
+	bool Registry::HasComponent(Entity& entity, entt::id_type id)
+	{
+		auto* storage = registry.storage(id);
+		return storage && storage->contains(entity.GetValue());
+	}
 }

@@ -10,7 +10,7 @@
 #include "Components/ComponentSpriteRenderer.h"
 #include "Core/AssetDatabase.h"
 #include "Assets/TextureAsset.h"
-#include "Renderer/Renderer2D.h"
+#include "SimpleAPI\Renderer2D.h"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -26,14 +26,17 @@
 #include <iostream>
 
 std::unordered_map<entt::id_type, PropertiesLoader::DrawFn> PropertiesLoader::componentFunc;
+std::unordered_map<entt::id_type, PropertiesLoader::AddFn> PropertiesLoader::componentAddFunc;
 std::unordered_map<entt::id_type, PropertiesLoader::ComponentData> PropertiesLoader::componentData;
+std::map<std::string, std::vector<entt::id_type>> PropertiesLoader::addFolderList;
 
 void PropertiesLoader::Reset()
 {
     componentData.clear();
     componentFunc.clear();
+    addFolderList.clear();
 
-    RegisterComponent<Vortx::TransformData>("Transform", true, [](Entity entity) {
+    RegisterComponent<Vortx::TransformData>("Transform", "Meta", true, [](Entity entity) {
         auto& t = entity.GetComponent<Vortx::TransformData>();
 
         ImGui::Spacing();
@@ -46,9 +49,11 @@ void PropertiesLoader::Reset()
         ImGui::DragFloat2("##sca", (float*)&t.scale, 0.1f, 0.0f, 0.0f, "%.2f", 0);
 
         ImGui::Spacing();
+    }, [](Entity entity) {
+        entity.AddComponent<Vortx::TransformData>();
     });
 
-    RegisterComponent<MetadataData>("Object", true, [](Entity entity) {
+    RegisterComponent<MetadataData>("Object", "Meta", true, [](Entity entity) {
         auto& t = entity.GetComponent<MetadataData>();
 
         ImGui::Spacing();
@@ -64,9 +69,11 @@ void PropertiesLoader::Reset()
         ImGui::InputText("##tag", &t.tag, ImGuiInputTextFlags_AutoSelectAll);
 
         ImGui::Spacing();
+    }, [](Entity entity) {
+        entity.AddComponent<Vortx::MetadataData>();
     });
 
-    RegisterComponent<ScriptComponent>("Scripts", false, [](Entity entity)
+    RegisterComponent<ScriptComponent>("Scripts", "Meta", false, [](Entity entity)
     {
         auto& sc = entity.GetComponent<ScriptComponent>();
 
@@ -100,9 +107,11 @@ void PropertiesLoader::Reset()
             ImGui::TextDisabled("No scripts attached");
 
        // ImGui::Spacing();
+    }, [](Entity entity) {
+        entity.AddComponent<Vortx::ScriptComponent>();
     });
 
-    RegisterComponent<SpriteRendererData>("Sprite Renderer", true, [](Entity entity) {
+    RegisterComponent<SpriteRendererData>("Sprite Renderer", "Rendering", true, [](Entity entity) {
         auto& sr = entity.GetComponent<SpriteRendererData>();
 
         ImGui::Spacing();
@@ -135,9 +144,11 @@ void PropertiesLoader::Reset()
         ImGui::SameLine();
         ImGui::Checkbox("Flip Y", &sr.flipY);
         ImGui::Spacing();
+    }, [](Entity entity) {
+        entity.AddComponent<Vortx::SpriteRendererData>();
     });
 
-    RegisterComponent<Vortx::CameraData>("Camera", true, [](Entity entity) {
+    RegisterComponent<Vortx::CameraData>("Camera", "Logic", true, [](Entity entity) {
         auto& t = entity.GetComponent<Vortx::CameraData>();
 
         ImGui::Spacing();
@@ -146,7 +157,9 @@ void PropertiesLoader::Reset()
         ImGui::DragFloat("##siz", (float*)&t.size, 0.1f, 0.0f, 0.0f, "%.2f", 0);
 
         ImGui::Spacing();
-        });
+    }, [](Entity entity) {
+            entity.AddComponent<Vortx::CameraData>();
+    });
 }
 
 std::string PropertiesLoader::CleanScriptName(const std::string& raw)
@@ -216,6 +229,16 @@ void PropertiesLoader::DrawPropertiesPanel(const AssetID& selected)
     DrawAddComponentPopup(entity);
 }
 
+void PropertiesLoader::AddComponent(Entity entity, entt::id_type hash)
+{
+    auto it = componentAddFunc.find(hash);
+
+    if (it != componentAddFunc.end())
+    {
+        it->second(entity);
+    }
+}
+
 void PropertiesLoader::DrawAddComponentPopup(Entity entity)
 {
     if (!ImGui::BeginPopup("AddComponentPopup"))
@@ -239,8 +262,52 @@ void PropertiesLoader::DrawAddComponentPopup(Entity entity)
 
     if (ImGui::BeginChild("##componentList", ImVec2(220.0f, 180.0f)))
     {
+        for (auto& i : addFolderList)
+        {
+            bool headerAdded = 0;
+            bool headerOpen = 0;
+
+            if (i.first == "Meta") continue;
+
+            for (auto& j : i.second)
+            {
+
+                if (entity.HasComponent(j)) continue;
+
+                std::string lower = componentData[j].name;
+                std::transform(lower.begin(), lower.end(), lower.begin(),
+                    [](unsigned char c) { return (char)std::tolower(c); });
+
+                if (!search.empty() && lower.find(search) == std::string::npos)
+                    continue;
+
+                if (!headerAdded)
+                {
+                    headerAdded = 1;
+                    headerOpen = ImGui::TreeNodeEx(i.first.c_str());
+                }
+
+                any = true;
+
+                if (headerOpen) {
+                    if (ImGui::Selectable(componentData[j].name.c_str()))
+                    {
+                        AddComponent(entity, j);
+                        //entity.AddComponent(j);
+                        searchBuf[0] = '\0';
+                        ImGui::CloseCurrentPopup();
+                    }
+                }
+            }
+
+            if (headerOpen)
+            {
+                ImGui::TreePop();
+            }
+        }
+
         bool scriptsHeaderAdded = 0;
-        bool headerOpen = 0;
+        bool scriptsheaderOpen = 0;
 
         for (auto& [key, info] : scripts)
         {
@@ -256,12 +323,12 @@ void PropertiesLoader::DrawAddComponentPopup(Entity entity)
             if (!scriptsHeaderAdded)
             {
                 scriptsHeaderAdded = 1;
-                headerOpen = ImGui::TreeNodeEx("Scripts");
+                scriptsheaderOpen = ImGui::TreeNodeEx("Scripts");
             }
 
             any = true;
 
-            if (headerOpen) {
+            if (scriptsheaderOpen) {
                 if (ImGui::Selectable(display.c_str()))
                 {
                     ScriptSystem::Instance().AddScript(entity, key);
@@ -271,7 +338,7 @@ void PropertiesLoader::DrawAddComponentPopup(Entity entity)
             }
         }
 
-        if (headerOpen)
+        if (scriptsheaderOpen)
         {
             ImGui::TreePop();
         }

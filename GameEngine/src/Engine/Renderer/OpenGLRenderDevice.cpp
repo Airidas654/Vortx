@@ -96,12 +96,7 @@ namespace Vortx
         glViewport(0, 0, (GLsizei)width, (GLsizei)height);
     }
 
-    void OpenGLRenderDevice::BeginFrame()
-    {
-        // Nothing extra needed for GL. Kept for symmetry with backends that
-        // need an explicit per-frame acquire step (e.g. WebGPU's
-        // surface.GetCurrentTexture()).
-    }
+    void OpenGLRenderDevice::BeginFrame() {}
 
     void OpenGLRenderDevice::Clear(const glm::vec4& color)
     {
@@ -121,10 +116,6 @@ namespace Vortx
 
     RenderTargetHandle OpenGLRenderDevice::CreateRenderTarget(uint32_t width, uint32_t height)
     {
-        // The color attachment is a perfectly normal texture, registered
-        // in the same glTextures map as any image-loaded texture - so it
-        // can be handed to ImGui, or even sampled by DrawSprite later,
-        // with no special-casing anywhere else.
         uint32_t colorTex;
         glGenTextures(1, &colorTex);
         glBindTexture(GL_TEXTURE_2D, colorTex);
@@ -150,7 +141,7 @@ namespace Vortx
         glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, depthRbo);
 
         if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-            std::cerr << "[OpenGLRenderDevice] Render target framebuffer incomplete\n";
+            std::cerr << "Render target framebuffer incomplete\n";
 
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
@@ -167,14 +158,11 @@ namespace Vortx
         if (it == glRenderTargets.end()) return;
 
         GLRenderTargetInfo& rt = it->second;
-        if (rt.width == width && rt.height == height) return; // already the right size
+        if (rt.width == width && rt.height == height) return;
 
         rt.width = width;
         rt.height = height;
 
-        // GL textures/renderbuffers can't be resized in place, but
-        // reallocating storage under the SAME object id means the FBO's
-        // existing attachment stays valid - no need to re-attach anything.
         auto texIt = glTextures.find(rt.colorTexture.id);
         if (texIt != glTextures.end())
         {
@@ -235,7 +223,7 @@ namespace Vortx
         {
             char log[512];
             glGetShaderInfoLog(shader, sizeof(log), nullptr, log);
-            std::cerr << "[OpenGLRenderDevice] Shader compile error: " << log << "\n";
+            std::cerr << "Shader compile error: " << log << "\n";
         }
         return shader;
     }
@@ -256,7 +244,7 @@ namespace Vortx
         {
             char log[512];
             glGetProgramInfoLog(program, sizeof(log), nullptr, log);
-            std::cerr << "[OpenGLRenderDevice] Shader link error: " << log << "\n";
+            std::cerr << "Shader link error: " << log << "\n";
         }
 
         glDeleteShader(vert);
@@ -321,9 +309,7 @@ namespace Vortx
         return (void*)(intptr_t)it->second;
     }
 
-    void OpenGLRenderDevice::SubmitBatch(const QuadVertex* vertices, uint32_t quadCount,
-        const TextureHandle* textures, uint32_t textureCount,
-        ShaderHandle shader)
+    void OpenGLRenderDevice::SubmitBatch(const QuadVertex* vertices, uint32_t quadCount, const TextureHandle* textures, uint32_t textureCount, ShaderHandle shader)
     {
         auto progIt = glShaders.find(shader.id);
         if (progIt == glShaders.end()) return;

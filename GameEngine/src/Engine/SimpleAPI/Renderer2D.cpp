@@ -1,4 +1,4 @@
-#include "Renderer/Renderer2D.h"
+#include "SimpleAPI\Renderer2D.h"
 
 #include <algorithm>
 #include <array>
@@ -10,11 +10,8 @@ namespace Vortx
     namespace
     {
         constexpr uint32_t kMaxQuadsPerBatch = 10000;
-        constexpr uint32_t kMaxTextureSlots = 16; // guaranteed minimum in GL 3.3+ core per fragment stage
+        constexpr uint32_t kMaxTextureSlots = 16;
 
-        // A deferred draw call. DrawQuad/DrawSprite just record one of
-        // these instead of writing vertices immediately, so the whole
-        // frame can be sorted by draw order BEFORE anything is batched.
         struct DrawCommand
         {
             glm::vec2 position;
@@ -28,17 +25,14 @@ namespace Vortx
 
         std::unique_ptr<IRenderDevice> s_device;
         ShaderHandle s_shader;
-        TextureHandle s_whiteTexture; // 1x1 white pixel - lets solid-color quads reuse the sprite path
+        TextureHandle s_whiteTexture;
 
-        std::vector<DrawCommand> s_commands;   // accumulated for the whole scene, sorted at EndScene
-        std::vector<QuadVertex> s_vertices;    // scratch buffer, rebuilt per batch while flushing
+        std::vector<DrawCommand> s_commands;
+        std::vector<QuadVertex> s_vertices;
         std::array<TextureHandle, kMaxTextureSlots> s_textureSlots;
         uint32_t s_textureSlotCount = 0;
         uint32_t s_quadsInBatch = 0;
 
-        // GLSL today. If/when a WebGPU backend is added, this pair gets
-        // replaced with WGSL source - none of the batching logic below
-        // changes at all.
         const char* kVertexShaderSrc = R"(
             #version 330 core
             layout(location = 0) in vec3 a_Position;
@@ -83,7 +77,7 @@ namespace Vortx
             s_vertices.clear();
             s_quadsInBatch = 0;
             s_textureSlotCount = 1;
-            s_textureSlots[0] = s_whiteTexture; // slot 0 is always the white pixel
+            s_textureSlots[0] = s_whiteTexture;
         }
 
         float GetOrAddTextureSlot(TextureHandle texture)
@@ -106,8 +100,6 @@ namespace Vortx
                 s_shader);
         }
 
-        // Converts one already-sorted DrawCommand into vertices, flushing
-        // and starting a new batch first if it wouldn't fit in this one.
         void EmitQuad(const DrawCommand& cmd)
         {
             bool alreadyBound = false;
@@ -210,9 +202,6 @@ namespace Vortx
 
     void Renderer2D::EndScene()
     {
-        // stable_sort: equal (layer, orderInLayer) pairs keep the order
-        // they were submitted in, so ties don't visibly "jitter" frame to
-        // frame.
         std::stable_sort(s_commands.begin(), s_commands.end(),
             [](const DrawCommand& a, const DrawCommand& b)
         {

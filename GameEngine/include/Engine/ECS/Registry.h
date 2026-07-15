@@ -76,5 +76,7 @@ namespace Vortx
 			return 0;
 		}
 
+		bool HasComponent(Entity& entity, entt::id_type id);
+
 	};
 }
