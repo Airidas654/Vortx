@@ -10,9 +10,10 @@ class Editor
 public:
 	static void Start(Engine& engine);
 	static void Compile();
-
-private:
 	static bool isBuilding;
+	static bool autoCompile;
+private:
+	
 	static bool needsReload;
 	static std::string cmakePath;
 	static DynamicLibrary gameLib;

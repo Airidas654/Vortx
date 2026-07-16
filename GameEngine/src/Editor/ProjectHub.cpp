@@ -2,6 +2,7 @@
 
 #include "Project.h"
 #include "Core/File.h"
+#include "Editor.h"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -303,6 +304,8 @@ void ProjectHub::AddProject(const std::string& path)
 void ProjectHub::LoadProject(const std::string& path)
 {
     Vortx::Project::LoadProject(path);
+
+    Editor::Compile();
 
     ProjectHub::instance->projectLoaded = true;
 }

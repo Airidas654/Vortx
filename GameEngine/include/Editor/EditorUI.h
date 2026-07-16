@@ -3,6 +3,7 @@
 #include "AssetID.h"
 #include "Engine.h"
 #include "Renderer\RenderTypes.h"
+#include "EditorController.h"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -95,6 +96,7 @@ private:
 
     GLFWwindow* window;
     Engine& engine;
+    EditorController sceneController;
 
     //std::unique_ptr<Scene>& scene;
     //RayTracing* raytracing;

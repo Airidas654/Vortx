@@ -14,15 +14,15 @@
   "ExpandedNodes": [
     "",
     "\\include",
+    "\\include\\Editor",
     "\\include\\Engine",
-    "\\include\\Engine\\ECS",
-    "\\include\\Engine\\Renderer",
+    "\\include\\Engine\\SimpleAPI",
     "\\src",
+    "\\src\\Common",
+    "\\src\\Editor",
     "\\src\\Engine",
-    "\\src\\Engine\\ECS",
-    "\\src\\Engine\\Renderer",
     "\\src\\Engine\\SimpleAPI"
   ],
-  "SelectedNode": "\\src\\Engine\\SerializerLoader.cpp",
+  "SelectedNode": "\\src\\Editor\\PlayModeManager.cpp",
   "PreviewInSolutionExplorer": false
 }

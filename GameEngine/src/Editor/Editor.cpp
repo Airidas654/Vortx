@@ -36,6 +36,7 @@ using namespace Vortx;
 
 bool Editor::isBuilding = false;
 bool Editor::needsReload = false;
+bool Editor::autoCompile = false;
 std::string Editor::cmakePath = "";
 DynamicLibrary Editor::gameLib;
 
@@ -259,17 +260,32 @@ void Editor::Start(Engine& engine)
             if (gameLib.IsLoaded())
                 gameLib.Unload();
 
-            std::filesystem::path gameLibPath = Project::current.path;
+            std::filesystem::path gameLibPathDLL = Project::current.path;
+            std::filesystem::path gameLibPathPDB;
 
 #ifdef _DEBUG
-            gameLibPath = gameLibPath.parent_path() / "build" / "Debug" / "Game.dll";
+            gameLibPathPDB = gameLibPathDLL.parent_path() / "build" / "Debug" / "Game.pdb";
+            gameLibPathDLL = gameLibPathDLL.parent_path() / "build" / "Debug" / "Game.dll";
 #else
-            gameLibPath = gameLibPath.parent_path() / "build" / "Release" / "Game.dll";
+            gameLibPathPDB = gameLibPathDLL.parent_path() / "build" / "Release" / "Game.pdb";
+            gameLibPathDLL = gameLibPathDLL.parent_path() / "build" / "Release" / "Game.dll";
 #endif
 
-            if (!gameLib.Load(gameLibPath.string()))
-                std::cerr << "Failed to reload Game.dll\n";
+            std::filesystem::path gameLibPathDLLTemp = gameLibPathDLL.parent_path() / "GameLoaded.dll";
+            std::filesystem::path gameLibPathPDBTemp = gameLibPathDLL.parent_path() / "GameLoaded.pdb";
 
+            std::filesystem::copy_file(
+                gameLibPathDLL,
+                gameLibPathDLLTemp,
+                std::filesystem::copy_options::overwrite_existing);
+
+            std::filesystem::copy_file(
+                gameLibPathPDB,
+                gameLibPathPDBTemp,
+                std::filesystem::copy_options::overwrite_existing);
+
+            if (!gameLib.Load(gameLibPathDLLTemp.string()))
+                std::cerr << "Failed to reload Game.dll\n";
         }
 
         if (PlayModeManager::state == PlayState::Playing)

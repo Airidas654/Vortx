@@ -1,4 +1,5 @@
 #include "PlayModeManager.h"
+#include "Editor.h"
 
 #include "Scene.h"
 #include "PropertiesLoader.h"
@@ -10,6 +11,13 @@ bool PlayModeManager::stepRequested = false;
 
 void PlayModeManager::EnterPlay()
 {
+	if (Editor::autoCompile)
+	{
+		Editor::Compile();
+
+		while (Editor::isBuilding) {}
+	}
+
 	snapshot = Scene::Current()->Serialize();
 	ScriptSystem::Instance().CreateAll();  
 	state = PlayState::Playing;
