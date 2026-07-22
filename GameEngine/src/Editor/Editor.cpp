@@ -321,6 +321,8 @@ void Editor::Start(Engine& engine)
 
         editorUI.NewFrame();
 
+        ScriptSystem::Instance().SceneUpdate(editorUI.GetSelected());
+
         editorUI.Render();
 
         Renderer2D::Present();

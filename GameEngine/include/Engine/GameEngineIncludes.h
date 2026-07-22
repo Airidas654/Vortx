@@ -4,6 +4,7 @@
 #include "SimpleAPI/GameObject.h"
 #include "SimpleAPI/Transform.h"
 #include "SimpleAPI/Time.h"
+#include "SimpleAPI/Gizmos.h"
 #include "Scripting/ScriptSystem.h"
 #include "Scripting/ScriptBase.h"
 #include "ECS/Entity.h"

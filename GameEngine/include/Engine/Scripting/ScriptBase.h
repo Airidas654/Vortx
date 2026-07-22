@@ -26,6 +26,8 @@ namespace Vortx
         void Start() override {}
         void Update() override {}
         void Destroy() override {}
+        void OnDrawGizmos() override {}
+        void OnDrawGizmosSelected() override {}
     };
 }
 

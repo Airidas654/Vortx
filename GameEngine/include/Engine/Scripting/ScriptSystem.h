@@ -14,6 +14,7 @@ namespace Vortx
         static ScriptSystem& Instance();
 
         void Update();
+        void SceneUpdate(AssetID selected);
 
         void DestroyAll();
 

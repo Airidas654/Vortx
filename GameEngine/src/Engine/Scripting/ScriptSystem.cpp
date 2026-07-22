@@ -1,6 +1,7 @@
 #include "Scripting/ScriptSystem.h"
 #include "Scripting/ScriptRegistry.h"
 #include "SimpleAPI/SceneManager.h"
+#include "Components/ComponentMetadata.h"
 #include "Scene.h"
 #include <iostream>
 
@@ -16,6 +17,24 @@ namespace Vortx
             std::atexit([]() { delete instance; instance = nullptr; });
         }
         return *instance;
+    }
+
+    void ScriptSystem::SceneUpdate(AssetID selected)
+    {
+        if (!Vortx::SceneManager::current) return;
+
+        Vortx::SceneManager::current->GetRegistry().View<ScriptComponent, MetadataData>().each([&](ScriptComponent& sc, MetadataData& meta)
+        {
+            for (auto& entry : sc.scripts)
+            {
+                if (!entry.instance) continue;
+
+                if (meta.id == selected) {
+                    entry.instance->OnDrawGizmosSelected();
+                }
+                entry.instance->OnDrawGizmos();
+            }
+        });
     }
 
     void ScriptSystem::Update()

@@ -14,15 +14,15 @@
   "ExpandedNodes": [
     "",
     "\\include",
-    "\\include\\Editor",
     "\\include\\Engine",
-    "\\include\\Engine\\SimpleAPI",
+    "\\include\\Engine\\Scripting",
     "\\src",
     "\\src\\Common",
     "\\src\\Editor",
     "\\src\\Engine",
+    "\\src\\Engine\\Scripting",
     "\\src\\Engine\\SimpleAPI"
   ],
-  "SelectedNode": "\\src\\Editor\\PlayModeManager.cpp",
+  "SelectedNode": "\\src\\Editor\\Logger.cpp",
   "PreviewInSolutionExplorer": false
 }

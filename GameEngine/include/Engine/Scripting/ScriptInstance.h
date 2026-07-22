@@ -12,6 +12,8 @@ namespace Vortx
         virtual void Start() {}
         virtual void Update() {}
         virtual void Destroy() {}
+        virtual void OnDrawGizmos() {}
+        virtual void OnDrawGizmosSelected() {}
 
         bool _started = false;
         GameObject gameObject;

@@ -8,53 +8,99 @@
 #include <functional>
 
 struct GLFWwindow;
+struct ImDrawList;
 
-// Simple fly-style controller for the Scene view.
-//
-// Controls:
-//   - Hold Right Mouse Button while hovering the Scene panel to enable camera
-//     movement, then W/A/S/D pans the camera up/left/down/right.
-//   - Mouse wheel while hovering the Scene panel zooms in/out.
-//   - Left click (when not panning) selects the topmost sprite/quad under the
-//     cursor. Clicking empty space clears the selection.
-//
-// This class owns no rendering state - it only tracks camera position/zoom
-// and turns raw input into a view-projection matrix and a pick result, so it
-// can be dropped into EditorUI's existing Scene panel with a few call sites.
+namespace Vortx { struct TransformData; }
+
 class EditorController
 {
 public:
+    enum class GizmoMode
+    {
+        Move,
+        Rotate,
+        Scale
+    };
+
+    enum class GizmoElement
+    {
+        None,
+        MoveX,
+        MoveY,
+        MoveFree,
+        Rotate,
+        ScaleX,
+        ScaleY,
+        ScaleFree
+    };
+
     EditorController() = default;
 
-    // Call once per frame (typically from DrawSceneViewPanel) whether or not
-    // the panel is hovered - hover state gates which inputs are read.
-    void Update(GLFWwindow* window, bool viewportHovered, float unscaledDeltaTime);
+    void Update(GLFWwindow* window, bool viewportHovered, const glm::vec2& localMousePos,
+        const glm::vec2& viewportSize, float unscaledDeltaTime, const Vortx::AssetID& selected);
 
-    // localMousePos: mouse position relative to the top-left of the Scene
-    // image, in pixels (0,0 = top-left). viewportSize: size of the Scene
-    // image, in pixels. Call this when a left-click is detected on the image.
-    void HandleClick(const glm::vec2& localMousePos, const glm::vec2& viewportSize);
+    void DrawGizmo(ImDrawList* drawList, const glm::vec2& screenOrigin, const glm::vec2& viewportSize,
+        const Vortx::AssetID& selected) const;
 
-    // Builds the combined view-projection matrix for the given aspect ratio
-    // (viewport width / height), taking the current pan/zoom into account.
     glm::mat4 GetViewProjectionMatrix(float aspect) const;
 
     const glm::vec2& GetPosition() const { return position; }
     float GetViewSize() const { return viewSize; }
     bool IsPanning() const { return isPanning; }
+    bool IsDraggingObject() const { return isDraggingObject; }
+    GizmoElement ActiveGizmo() const { return activeGizmo; }
 
-    // Fired by HandleClick with the picked GameObject's AssetID, or
-    // AssetID(0) if nothing was under the cursor.
+    GizmoMode GetGizmoMode() const { return gizmoMode; }
+    void SetGizmoMode(GizmoMode mode) { gizmoMode = mode; }
+
     std::function<void(const Vortx::AssetID&)> onSelect;
 
 private:
     glm::vec2 position{ 0.0f, 0.0f };
     float viewSize = 5.0f;
 
-    float panSpeed = 4.0f;      // world units/sec at viewSize == 1
-    float zoomSpeed = 10.0f;    // higher = slower zoom per scroll tick
-    float minViewSize = 0.01f;
+    float panSpeed = 4.0f;
+    float zoomSpeed = 10.0f;
+    float minViewSize = 0.5f;
     float maxViewSize = 50.0f;
+    float minScale = 0.05f;
+
+    float axisLength = 70.0f;
+    float ringRadius = 55.0f;
+    float pickTolerance = 8.0f;
+    float freeBoxHalf = 6.0f;
+    float scaleHandleHalf = 5.0f;
+
+    GizmoMode gizmoMode = GizmoMode::Move;
 
     bool isPanning = false;
+
+    bool isDraggingObject = false;
+    Vortx::AssetID draggedObject{ 0 };
+
+    GizmoElement activeGizmo = GizmoElement::None;
+    float lastMouseAngle = 0.0f;
+    float lastScaleDistPixels = 0.0f;
+
+    bool wasRightMouseDown = false;
+    bool wasLeftMouseDown = false;
+    glm::vec2 lastMousePos{ 0.0f, 0.0f };
+
+    bool wasKey1Down = false;
+    bool wasKey2Down = false;
+    bool wasKey3Down = false;
+
+    // Click-vs-drag disambiguation: movement only counts as a drag once it
+    // exceeds this many pixels from the initial press point, so a plain
+    // click just selects.
+    glm::vec2 pressLocalPos{ 0.0f, 0.0f };
+    bool dragConfirmed = false;
+    float dragThresholdPixels = 4.0f;
+
+    Vortx::AssetID Pick(const glm::vec2& localMousePos, const glm::vec2& viewportSize) const;
+    GizmoElement HitTestGizmo(const Vortx::AssetID& selected, const glm::vec2& localMousePos,
+        const glm::vec2& viewportSize) const;
+
+    Vortx::TransformData* GetTransform(const Vortx::AssetID& id) const;
+    glm::vec2 WorldToLocal(const glm::vec2& worldPos, const glm::vec2& viewportSize) const;
 };
