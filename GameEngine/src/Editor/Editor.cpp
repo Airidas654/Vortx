@@ -18,6 +18,7 @@
 #include "Assets/TextureAsset.h"
 #include "Renderer/OpenGLRenderDevice.h"
 #include "SimpleAPI\Renderer2D.h"
+#include "SimpleAPI/InputManager.h"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -231,6 +232,8 @@ void Editor::Start(Engine& engine)
 
     if (!window) return;
 
+    InputManager::Init(window);
+
     ProjectHub projectHub;
 
     EditorInputManager input(window);
@@ -248,6 +251,8 @@ void Editor::Start(Engine& engine)
         glfwPollEvents();
 
         ImGui_ImplGlfw_NewFrame();
+
+        InputManager::Update();
 
         if (!isBuilding && needsReload)
         {

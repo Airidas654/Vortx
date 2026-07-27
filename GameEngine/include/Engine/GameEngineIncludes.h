@@ -5,6 +5,7 @@
 #include "SimpleAPI/Transform.h"
 #include "SimpleAPI/Time.h"
 #include "SimpleAPI/Gizmos.h"
+#include "SimpleAPI/InputManager.h"
 #include "Scripting/ScriptSystem.h"
 #include "Scripting/ScriptBase.h"
 #include "ECS/Entity.h"
