@@ -37,16 +37,31 @@ void PropertiesLoader::Reset()
     addFolderList.clear();
 
     RegisterComponent<Vortx::TransformData>("Transform", "Meta", true, [](Entity entity) {
-        auto& t = entity.GetComponent<Vortx::TransformData>();
-
+        //auto& t = entity.GetComponent<Vortx::TransformData>();
+        Transform t = Transform(entity);
         ImGui::Spacing();
 
+        glm::vec2 pos = t.LocalPosition();
+        float rot = t.LocalRotation();
+        glm::vec2 sca = t.LocalScale();
+
         ImGui::TextDisabled("Position");
-        ImGui::DragFloat2("##pos", (float*)&t.position, 0.1f, 0.0f, 0.0f, "%.2f", 0);
+        if (ImGui::DragFloat2("##pos", (float*)&pos, 0.1f, 0.0f, 0.0f, "%.2f", 0))
+        {
+            t.SetLocalPosition(pos);
+        }
+
         ImGui::TextDisabled("Rotation");
-        ImGui::DragFloat("##rot", (float*)&t.rotation, 0.1f, 0.0f, 0.0f, "%.2f", 0);
+        if (ImGui::DragFloat("##rot", (float*)&rot, 0.1f, 0.0f, 0.0f, "%.2f", 0))
+        {
+            t.SetLocalRotation(rot);
+        }
+
         ImGui::TextDisabled("Scale");
-        ImGui::DragFloat2("##sca", (float*)&t.scale, 0.1f, 0.0f, 0.0f, "%.2f", 0);
+        if (ImGui::DragFloat2("##sca", (float*)&sca, 0.1f, 0.0f, 0.0f, "%.2f", 0))
+        {
+            t.SetLocalScale(sca);
+        }
 
         ImGui::Spacing();
     }, [](Entity entity) {

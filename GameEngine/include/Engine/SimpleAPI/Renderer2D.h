@@ -38,8 +38,13 @@ namespace Vortx
         static void DrawQuad(const glm::vec2& position, const glm::vec2& size, glm::vec1 rotation, const glm::vec4& color,
             int32_t layer = RenderLayer::World, int32_t orderInLayer = 0);
 
+        static void DrawQuad(const glm::mat4& transform, const glm::vec4& color, int32_t layer = RenderLayer::World, int32_t orderInLayer = 0);
+
         static void DrawSprite(const glm::vec2& position, const glm::vec2& size, glm::vec1 rotation, TextureHandle texture, 
             const glm::vec4& tint = glm::vec4(1.0f), int32_t layer = RenderLayer::World, int32_t orderInLayer = 0);
+
+        static void DrawSprite(const glm::mat4& transform, TextureHandle texture, const glm::vec4& tint = glm::vec4(1.0f), 
+            int32_t layer = RenderLayer::World, int32_t orderInLayer = 0);
 
         static TextureHandle CreateTexture(const TextureDesc& desc);
         static void DestroyTexture(TextureHandle handle);

@@ -5,6 +5,7 @@
 #include "SimpleAPI/Transform.h"
 
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 #include <vector>
 #include <optional>
@@ -12,25 +13,30 @@
 namespace Vortx
 {
 
-	struct TransformData
-	{
-		glm::vec2 position;
-		glm::vec1 rotation;
-		glm::vec2 scale;
+    struct TransformData
+    {
+        glm::vec2 localPosition;
+        float localRotation;
+        glm::vec2 localScale;
 
-		std::optional<Transform> parent;
-		std::vector<Transform> children;
+        glm::mat4 localMatrix = glm::mat4(1.0f);
+        glm::mat4 worldMatrix = glm::mat4(1.0f);
 
-		glm::mat4 matrix;
+        glm::vec2 worldPositionCache = glm::vec2(0);
+        float worldRotationCache = 0.0f;
+        glm::vec2 worldScaleCache = glm::vec2(1);
 
-		TransformData()
-		{
-			position = glm::vec2(0);
-			rotation = glm::vec1(0);
-			scale = glm::vec2(1, 1);
+        bool worldDirty = true;
 
-			parent = std::nullopt;
-			matrix = glm::mat4(1.0f);
-		}
-	};
+        std::optional<Transform> parent;
+        std::vector<Transform> children;
+
+        TransformData()
+        {
+            localPosition = glm::vec2(0);
+            localRotation = 0;
+            localScale = glm::vec2(1, 1);
+            parent = std::nullopt;
+        }
+    };
 }

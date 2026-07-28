@@ -13,16 +13,16 @@
   },
   "ExpandedNodes": [
     "",
+    "\\external\\glm",
+    "\\external\\glm\\glm",
     "\\include",
+    "\\include\\Editor",
     "\\include\\Engine",
-    "\\include\\Engine\\SimpleAPI",
+    "\\include\\Engine\\Components",
     "\\src",
-    "\\src\\Common",
-    "\\src\\Editor",
     "\\src\\Engine",
-    "\\src\\Engine\\Scripting",
     "\\src\\Engine\\SimpleAPI"
   ],
-  "SelectedNode": "\\CMakeLists.txt",
+  "SelectedNode": "\\include\\Editor\\EditorController.h",
   "PreviewInSolutionExplorer": false
 }

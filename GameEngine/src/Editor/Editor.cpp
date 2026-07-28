@@ -305,12 +305,16 @@ void Editor::Start(Engine& engine)
             ScriptSystem::Instance().Update();
         }
 
+        Scene::Current()->UpdateTransforms();
+
         Renderer2D::NewFrame();
 
         glm::mat4 viewProjMatrix(0.25f, 0,0,0,0,0.333f,0,0,0,0, -0.02f, 0,0,0, -1.202f, 1);
 
         Renderer2D::BeginScene(viewProjMatrix);
         Renderer2D::EndScene();
+
+        
 
         editorUI.TryDrawScene();
 

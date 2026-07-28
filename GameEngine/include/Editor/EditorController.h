@@ -1,6 +1,7 @@
 #pragma once
 
 #include "AssetID.h"
+#include "SimpleAPI/Transform.h"
 
 #include <glm/glm.hpp>
 
@@ -20,6 +21,12 @@ public:
         Move,
         Rotate,
         Scale
+    };
+
+    enum class SpaceMode
+    {
+        Local,
+        World
     };
 
     enum class GizmoElement
@@ -51,7 +58,9 @@ public:
     GizmoElement ActiveGizmo() const { return activeGizmo; }
 
     GizmoMode GetGizmoMode() const { return gizmoMode; }
+    SpaceMode GetGizmoSpaceMode() const { return gizmoSpaceMode; }
     void SetGizmoMode(GizmoMode mode) { gizmoMode = mode; }
+    void SetGizmoSpaceMode(SpaceMode mode) { gizmoSpaceMode = mode; }
 
     std::function<void(const Vortx::AssetID&)> onSelect;
 
@@ -72,6 +81,7 @@ private:
     float scaleHandleHalf = 5.0f;
 
     GizmoMode gizmoMode = GizmoMode::Move;
+    SpaceMode gizmoSpaceMode = SpaceMode::Local;
 
     bool isPanning = false;
 
@@ -101,6 +111,6 @@ private:
     GizmoElement HitTestGizmo(const Vortx::AssetID& selected, const glm::vec2& localMousePos,
         const glm::vec2& viewportSize) const;
 
-    Vortx::TransformData* GetTransform(const Vortx::AssetID& id) const;
+    Vortx::Transform GetTransform(const Vortx::AssetID& id) const;
     glm::vec2 WorldToLocal(const glm::vec2& worldPos, const glm::vec2& viewportSize) const;
 };

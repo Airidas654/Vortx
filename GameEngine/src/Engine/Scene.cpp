@@ -46,6 +46,12 @@ namespace Vortx
 		data.parent = std::nullopt;
 	}
 
+	void Scene::UpdateTransforms()
+	{
+		for (Transform& root : children)
+			root.UpdateSubtree();
+	}
+
 	void Scene::ChangeTransformParent(Transform& transform, std::optional<Transform>& parent, uint32_t index)
 	{
 		DetachFromParent(transform);

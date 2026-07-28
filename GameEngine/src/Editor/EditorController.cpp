@@ -15,6 +15,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <iostream>
 
 using namespace Vortx;
 
@@ -68,9 +69,7 @@ void EditorController::Update(GLFWwindow* window, bool viewportHovered, const gl
     else if (!rightMouseDown)
         isPanning = false;
 
-    // 1 / 2 / 3 switch the active gizmo. Gated on hovering the Scene panel
-    // (not WantCaptureKeyboard, which stays true almost constantly with
-    // keyboard nav enabled).
+    
     if (!isPanning && viewportHovered)
     {
         bool key1Down = glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS;
@@ -111,8 +110,8 @@ void EditorController::Update(GLFWwindow* window, bool viewportHovered, const gl
             activeGizmo = hitGizmo;
             isDraggingObject = false;
 
-            TransformData* t = GetTransform(selected);
-            glm::vec2 objLocal = t ? WorldToLocal(t->position, viewportSize) : glm::vec2(0.0f);
+            Transform t = GetTransform(selected);
+            glm::vec2 objLocal = ((t != Transform()) ? WorldToLocal(t.Position(), viewportSize) : glm::vec2(0.0f));
 
             if (hitGizmo == GizmoElement::Rotate)
                 lastMouseAngle = atan2f(-(localMousePos.y - objLocal.y), localMousePos.x - objLocal.x);
@@ -148,46 +147,63 @@ void EditorController::Update(GLFWwindow* window, bool viewportHovered, const gl
 
     if (activeGizmo != GizmoElement::None && wasLeftMouseDown)
     {
-        if (TransformData* t = GetTransform(selected))
+        Transform t = GetTransform(selected);
+        if (t != Transform())
         {
+            glm::vec2 world = t.Position();
             switch (activeGizmo)
             {
             case GizmoElement::MoveX:
-                t->position.x += mouseDeltaWorld.x;
+            {
+                t.SetPosition(world + glm::vec2(mouseDeltaWorld.x, 0));
                 break;
+            }
             case GizmoElement::MoveY:
-                t->position.y += mouseDeltaWorld.y;
+            {
+                t.SetPosition(world + glm::vec2(0, mouseDeltaWorld.y));
                 break;
+            }
             case GizmoElement::MoveFree:
-                t->position += mouseDeltaWorld;
+            {
+                t.SetPosition(world + mouseDeltaWorld);
                 break;
+            }
             case GizmoElement::Rotate:
             {
-                glm::vec2 objLocal = WorldToLocal(t->position, viewportSize);
+                glm::vec2 objLocal = WorldToLocal(t.Position(), viewportSize);
                 float angle = atan2f(-(localMousePos.y - objLocal.y), localMousePos.x - objLocal.x);
 
                 float delta = angle - lastMouseAngle;
                 if (delta > kPi) delta -= 2.0f * kPi;
                 if (delta < -kPi) delta += 2.0f * kPi;
 
-                t->rotation.x += delta;
+                t.SetRotation(t.Rotation() + delta);
                 lastMouseAngle = angle;
                 break;
             }
             case GizmoElement::ScaleX:
-                t->scale.x = std::max(minScale, t->scale.x + mouseDeltaWorld.x);
+            {
+                glm::vec2 scale = t.Scale();
+                scale.x = std::max(minScale, t.Scale().x + mouseDeltaWorld.x);
+                t.SetScale(scale);
                 break;
+            }
             case GizmoElement::ScaleY:
-                t->scale.y = std::max(minScale, t->scale.y + mouseDeltaWorld.y);
+            {
+                glm::vec2 scale = t.Scale();
+                scale.y = std::max(minScale, t.Scale().y + mouseDeltaWorld.y);
+                t.SetScale(scale);
                 break;
+            }
             case GizmoElement::ScaleFree:
             {
-                glm::vec2 objLocal = WorldToLocal(t->position, viewportSize);
+                glm::vec2 objLocal = WorldToLocal(t.Position(), viewportSize);
                 float distPixels = glm::length(localMousePos - objLocal);
                 float deltaWorld = (distPixels - lastScaleDistPixels) * pixelsToWorld;
 
-                t->scale.x = std::max(minScale, t->scale.x + deltaWorld);
-                t->scale.y = std::max(minScale, t->scale.y + deltaWorld);
+                glm::vec2 scale = glm::vec2(std::max(minScale, t.Scale().x + deltaWorld), std::max(minScale, t.Scale().y + deltaWorld));
+
+                t.SetScale(scale);
 
                 lastScaleDistPixels = distPixels;
                 break;
@@ -246,10 +262,10 @@ void EditorController::DrawGizmo(ImDrawList* drawList, const glm::vec2& screenOr
 {
     if (!drawList || selected == AssetID(0)) return;
 
-    TransformData* t = GetTransform(selected);
-    if (!t) return;
+    Transform t = GetTransform(selected);
+    if (t == Transform()) return;
 
-    glm::vec2 objLocal = WorldToLocal(t->position, viewportSize);
+    glm::vec2 objLocal = WorldToLocal(t.Position(), viewportSize);
     ImVec2 center = { screenOrigin.x + objLocal.x, screenOrigin.y + objLocal.y };
 
     glm::vec2 xHandle = objLocal + glm::vec2(axisLength, 0.0f);
@@ -285,7 +301,7 @@ void EditorController::DrawGizmo(ImDrawList* drawList, const glm::vec2& screenOr
         DrawHandleBox(drawList, xTip, scaleHandleHalf, colX);
         DrawHandleBox(drawList, yTip, scaleHandleHalf, colY);
     }
-
+    
     DrawHandleBox(drawList, center, freeBoxHalf, colFree);
 }
 
@@ -318,18 +334,22 @@ AssetID EditorController::Pick(const glm::vec2& localMousePos, const glm::vec2& 
     Scene::Current()->GetRegistry().View<SpriteRendererData, TransformData>().each(
         [&](entt::entity e, SpriteRendererData& sprite, TransformData& transform)
         {
-            glm::vec2 local = worldPos - transform.position;
+            Entity entity(&Scene::Current()->GetRegistry(), e);
+            Transform trans = Transform(entity);
 
-            float c = cosf(-transform.rotation.x);
-            float s = sinf(-transform.rotation.x);
+            glm::vec2 local = worldPos - trans.Position();
+
+            float rot = trans.Rotation();
+            float c = cosf(-rot);
+            float s = sinf(-rot);
             glm::vec2 rotated = { local.x * c - local.y * s, local.x * s + local.y * c };
 
-            glm::vec2 half = transform.scale * 0.5f;
+            glm::vec2 half = trans.Scale() * 0.5f;
 
             if (rotated.x >= -half.x && rotated.x <= half.x &&
                 rotated.y >= -half.y && rotated.y <= half.y)
             {
-                Entity entity(&Scene::Current()->GetRegistry(), e);
+                
                 hit = entity.GetComponent<MetadataData>().id;
             }
         });
@@ -340,10 +360,10 @@ AssetID EditorController::Pick(const glm::vec2& localMousePos, const glm::vec2& 
 EditorController::GizmoElement EditorController::HitTestGizmo(const AssetID& selected,
     const glm::vec2& localMousePos, const glm::vec2& viewportSize) const
 {
-    TransformData* t = GetTransform(selected);
-    if (!t) return GizmoElement::None;
+    Transform t = GetTransform(selected);
+    if (t == Transform()) return GizmoElement::None;
 
-    glm::vec2 objLocal = WorldToLocal(t->position, viewportSize);
+    glm::vec2 objLocal = WorldToLocal(t.Position(), viewportSize);
 
     if (gizmoMode == GizmoMode::Rotate)
     {
@@ -367,16 +387,16 @@ EditorController::GizmoElement EditorController::HitTestGizmo(const AssetID& sel
     return GizmoElement::None;
 }
 
-TransformData* EditorController::GetTransform(const AssetID& id) const
+Transform EditorController::GetTransform(const AssetID& id) const
 {
-    if (!Scene::Current() || id == AssetID(0)) return nullptr;
+    if (!Scene::Current() || id == AssetID(0)) return Transform();
 
     auto& registry = Scene::Current()->gameObjectsRegister;
     auto it = registry.find(id);
-    if (it == registry.end()) return nullptr;
+    if (it == registry.end()) return Transform();
 
     GameObject go = it->second;
-    return &go.GetComponent<TransformData>();
+    return go.GetComponent<Transform>();
 }
 
 glm::vec2 EditorController::WorldToLocal(const glm::vec2& worldPos, const glm::vec2& viewportSize) const

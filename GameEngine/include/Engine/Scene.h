@@ -26,6 +26,8 @@ namespace Vortx
 
 		GameObject CreateGameObject();
 
+		void UpdateTransforms();
+
 		static std::unique_ptr<Scene>& Current();
 
 		Registry& GetRegistry() { return registry; };

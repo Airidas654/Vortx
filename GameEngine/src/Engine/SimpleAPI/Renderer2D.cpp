@@ -1,5 +1,7 @@
 #include "SimpleAPI\Renderer2D.h"
 
+#include <glm/gtc/matrix_transform.hpp>
+
 #include <algorithm>
 #include <array>
 #include <cmath>
@@ -14,14 +16,21 @@ namespace Vortx
 
         struct DrawCommand
         {
-            glm::vec2 position;
-            glm::vec2 size;
-            glm::vec1 rotation;
+            glm::mat4 transform;
             TextureHandle texture;
             glm::vec4 tint;
             int32_t layer;
             int32_t orderInLayer;
         };
+
+        constexpr glm::vec2 kUnitCorners[4] = 
+        {
+            { -0.5f, -0.5f },
+            {  0.5f, -0.5f },
+            {  0.5f,  0.5f },
+            { -0.5f,  0.5f }
+        };
+        constexpr glm::vec2 kUnitUVs[4] = { {0,0}, {1,0}, {1,1}, {0,1} };
 
         std::unique_ptr<IRenderDevice> s_device;
         ShaderHandle s_shader;
@@ -118,29 +127,14 @@ namespace Vortx
 
             float texIndex = GetOrAddTextureSlot(cmd.texture);
 
-            glm::vec2 half = cmd.size * 0.5f;
-            float c = cosf(cmd.rotation.x);
-            float s = sinf(cmd.rotation.x);
-
-            glm::vec2 corners[4] = {
-                { -half.x, -half.y },
-                {  half.x, -half.y },
-                {  half.x,  half.y },
-                { -half.x,  half.y }
-            };
-            glm::vec2 uvs[4] = { {0,0}, {1,0}, {1,1}, {0,1} };
-
             for (int i = 0; i < 4; i++)
             {
-                glm::vec2 rotated = {
-                    corners[i].x * c - corners[i].y * s,
-                    corners[i].x * s + corners[i].y * c
-                };
+                glm::vec4 worldPos = cmd.transform * glm::vec4(kUnitCorners[i], 0.0f, 1.0f);
 
                 QuadVertex v;
-                v.position = glm::vec3(cmd.position + rotated, 0.0f);
+                v.position = glm::vec3(worldPos);
                 v.color = cmd.tint;
-                v.uv = uvs[i];
+                v.uv = kUnitUVs[i];
                 v.texIndex = texIndex;
                 s_vertices.push_back(v);
             }
@@ -229,17 +223,34 @@ namespace Vortx
         s_device->EndFrame();
     }
 
-    void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, glm::vec1 rotation, const glm::vec4& color,
+    void Renderer2D::DrawQuad(const glm::mat4& transform, const glm::vec4& color,
         int32_t layer, int32_t orderInLayer)
     {
-        DrawSprite(position, size, rotation, s_whiteTexture, color, layer, orderInLayer);
+        DrawSprite(transform, s_whiteTexture, color, layer, orderInLayer);
+    }
+
+    void Renderer2D::DrawSprite(const glm::mat4& transform, TextureHandle texture,
+        const glm::vec4& tint, int32_t layer, int32_t orderInLayer)
+    {
+        s_commands.push_back({ transform, texture, tint, layer, orderInLayer });
+    }
+
+    void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, glm::vec1 rotation,
+        const glm::vec4& color, int32_t layer, int32_t orderInLayer)
+    {
+        glm::mat4 t = glm::translate(glm::mat4(1.0f), glm::vec3(position, 0.0f));
+        t = glm::rotate(t, rotation.x, glm::vec3(0, 0, 1));
+        t = glm::scale(t, glm::vec3(size, 1.0f));
+        DrawQuad(t, color, layer, orderInLayer);
     }
 
     void Renderer2D::DrawSprite(const glm::vec2& position, const glm::vec2& size, glm::vec1 rotation,
-        TextureHandle texture, const glm::vec4& tint,
-        int32_t layer, int32_t orderInLayer)
+        TextureHandle texture, const glm::vec4& tint, int32_t layer, int32_t orderInLayer)
     {
-        s_commands.push_back({ position, size, rotation, texture, tint, layer, orderInLayer });
+        glm::mat4 t = glm::translate(glm::mat4(1.0f), glm::vec3(position, 0.0f));
+        t = glm::rotate(t, rotation.x, glm::vec3(0, 0, 1));
+        t = glm::scale(t, glm::vec3(size, 1.0f));
+        DrawSprite(t, texture, tint, layer, orderInLayer);
     }
 
     TextureHandle Renderer2D::CreateTexture(const TextureDesc& desc)
