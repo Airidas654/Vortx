@@ -155,12 +155,34 @@ void EditorController::Update(GLFWwindow* window, bool viewportHovered, const gl
             {
             case GizmoElement::MoveX:
             {
-                t.SetPosition(world + glm::vec2(mouseDeltaWorld.x, 0));
+                if (gizmoSpaceMode == SpaceMode::Local)
+                {
+                    glm::vec2 right = t.Right();
+                    float dist = glm::dot(right, mouseDeltaWorld);
+
+                    t.SetPosition(world + right * dist);
+                }
+                else
+                {
+                    t.SetPosition(world + glm::vec2(mouseDeltaWorld.x, 0));
+                }
+
                 break;
             }
             case GizmoElement::MoveY:
             {
-                t.SetPosition(world + glm::vec2(0, mouseDeltaWorld.y));
+                if (gizmoSpaceMode == SpaceMode::Local)
+                {
+                    glm::vec2 up = t.Up();
+                    float dist = glm::dot(up, mouseDeltaWorld);
+
+                    t.SetPosition(world + up * dist);
+                }
+                else
+                {
+                    t.SetPosition(world + glm::vec2(0, mouseDeltaWorld.y));
+                }
+                
                 break;
             }
             case GizmoElement::MoveFree:
@@ -183,15 +205,21 @@ void EditorController::Update(GLFWwindow* window, bool viewportHovered, const gl
             }
             case GizmoElement::ScaleX:
             {
+                glm::vec2 right = t.Right();
+                float dist = glm::dot(right, mouseDeltaWorld);
+
                 glm::vec2 scale = t.Scale();
-                scale.x = std::max(minScale, t.Scale().x + mouseDeltaWorld.x);
+                scale.x = std::max(minScale, scale.x + dist*2);
                 t.SetScale(scale);
                 break;
             }
             case GizmoElement::ScaleY:
             {
+                glm::vec2 up = t.Up();
+                float dist = glm::dot(up, mouseDeltaWorld);
+
                 glm::vec2 scale = t.Scale();
-                scale.y = std::max(minScale, t.Scale().y + mouseDeltaWorld.y);
+                scale.y = std::max(minScale, scale.y + dist*2);
                 t.SetScale(scale);
                 break;
             }
@@ -217,30 +245,6 @@ void EditorController::Update(GLFWwindow* window, bool viewportHovered, const gl
             activeGizmo = GizmoElement::None;
         }
     }
-    //// Freeform drag on the object body (no gizmo handle involved). Only
-    //// moves the object once the cursor has traveled past a small threshold
-    //// from the press point, so a plain click just selects without nudging it.
-    //else if (isDraggingObject && wasLeftMouseDown && Scene::Current())
-    //{
-    //    if (!dragConfirmed && glm::length(localMousePos - pressLocalPos) >= dragThresholdPixels)
-    //        dragConfirmed = true;
-
-    //    if (dragConfirmed)
-    //    {
-    //        auto& registry = Scene::Current()->gameObjectsRegister;
-    //        auto it = registry.find(draggedObject);
-
-    //        if (it != registry.end())
-    //        {
-    //            GameObject go = it->second;
-    //            go.GetComponent<TransformData>().position += mouseDeltaWorld;
-    //        }
-    //        else
-    //        {
-    //            isDraggingObject = false;
-    //        }
-    //    }
-    //}
 
     if (viewportHovered)
     {
@@ -270,6 +274,19 @@ void EditorController::DrawGizmo(ImDrawList* drawList, const glm::vec2& screenOr
 
     glm::vec2 xHandle = objLocal + glm::vec2(axisLength, 0.0f);
     glm::vec2 yHandle = objLocal + glm::vec2(0.0f, -axisLength);
+
+    if ((gizmoSpaceMode == SpaceMode::Local && gizmoMode == GizmoMode::Move) || gizmoMode == GizmoMode::Scale)
+    {
+        glm::vec2 right = t.Right();
+        right.y *= -1;
+
+        glm::vec2 up = -t.Up();
+        up.y *= -1;
+
+        xHandle = objLocal + right * axisLength;
+        yHandle = objLocal + up * -axisLength;
+    }
+
     ImVec2 xTip = { screenOrigin.x + xHandle.x, screenOrigin.y + xHandle.y };
     ImVec2 yTip = { screenOrigin.x + yHandle.x, screenOrigin.y + yHandle.y };
 
@@ -377,6 +394,18 @@ EditorController::GizmoElement EditorController::HitTestGizmo(const AssetID& sel
 
     glm::vec2 xHandle = objLocal + glm::vec2(axisLength, 0.0f);
     glm::vec2 yHandle = objLocal + glm::vec2(0.0f, -axisLength);
+
+    if ((gizmoSpaceMode == SpaceMode::Local && gizmoMode == GizmoMode::Move) || gizmoMode == GizmoMode::Scale)
+    {
+        glm::vec2 right = t.Right();
+        right.y *= -1;
+
+        glm::vec2 up = -t.Up();
+        up.y *= -1;
+
+        xHandle = objLocal + right * axisLength;
+        yHandle = objLocal + up * -axisLength;
+    }
 
     if (DistancePointSegment(localMousePos, objLocal, xHandle) <= pickTolerance)
         return (gizmoMode == GizmoMode::Move) ? GizmoElement::MoveX : GizmoElement::ScaleX;

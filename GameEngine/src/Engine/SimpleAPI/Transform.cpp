@@ -4,6 +4,8 @@
 
 #include "Scene.h"
 
+#include <iostream>
+
 namespace Vortx
 {
 
@@ -21,21 +23,6 @@ namespace Vortx
 	{
 		return entity.GetComponent<TransformData>();
 	}
-
-	/*glm::vec2& Transform::Position()
-	{
-		return entity.GetComponent<TransformData>().position;
-	}
-
-	glm::vec1& Transform::Rotation()
-	{
-		return entity.GetComponent<TransformData>().rotation;
-	}*/
-
-	/*glm::vec2& Transform::Scale()
-	{
-		return entity.GetComponent<TransformData>().scale;
-	}*/
 
 	static glm::mat4 ComputeLocalMatrix(const TransformData& t)
 	{
@@ -139,6 +126,53 @@ namespace Vortx
 		return { -sinf(r), cosf(r) };
 	}
 
+	void Transform::Translate(const glm::vec2& delta)
+	{
+		glm::vec2 pos = Position();
+		SetPosition(pos + delta);
+	}
+
+	void Transform::LocalTranslate(const glm::vec2& delta)
+	{
+		glm::vec2 pos = LocalPosition();
+		SetLocalPosition(pos + delta);
+	}
+
+	void Transform::Rotate(float radians)
+	{
+		float rot = LocalRotation();
+		SetLocalRotation(rot + radians);
+	}
+
+	void Transform::LookAt(const glm::vec2& worldTarget)
+	{
+		glm::vec2 worldPos = Position();
+		glm::vec2 dir = glm::normalize(worldTarget - worldPos);
+
+		float rot = atan2f(dir.y, dir.x);
+
+		SetRotation(rot);
+	}
+
+	glm::vec2 Transform::LocalToWorldPoint(const glm::vec2& localPoint)
+	{
+		glm::vec4 result = GetWorldMatrix() * glm::vec4(localPoint, 0.0f, 1.0f);
+		return glm::vec2(result.x, result.y);
+	}
+
+	glm::vec2 Transform::WorldToLocalPoint(const glm::vec2& worldPoint)
+	{
+		glm::mat4 inv = glm::inverse(GetWorldMatrix());
+		glm::vec4 result = inv * glm::vec4(worldPoint, 0.0f, 1.0f);
+		return glm::vec2(result.x, result.y);
+	}
+
+	glm::vec2 Transform::LocalToWorldDirection(const glm::vec2& localDir)
+	{
+		glm::vec4 result = GetWorldMatrix() * glm::vec4(localDir, 0.0f, 0.0f);
+		return glm::vec2(result.x, result.y);
+	}
+
 	void Transform::MarkWorldDirty()
 	{
 		TransformData& data = Data();
@@ -183,20 +217,38 @@ namespace Vortx
 			child.UpdateSubtree();
 	}
 
-	const glm::mat4& Transform::GetWorldMatrix()
+	glm::mat4 Transform::GetWorldMatrix()
 	{
 		EnsureWorldUpdated();
 		return Data().worldMatrix;
 	}
 
+	int Transform::GetChildCount()
+	{
+		return Data().children.size();
+	}
+
+	Transform Transform::GetChild(int index)
+	{
+		auto& children = Data().children;
+
+		if (index < 0 || index >= children.size())
+		{
+			std::cerr << "Transform::GetChild invalid index" << std::endl;
+			return Transform();
+		}
+
+		return children[index];
+	}
+
 	std::vector<Transform>& Transform::GetChildren()
 	{
-		return entity.GetComponent<TransformData>().children;
+		return Data().children;
 	}
 
 	std::optional<Transform> Transform::GetParent()
 	{
-		return entity.GetComponent<TransformData>().parent;
+		return Data().parent;
 	}
 
 	void Transform::SetParent(std::optional<Transform> parent)

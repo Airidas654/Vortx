@@ -48,25 +48,26 @@ namespace Vortx
 		void SetRotation(float worldAngle);
 		void SetScale(const glm::vec2& worldScale);
 
-		const glm::mat4& GetWorldMatrix();
+		glm::mat4 GetWorldMatrix();
 
 		glm::vec2 Right();
 		glm::vec2 Up();
+		
+		void Translate(const glm::vec2& delta);
+		void LocalTranslate(const glm::vec2& delta);
+		void Rotate(float radians);
+		void LookAt(const glm::vec2& worldTarget);
 
-		glm::vec2 TransformPoint(const glm::vec2& localPoint);      // local -> world    TODO
-		glm::vec2 InverseTransformPoint(const glm::vec2& worldPoint); // world -> local   TODO
-		glm::vec2 TransformDirection(const glm::vec2& localDir);     // ignores translation   TODO
-
-		void Translate(const glm::vec2& delta);          // local-space move  TODO
-		void Rotate(float degreesOrRadians);             //   TODO
-		void LookAt(const glm::vec2& worldTarget);        // sets rotation to face a point   TODO
+		glm::vec2 LocalToWorldPoint(const glm::vec2& localPoint);
+		glm::vec2 WorldToLocalPoint(const glm::vec2& worldPoint);
+		glm::vec2 LocalToWorldDirection(const glm::vec2& localDir);
 
 		void MarkWorldDirty();
 		void EnsureWorldUpdated();
 		void UpdateSubtree();
 
-		int GetChildCount();            // TODO
-		Transform GetChild(int index);  // TODO
+		int GetChildCount();
+		Transform GetChild(int index);
 		std::vector<Transform>& GetChildren();
 		std::optional<Transform> GetParent();
 		void SetParent(std::optional<Transform> parent);

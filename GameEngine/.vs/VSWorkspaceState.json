@@ -13,8 +13,6 @@
   },
   "ExpandedNodes": [
     "",
-    "\\external\\glm",
-    "\\external\\glm\\glm",
     "\\include",
     "\\include\\Editor",
     "\\include\\Engine",
@@ -23,6 +21,5 @@
     "\\src\\Engine",
     "\\src\\Engine\\SimpleAPI"
   ],
-  "SelectedNode": "\\include\\Editor\\EditorController.h",
   "PreviewInSolutionExplorer": false
 }
