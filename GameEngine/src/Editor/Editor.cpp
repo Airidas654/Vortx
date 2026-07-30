@@ -17,8 +17,10 @@
 #include "Assets/FontAsset.h"
 #include "Assets/TextureAsset.h"
 #include "Renderer/OpenGLRenderDevice.h"
+#include "Renderer/GameViewport.h"
 #include "SimpleAPI\Renderer2D.h"
 #include "SimpleAPI/InputManager.h"
+#include "Core/WindowManager.h"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -43,34 +45,32 @@ DynamicLibrary Editor::gameLib;
 
 GLFWwindow* CreateWindow()
 {
-    GLFWwindow* window;
-
-    if (!glfwInit())
-    {
+    if (!WindowManager::Init())
         return nullptr;
-    }
-
-    GLFWmonitor* monitor = glfwGetPrimaryMonitor();
-    const GLFWvidmode* mode = glfwGetVideoMode(monitor);
 
     OpenGLRenderDevice::PrepareGLFWHints();
 
-    window = glfwCreateWindow(mode->width, mode->height, "Vortx", NULL, NULL);
+    uint32_t w, h;
+    WindowManager::GetMonitorResolution(-1, w, h);
 
-    if (!window)
-    {
-        glfwTerminate();
-        return nullptr;
-    }
+    WindowDesc desc;
+    desc.title = "Vortx";
+    desc.mode = WindowMode::Windowed;
+    desc.vsync = true;
+    desc.width = w;
+    desc.height = h;
+
+    GLFWwindow* window = WindowManager::Create(desc);
+    if (!window) return nullptr;
 
     auto device = std::make_unique<OpenGLRenderDevice>();
     if (!Renderer2D::Init(std::move(device), window)) return nullptr;
 
-    /*glfwMakeContextCurrent(window);
+    GameViewport::InitEmbedded(1280, 720);
 
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-        return nullptr;
-    }*/
+    WindowManager::AddResizeCallback([](uint32_t w, uint32_t h) {
+        Renderer2D::OnResize(w, h);
+        });
 
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -190,7 +190,7 @@ void Editor::Compile()
 void Test(Engine& engine)
 {
     GameObject fir = Scene::Current()->CreateGameObject();
-    fir.AddComponent<Camera>();
+    //fir.AddComponent<Camera>();
     Scene::Current()->CreateGameObject();
     Transform par = Scene::Current()->CreateGameObject().GetComponent<Transform>();
 
@@ -231,6 +231,8 @@ void Editor::Start(Engine& engine)
     GLFWwindow* window = CreateWindow();
 
     if (!window) return;
+
+    {
 
     InputManager::Init(window);
 
@@ -309,12 +311,12 @@ void Editor::Start(Engine& engine)
 
         Renderer2D::NewFrame();
 
-        glm::mat4 viewProjMatrix(0.25f, 0,0,0,0,0.333f,0,0,0,0, -0.02f, 0,0,0, -1.202f, 1);
+        glm::mat4 viewProjMatrix(0.25f, 0, 0, 0, 0, 0.333f, 0, 0, 0, 0, -0.02f, 0, 0, 0, -1.202f, 1);
 
         Renderer2D::BeginScene(viewProjMatrix);
         Renderer2D::EndScene();
 
-        
+
 
         editorUI.TryDrawScene();
 
@@ -322,9 +324,9 @@ void Editor::Start(Engine& engine)
         ////DrawSceneSprites();   // whatever iterates your ECS and calls Renderer2D::DrawSprite
         //Renderer2D::EndScene();
 
-        Renderer2D::BeginScene(viewProjMatrix, glm::vec4(0.07f, 0.07f, 0.08f, 1.0f), editorUI.GetGameRenderTarget());
+        //Renderer2D::BeginScene(viewProjMatrix, glm::vec4(0.07f, 0.07f, 0.08f, 1.0f), editorUI.GetGameRenderTarget());
         //DrawSceneSprites();
-        Renderer2D::EndScene();
+        //Renderer2D::EndScene();
 
         Renderer2D::BindBackbuffer();
 
@@ -336,7 +338,8 @@ void Editor::Start(Engine& engine)
 
         Renderer2D::Present();
     }
-
-    glfwDestroyWindow(window);
-    glfwTerminate();
+    }
+    GameViewport::Shutdown();
+    Renderer2D::Shutdown();
+    WindowManager::Shutdown();
 }

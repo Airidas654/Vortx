@@ -11,7 +11,7 @@ namespace Vortx
 
 	struct CameraData
 	{
-		float size;
-		glm::mat4 projMatrix;
+		float size = 5;
+		glm::mat4 projMatrix = glm::mat4(1);
 	};
 }

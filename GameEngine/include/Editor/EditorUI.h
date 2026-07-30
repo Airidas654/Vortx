@@ -51,7 +51,6 @@ public:
     void ResetSelected() { ChangeSelected(AssetID(0)); };
 
     RenderTargetHandle& GetSceneRenderTarget() { return sceneRenderTarget; };
-    RenderTargetHandle& GetGameRenderTarget() { return gameRenderTarget; };
 
 private:
 
@@ -72,7 +71,6 @@ private:
     float cellSize = 100;
 
     RenderTargetHandle sceneRenderTarget;
-    RenderTargetHandle gameRenderTarget;
     uint32_t sceneViewWidth = 0, sceneViewHeight = 0;
     uint32_t gameViewWidth = 0, gameViewHeight = 0;
 

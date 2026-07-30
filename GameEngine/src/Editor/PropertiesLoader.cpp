@@ -11,6 +11,8 @@
 #include "Core/AssetDatabase.h"
 #include "Assets/TextureAsset.h"
 #include "SimpleAPI\Renderer2D.h"
+#include "SimpleAPI/SpriteRenderer.h"
+#include "SimpleAPI/Camera.h"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -65,7 +67,7 @@ void PropertiesLoader::Reset()
 
         ImGui::Spacing();
     }, [](Entity entity) {
-        entity.AddComponent<Vortx::TransformData>();
+        GameObject(entity).AddComponent<Transform>();
     });
 
     RegisterComponent<MetadataData>("Object", "Meta", true, [](Entity entity) {
@@ -160,20 +162,26 @@ void PropertiesLoader::Reset()
         ImGui::Checkbox("Flip Y", &sr.flipY);
         ImGui::Spacing();
     }, [](Entity entity) {
-        entity.AddComponent<Vortx::SpriteRendererData>();
+        GameObject(entity).AddComponent<SpriteRenderer>();
     });
 
     RegisterComponent<Vortx::CameraData>("Camera", "Logic", true, [](Entity entity) {
-        auto& t = entity.GetComponent<Vortx::CameraData>();
+        //auto& t = entity.GetComponent<Vortx::CameraData>();
+        Camera t = Camera(entity);
+
+        float size = t.GetSize();
 
         ImGui::Spacing();
 
         ImGui::TextDisabled("Size");
-        ImGui::DragFloat("##siz", (float*)&t.size, 0.1f, 0.0f, 0.0f, "%.2f", 0);
+        if (ImGui::DragFloat("##siz", &size, 0.1f, 0.0f, 0.0f, "%.2f", 0))
+        {
+            t.SetSize(size);
+        }
 
         ImGui::Spacing();
     }, [](Entity entity) {
-            entity.AddComponent<Vortx::CameraData>();
+        GameObject(entity).AddComponent<Camera>();
     });
 }
 

@@ -13,13 +13,17 @@
   },
   "ExpandedNodes": [
     "",
+    "\\external",
+    "\\external\\imgui-docking",
     "\\include",
-    "\\include\\Editor",
     "\\include\\Engine",
-    "\\include\\Engine\\Components",
+    "\\include\\Engine\\Renderer",
+    "\\include\\Engine\\SimpleAPI",
     "\\src",
+    "\\src\\Editor",
     "\\src\\Engine",
-    "\\src\\Engine\\SimpleAPI"
+    "\\src\\Engine\\Renderer"
   ],
+  "SelectedNode": "\\src\\Editor\\PropertiesLoader.cpp",
   "PreviewInSolutionExplorer": false
 }

@@ -1,19 +1,29 @@
 #include "SimpleAPI/Camera.h"
 
 #include "Components/ComponentCamera.h"
+#include "Renderer/GameViewport.h"
 #include "Scene.h"
+
+#include "glm/gtc/matrix_transform.hpp"
+
+#include <iostream>
 
 namespace Vortx
 {
-	Camera* Camera::main = nullptr;
+	Camera Camera::main = Camera();
 
 	void Camera::_InternalCreate()
 	{
 		entity.AddComponent<CameraData>();
 
-		if (Camera::main == nullptr)
+		std::cout << (int)entity.GetValue() << std::endl;
+
+		Camera cam = Camera(entity);
+		cam.RecalculateProjectionMatrix();
+
+		if (Camera::main == Camera())
 		{
-			ChangeMain(Camera(entity));
+			ChangeMain(cam);
 		}
 	}
 
@@ -24,8 +34,8 @@ namespace Vortx
 
 	Camera::~Camera()
 	{
-		if (Camera::main != nullptr && *(Camera::main) == *this)
-		{
+		/*if (Camera::main != Camera() && Camera::main == *this)
+		{*/
 			//Camera::main = nullptr;
 
 			//auto& view = Scene::Current()->GetRegistry().View<Camera>();
@@ -38,22 +48,41 @@ namespace Vortx
 					return;
 				}
 			}*/
-		}
+		//}
 	}
 
 	void Camera::ChangeMain(Camera camera)
 	{
-		if (Camera::main != nullptr)
-		{
-			delete Camera::main;
+		Camera::main = camera;
+		std::cout << "changed" << std::endl;
+		if (Camera::main == Camera()) {
+			std::cout << "wtf " << (int)entity.GetValue() << std::endl;
 		}
-
-		Camera::main = new Camera(camera);
 	}
 
 	glm::mat4 Camera::GetProjectionMatrix()
 	{
-		return entity.GetComponent<CameraData>().projMatrix;
+		return Data().projMatrix;
+	}
+
+	float Camera::GetSize()
+	{
+		return Data().size;
+	}
+
+	void Camera::SetSize(float size)
+	{
+		Data().size = size;
+		RecalculateProjectionMatrix();
+	}
+
+	void Camera::RecalculateProjectionMatrix()
+	{
+		float sizeY = Data().size;
+		
+		float sizeX = sizeY * GameViewport::GetAspect();
+
+		Data().projMatrix = glm::ortho(-sizeX, sizeX, -sizeY, sizeY, -1.0f, 1.0f);
 	}
 
 	CameraData& Camera::Data()

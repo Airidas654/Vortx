@@ -20,7 +20,7 @@ namespace Vortx
 
 	public:
 
-		static Camera* main;
+		static Camera main;
 
 		Camera() = default;
 
@@ -37,6 +37,12 @@ namespace Vortx
 		~Camera();
 
 		void ChangeMain(Camera camera);
+
+		float GetSize();
+
+		void SetSize(float size);
+
+		void RecalculateProjectionMatrix();
 
 		glm::mat4 GetProjectionMatrix();
 
