@@ -17,10 +17,10 @@ namespace Vortx
 	{
 	protected:
 		void _InternalCreate() override;
+	private:
+		static Camera main;
 
 	public:
-
-		static Camera main;
 
 		Camera() = default;
 
@@ -34,9 +34,11 @@ namespace Vortx
 
 		Camera(Entity entity, bool create);
 
-		~Camera();
+		~Camera() = default;
 
-		void ChangeMain(Camera camera);
+		static Camera Main();
+
+		static void ChangeMain(Camera camera);
 
 		float GetSize();
 
@@ -45,6 +47,8 @@ namespace Vortx
 		void RecalculateProjectionMatrix();
 
 		glm::mat4 GetProjectionMatrix();
+
+		glm::mat4 GetProjectionViewMatrix();
 
 		CameraData& Data();
 

@@ -21,6 +21,7 @@ namespace Vortx
 
         glm::mat4 localMatrix = glm::mat4(1.0f);
         glm::mat4 worldMatrix = glm::mat4(1.0f);
+        glm::mat4 inverseWorldMatrix = glm::mat4(1.0f);
 
         glm::vec2 worldPositionCache = glm::vec2(0);
         float worldRotationCache = 0.0f;

@@ -190,7 +190,8 @@ void Editor::Compile()
 void Test(Engine& engine)
 {
     GameObject fir = Scene::Current()->CreateGameObject();
-    //fir.AddComponent<Camera>();
+    fir.AddComponent<Camera>();
+    fir.GetComponent<GameObject>().NameSet("Camera");
     Scene::Current()->CreateGameObject();
     Transform par = Scene::Current()->CreateGameObject().GetComponent<Transform>();
 
@@ -317,17 +318,9 @@ void Editor::Start(Engine& engine)
         Renderer2D::EndScene();
 
 
-
         editorUI.TryDrawScene();
 
-        //Renderer2D::BeginScene(viewProjMatrix, glm::vec4(0.07f, 0.07f, 0.08f, 1.0f), editorUI.GetSceneRenderTarget());
-        ////DrawSceneSprites();   // whatever iterates your ECS and calls Renderer2D::DrawSprite
-        //Renderer2D::EndScene();
-
-        //Renderer2D::BeginScene(viewProjMatrix, glm::vec4(0.07f, 0.07f, 0.08f, 1.0f), editorUI.GetGameRenderTarget());
-        //DrawSceneSprites();
-        //Renderer2D::EndScene();
-
+        
         Renderer2D::BindBackbuffer();
 
         editorUI.NewFrame();

@@ -14,7 +14,7 @@ namespace Vortx
 
 	public:
 
-		Entity() = default;
+		Entity();
 
 		Entity(const Entity&) = default;
 		Entity& operator=(const Entity&) = default;

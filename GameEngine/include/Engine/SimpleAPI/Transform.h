@@ -49,6 +49,7 @@ namespace Vortx
 		void SetScale(const glm::vec2& worldScale);
 
 		glm::mat4 GetWorldMatrix();
+		glm::mat4 GetInverseWorldMatrix();
 
 		glm::vec2 Right();
 		glm::vec2 Up();

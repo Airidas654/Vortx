@@ -16,8 +16,6 @@ namespace Vortx
 	{
 		entity.AddComponent<CameraData>();
 
-		std::cout << (int)entity.GetValue() << std::endl;
-
 		Camera cam = Camera(entity);
 		cam.RecalculateProjectionMatrix();
 
@@ -32,37 +30,35 @@ namespace Vortx
 		_InternalCreate();
 	}
 
-	Camera::~Camera()
+	Camera Camera::Main()
 	{
-		/*if (Camera::main != Camera() && Camera::main == *this)
-		{*/
-			//Camera::main = nullptr;
-
-			//auto& view = Scene::Current()->GetRegistry().View<Camera>();
-
-			/*for (auto entity : view)
-			{
-				if (entity != this->entity.GetValue())
-				{
-					ChangeMain(Camera(Entity(&Scene::Current()->GetRegistry(), entity)));
-					return;
-				}
-			}*/
-		//}
+		if (Camera::main == Camera() || !Camera::main.GetEntity().HasComponent<CameraData>())
+		{
+			auto& view = Scene::Current()->GetRegistry().View<CameraData>();
+			if (view.empty()) {
+				Camera::main = Camera();
+			}
+			else {
+				ChangeMain(Camera(Entity(&Scene::Current()->GetRegistry(), view.front())));
+			}
+		}
+		return Camera::main;
 	}
 
 	void Camera::ChangeMain(Camera camera)
 	{
 		Camera::main = camera;
-		std::cout << "changed" << std::endl;
-		if (Camera::main == Camera()) {
-			std::cout << "wtf " << (int)entity.GetValue() << std::endl;
-		}
+		Camera::main.RecalculateProjectionMatrix();
 	}
 
 	glm::mat4 Camera::GetProjectionMatrix()
 	{
 		return Data().projMatrix;
+	}
+
+	glm::mat4 Camera::GetProjectionViewMatrix()
+	{
+		return Data().projMatrix * GetComponent<Transform>().GetInverseWorldMatrix();
 	}
 
 	float Camera::GetSize()

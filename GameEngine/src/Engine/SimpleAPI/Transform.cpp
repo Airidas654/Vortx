@@ -162,8 +162,7 @@ namespace Vortx
 
 	glm::vec2 Transform::WorldToLocalPoint(const glm::vec2& worldPoint)
 	{
-		glm::mat4 inv = glm::inverse(GetWorldMatrix());
-		glm::vec4 result = inv * glm::vec4(worldPoint, 0.0f, 1.0f);
+		glm::vec4 result = GetInverseWorldMatrix() * glm::vec4(worldPoint, 0.0f, 1.0f);
 		return glm::vec2(result.x, result.y);
 	}
 
@@ -207,6 +206,21 @@ namespace Vortx
 		data.worldScaleCache = parentScale * data.localScale;
 		data.worldPositionCache = glm::vec2(data.worldMatrix[3][0], data.worldMatrix[3][1]);
 
+		float c = cosf(data.worldRotationCache);
+		float s = sinf(data.worldRotationCache);
+		glm::vec2 pos = data.worldPositionCache;
+		glm::vec2 invScale = 1.0f / data.worldScaleCache;
+
+		data.inverseWorldMatrix = glm::mat4(1.0f);
+
+		data.inverseWorldMatrix[0][0] = c * invScale.x;
+		data.inverseWorldMatrix[1][0] = s * invScale.x;
+		data.inverseWorldMatrix[3][0] = -(pos.x * c + pos.y * s) * invScale.x;
+
+		data.inverseWorldMatrix[0][1] = -s * invScale.y;
+		data.inverseWorldMatrix[1][1] = c * invScale.y;
+		data.inverseWorldMatrix[3][1] = (pos.x * s - pos.y * c) * invScale.y;
+
 		data.worldDirty = false;
 	}
 
@@ -221,6 +235,12 @@ namespace Vortx
 	{
 		EnsureWorldUpdated();
 		return Data().worldMatrix;
+	}
+
+	glm::mat4 Transform::GetInverseWorldMatrix()
+	{
+		EnsureWorldUpdated();
+		return Data().inverseWorldMatrix;
 	}
 
 	int Transform::GetChildCount()
