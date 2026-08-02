@@ -32,9 +32,7 @@ namespace Vortx
         static RenderTargetHandle GetRenderTarget();
         static TextureHandle GetColorTexture();
 
-        static void BeginFrame(const glm::mat4& viewProjection,
-            const glm::vec4& clearColor = glm::vec4(0.07f, 0.07f, 0.08f, 1.0f));
-        static void EndFrame();
+        static void Render(const glm::mat4& viewProjection, const glm::vec4& clearColor = glm::vec4(0.07f, 0.07f, 0.08f, 1.0f));
 
         static void Present();
 

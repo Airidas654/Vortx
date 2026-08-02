@@ -13,17 +13,16 @@
   },
   "ExpandedNodes": [
     "",
-    "\\external",
-    "\\external\\imgui-docking",
     "\\include",
+    "\\include\\Editor",
     "\\include\\Engine",
-    "\\include\\Engine\\Renderer",
-    "\\include\\Engine\\SimpleAPI",
+    "\\include\\Engine\\Components",
     "\\src",
-    "\\src\\Editor",
     "\\src\\Engine",
-    "\\src\\Engine\\Renderer"
+    "\\src\\Engine\\Renderer",
+    "\\src\\Engine\\SimpleAPI",
+    "\\src\\Executable"
   ],
-  "SelectedNode": "\\src\\Editor\\PropertiesLoader.cpp",
+  "SelectedNode": "\\src\\Engine\\SerializerLoader.cpp",
   "PreviewInSolutionExplorer": false
 }

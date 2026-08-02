@@ -1,5 +1,5 @@
 #include "Renderer/GameViewport.h"
-#include "SimpleAPI/Renderer2D.h"
+#include "SimpleAPI/Renderer.h"
 #include "Core/WindowManager.h"
 
 namespace Vortx
@@ -18,7 +18,7 @@ namespace Vortx
         WindowManager::AddResizeCallback([](uint32_t w, uint32_t h) {
             width = w;
             height = h;
-            Renderer2D::OnResize(w, h);
+            Renderer::OnResize(w, h);
             });
     }
 
@@ -27,13 +27,13 @@ namespace Vortx
         mode = GameViewportMode::Embedded;
         width = initialWidth;
         height = initialHeight;
-        target = Renderer2D::CreateRenderTarget(width, height);
+        target = Renderer::CreateRenderTarget(width, height);
     }
 
     void GameViewport::Shutdown()
     {
         if (mode == GameViewportMode::Embedded && target.IsValid())
-            Renderer2D::DestroyRenderTarget(target);
+            Renderer::DestroyRenderTarget(target);
 
         target = {};
         width = 0;
@@ -58,7 +58,7 @@ namespace Vortx
 
         width = w;
         height = h;
-        Renderer2D::ResizeRenderTarget(target, w, h);
+        Renderer::ResizeRenderTarget(target, w, h);
     }
 
     bool GameViewport::IsReady()
@@ -74,25 +74,19 @@ namespace Vortx
     TextureHandle GameViewport::GetColorTexture()
     {
         if (mode != GameViewportMode::Embedded) return {};
-        return Renderer2D::GetRenderTargetTexture(target);
+        return Renderer::GetRenderTargetTexture(target);
     }
 
-    void GameViewport::BeginFrame(const glm::mat4& viewProjection, const glm::vec4& clearColor)
+    void GameViewport::Render(const glm::mat4& viewProjection, const glm::vec4& clearColor)
     {
         if (!IsReady()) return;
-        Renderer2D::BeginScene(viewProjection, clearColor, GetRenderTarget());
-    }
-
-    void GameViewport::EndFrame()
-    {
-        if (!IsReady()) return;
-        Renderer2D::EndScene();
+        Renderer::RenderView(viewProjection, clearColor, GetRenderTarget());
     }
 
     void GameViewport::Present()
     {
         if (mode != GameViewportMode::Standalone) return;
-        Renderer2D::BindBackbuffer();
-        Renderer2D::Present();
+        Renderer::BindBackbuffer();
+        Renderer::Present();
     }
 }

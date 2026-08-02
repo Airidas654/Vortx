@@ -18,9 +18,10 @@
 #include "Assets/TextureAsset.h"
 #include "Renderer/OpenGLRenderDevice.h"
 #include "Renderer/GameViewport.h"
-#include "SimpleAPI\Renderer2D.h"
+#include "SimpleAPI\Renderer.h"
 #include "SimpleAPI/InputManager.h"
 #include "Core/WindowManager.h"
+#include "Renderer\SpriteRendererSystem.h"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -64,12 +65,12 @@ GLFWwindow* CreateWindow()
     if (!window) return nullptr;
 
     auto device = std::make_unique<OpenGLRenderDevice>();
-    if (!Renderer2D::Init(std::move(device), window)) return nullptr;
+    if (!Renderer::Init(std::move(device), window)) return nullptr;
 
     GameViewport::InitEmbedded(1280, 720);
 
     WindowManager::AddResizeCallback([](uint32_t w, uint32_t h) {
-        Renderer2D::OnResize(w, h);
+        Renderer::OnResize(w, h);
         });
 
     IMGUI_CHECKVERSION();
@@ -296,6 +297,8 @@ void Editor::Start(Engine& engine)
                 std::cerr << "Failed to reload Game.dll\n";
         }
 
+        Renderer::NewFrame();
+
         if (PlayModeManager::state == PlayState::Playing)
         {
             ScriptSystem::Instance().Update();
@@ -308,31 +311,24 @@ void Editor::Start(Engine& engine)
             ScriptSystem::Instance().Update();
         }
 
-        Scene::Current()->UpdateTransforms();
-
-        Renderer2D::NewFrame();
-
-        glm::mat4 viewProjMatrix(0.25f, 0, 0, 0, 0, 0.333f, 0, 0, 0, 0, -0.02f, 0, 0, 0, -1.202f, 1);
-
-        Renderer2D::BeginScene(viewProjMatrix);
-        Renderer2D::EndScene();
-
-
-        editorUI.TryDrawScene();
-
-        
-        Renderer2D::BindBackbuffer();
-
         editorUI.NewFrame();
 
         ScriptSystem::Instance().SceneUpdate(editorUI.GetSelected());
 
-        editorUI.Render();
+        editorUI.BuildUI();
 
-        Renderer2D::Present();
+        Scene::Current()->UpdateTransforms();
+
+        SpriteRenderSystem::Submit();
+
+        editorUI.RenderViews();
+
+        editorUI.Composite();
+
+        Renderer::Present();
     }
     }
     GameViewport::Shutdown();
-    Renderer2D::Shutdown();
+    Renderer::Shutdown();
     WindowManager::Shutdown();
 }

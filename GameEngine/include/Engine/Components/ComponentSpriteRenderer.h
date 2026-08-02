@@ -12,5 +12,7 @@ namespace Vortx
         glm::vec4 color = glm::vec4(1.0f);
         bool flipX = false;
         bool flipY = false;
+        int32_t layer = 0;
+        int32_t orderInLayer = 0;
     };
 }

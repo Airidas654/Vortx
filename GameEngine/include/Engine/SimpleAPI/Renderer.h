@@ -2,6 +2,7 @@
 
 #include "EngineAPI.h"
 #include "Renderer/IRenderDevice.h"
+#include "AssetID.h"
 
 #include <glm/glm.hpp>
 #include <memory>
@@ -17,7 +18,7 @@ namespace Vortx
         constexpr int32_t UI = 3000;
     }
 
-    class ENGINE_API Renderer2D
+    class ENGINE_API Renderer
     {
     public:
         static bool Init(std::unique_ptr<IRenderDevice> device, GLFWwindow* window);
@@ -27,9 +28,13 @@ namespace Vortx
 
         static void NewFrame();
 
-        static void BeginScene(const glm::mat4& viewProjection, const glm::vec4& clearColor = glm::vec4(0.07f, 0.07f, 0.08f, 1.0f), RenderTargetHandle target = {});
+        //static void BeginScene(const glm::mat4& viewProjection, const glm::vec4& clearColor = glm::vec4(0.07f, 0.07f, 0.08f, 1.0f), RenderTargetHandle target = {});
 
-        static void EndScene();
+        //static void EndScene();
+
+        static void RenderView(const glm::mat4& viewProjection, const glm::vec4& clearColor = glm::vec4(0.07f, 0.07f, 0.08f, 1.0f), RenderTargetHandle target = {});
+
+        static void Clear(const glm::vec4& color = glm::vec4(0.07f, 0.07f, 0.08f, 1.0f), RenderTargetHandle target = {});
 
         static void BindBackbuffer();
 
@@ -44,6 +49,12 @@ namespace Vortx
             const glm::vec4& tint = glm::vec4(1.0f), int32_t layer = RenderLayer::World, int32_t orderInLayer = 0);
 
         static void DrawSprite(const glm::mat4& transform, TextureHandle texture, const glm::vec4& tint = glm::vec4(1.0f), 
+            int32_t layer = RenderLayer::World, int32_t orderInLayer = 0);
+
+        static void DrawSprite(const glm::vec2& position, const glm::vec2& size, glm::vec1 rotation, AssetID texture,
+            const glm::vec4& tint = glm::vec4(1.0f), int32_t layer = RenderLayer::World, int32_t orderInLayer = 0);
+
+        static void DrawSprite(const glm::mat4& transform, AssetID texture, const glm::vec4& tint = glm::vec4(1.0f),
             int32_t layer = RenderLayer::World, int32_t orderInLayer = 0);
 
         static TextureHandle CreateTexture(const TextureDesc& desc);

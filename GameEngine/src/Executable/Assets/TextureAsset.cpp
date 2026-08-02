@@ -1,6 +1,6 @@
 #include "Assets/TextureAsset.h"
 #include "Core/AssetDatabase.h"
-#include "SimpleAPI\Renderer2D.h"
+#include "SimpleAPI\Renderer.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
@@ -12,7 +12,7 @@ namespace Vortx
     TextureAsset::~TextureAsset()
     {
         if (handle.IsValid())
-            Renderer2D::DestroyTexture(handle);
+            Renderer::DestroyTexture(handle);
     }
 
     Asset* TextureAsset::Load(const std::string& path, const AssetMeta& meta)
@@ -44,7 +44,7 @@ namespace Vortx
         tex->width = width;
         tex->height = height;
         tex->channels = 4;
-        tex->handle = Renderer2D::CreateTexture(desc);
+        tex->handle = Renderer::CreateTexture(desc);
 
         stbi_image_free(pixels);
 

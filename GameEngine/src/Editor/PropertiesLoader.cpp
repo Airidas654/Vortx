@@ -10,7 +10,7 @@
 #include "Components/ComponentSpriteRenderer.h"
 #include "Core/AssetDatabase.h"
 #include "Assets/TextureAsset.h"
-#include "SimpleAPI\Renderer2D.h"
+#include "SimpleAPI\Renderer.h"
 #include "SimpleAPI/SpriteRenderer.h"
 #include "SimpleAPI/Camera.h"
 
@@ -138,7 +138,7 @@ void PropertiesLoader::Reset()
         Vortx::TextureAsset* tex = Vortx::AssetDatabase::GetLoaded<Vortx::TextureAsset>(sr.textureID);
 
         if (tex)
-            ImGui::ImageButton("##texPreview", (ImTextureID)(intptr_t)Vortx::Renderer2D::GetNativeTextureHandle(tex->handle), ImVec2(48, 48));
+            ImGui::ImageButton("##texPreview", (ImTextureID)(intptr_t)Vortx::Renderer::GetNativeTextureHandle(tex->handle), ImVec2(48, 48));
         else
             ImGui::Button("None", ImVec2(48, 48));
 
@@ -160,6 +160,14 @@ void PropertiesLoader::Reset()
         ImGui::Checkbox("Flip X", &sr.flipX);
         ImGui::SameLine();
         ImGui::Checkbox("Flip Y", &sr.flipY);
+        ImGui::Spacing();
+
+        ImGui::TextDisabled("Layer");
+        ImGui::DragInt("##lay", &sr.layer);
+        ImGui::Spacing();
+
+        ImGui::TextDisabled("Order In Layer");
+        ImGui::DragInt("##orderInLay", &sr.orderInLayer);
         ImGui::Spacing();
     }, [](Entity entity) {
         GameObject(entity).AddComponent<SpriteRenderer>();

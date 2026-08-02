@@ -35,7 +35,11 @@ public:
     ~EditorUI();
 
     void NewFrame();
-    void Render();
+    //void Render();
+    void BuildUI();
+    void RenderViews();
+    void Composite();
+
     void Shutdown();
 
     void TryDrawScene();
@@ -73,6 +77,9 @@ private:
     RenderTargetHandle sceneRenderTarget;
     uint32_t sceneViewWidth = 0, sceneViewHeight = 0;
     uint32_t gameViewWidth = 0, gameViewHeight = 0;
+
+    glm::mat4 gameViewProjViewMat = glm::mat4(1.0f);
+    bool gameViewReady = false;
 
     void RenderEditorView();
     void DrawMenuBar();
