@@ -9,8 +9,6 @@
 #include <filesystem>
 #include <string>
 
-#include "json.hpp"
-
 namespace Vortx
 {
     Project Project::current;
@@ -21,14 +19,12 @@ namespace Vortx
 		current.scenes.clear();
         current.scene_name_to_index.clear();
 
-        nlohmann::json j;
-
         if (std::filesystem::exists(std::filesystem::path(path)))
         {
             try {
                 std::ifstream file(path);
 
-                file >> j;
+                file >> current.json;
 
                 file.close();
             }
@@ -39,12 +35,12 @@ namespace Vortx
             }
         }
 
-        current.name = j.value("Name", "");
+        current.name = current.json.value("Name", "");
 
-        if (j.contains("Scenes") && j["Scenes"].is_array())
+        if (current.json.contains("Scenes") && current.json["Scenes"].is_array())
         {
             uint32_t index = 0;
-            for (auto& i : j["Scenes"])
+            for (auto& i : current.json["Scenes"])
             {
                 std::filesystem::path path_scene = std::filesystem::path((std::string)i);
                 current.scene_name_to_index.emplace(path_scene.filename().replace_extension().string(), index);
@@ -56,6 +52,49 @@ namespace Vortx
         std::filesystem::path assetsRoot = std::filesystem::path(path).parent_path() / "Assets";
         AssetDatabase::Refresh(assetsRoot.string());
 
-        SceneManager::LoadScene(0);
+        std::string scene = (std::string)current.LoadEditorSettingValue("LastScene","");
+        if (scene != "") {
+            SceneManager::LoadScene(scene);
+        }
+        else {
+            SceneManager::LoadScene(0);
+        }
 	}
+
+    void Project::SaveJSON()
+    {
+        std::ofstream out(path);
+        out << json.dump(4);
+        out.close();
+    }
+
+    void Project::SaveSettingValue(const std::string& name, const nlohmann::json &value)
+    {
+        json["Settings"][name] = value;
+    }
+
+    void Project::SaveEditorSettingValue(const std::string& name, const nlohmann::json &value)
+    {
+        json["EditorTemp"]["Settings"][name] = value;
+    }
+
+    nlohmann::json Project::LoadEditorSettingValue(const std::string& name, const nlohmann::json& default)
+    {
+        nlohmann::json par = json["EditorTemp"]["Settings"];
+        if (par.contains(name))
+        {
+            return par[name];
+        }
+        return default;
+    }
+
+    nlohmann::json Project::LoadSettingValue(const std::string& name, const nlohmann::json& default)
+    {
+        nlohmann::json par = json["Settings"];
+        if (par.contains(name))
+        {
+            return par[name];
+        }
+        return default;
+    }
 }

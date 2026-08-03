@@ -188,23 +188,23 @@ void Editor::Compile()
     }).detach();
 }
 
-void Test(Engine& engine)
-{
-    GameObject fir = Scene::Current()->CreateGameObject();
-    fir.AddComponent<Camera>();
-    fir.GetComponent<GameObject>().NameSet("Camera");
-    Scene::Current()->CreateGameObject();
-    Transform par = Scene::Current()->CreateGameObject().GetComponent<Transform>();
-
-    Transform chil = Scene::Current()->CreateGameObject().GetComponent<Transform>();
-
-    chil.AddComponent<SpriteRenderer>();
-
-    //chil.AddComponent<GameTest>();
-
-    chil.SetParent(par);
-    chil.GetGameObject().NameSet("Child");
-}
+//void Test(Engine& engine)
+//{
+//    GameObject fir = Scene::Current()->CreateGameObject();
+//    fir.AddComponent<Camera>();
+//    fir.GetComponent<GameObject>().NameSet("Camera");
+//    Scene::Current()->CreateGameObject();
+//    Transform par = Scene::Current()->CreateGameObject().GetComponent<Transform>();
+//
+//    Transform chil = Scene::Current()->CreateGameObject().GetComponent<Transform>();
+//
+//    chil.AddComponent<SpriteRenderer>();
+//
+//    //chil.AddComponent<GameTest>();
+//
+//    chil.SetParent(par);
+//    chil.GetGameObject().NameSet("Child");
+//}
 
 void Setup(EditorUI& editorUI)
 {
@@ -217,10 +217,16 @@ void Setup(EditorUI& editorUI)
 
     editorUI.SetSaveSceneCallback([](const std::string& path) {
         SceneManager::SaveScene(path);
+        if (SceneManager::current) {
+            Project::current.SaveEditorSettingValue("LastScene", SceneManager::current->path);
+        }
     });
 
     editorUI.SetLoadSceneCallback([](const std::string& path) {
         SceneManager::LoadScene(path);
+        if (SceneManager::current) {
+           Project::current.SaveEditorSettingValue("LastScene", SceneManager::current->path);
+        }
     });
 }
 
@@ -246,7 +252,7 @@ void Editor::Start(Engine& engine)
 
     Setup(editorUI);
 
-    Test(engine);
+    //Test(engine);
 
     while (!glfwWindowShouldClose(window))
     {

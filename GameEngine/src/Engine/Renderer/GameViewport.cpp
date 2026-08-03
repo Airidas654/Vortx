@@ -1,6 +1,7 @@
 #include "Renderer/GameViewport.h"
 #include "SimpleAPI/Renderer.h"
 #include "Core/WindowManager.h"
+#include "SimpleAPI/Camera.h"
 
 namespace Vortx
 {
@@ -19,7 +20,11 @@ namespace Vortx
             width = w;
             height = h;
             Renderer::OnResize(w, h);
-            });
+            Camera cam = Camera::Main();
+            if (cam != Camera()) {
+                cam.RecalculateProjectionMatrix();
+            }
+        });
     }
 
     void GameViewport::InitEmbedded(uint32_t initialWidth, uint32_t initialHeight)
@@ -59,6 +64,11 @@ namespace Vortx
         width = w;
         height = h;
         Renderer::ResizeRenderTarget(target, w, h);
+
+        Camera cam = Camera::Main();
+        if (cam != Camera()) {
+            cam.RecalculateProjectionMatrix();
+        }
     }
 
     bool GameViewport::IsReady()
