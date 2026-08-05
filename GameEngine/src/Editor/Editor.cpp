@@ -22,6 +22,7 @@
 #include "SimpleAPI/InputManager.h"
 #include "Core/WindowManager.h"
 #include "Renderer\SpriteRendererSystem.h"
+#include "AssetPropertiesLoader.h"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -188,26 +189,9 @@ void Editor::Compile()
     }).detach();
 }
 
-//void Test(Engine& engine)
-//{
-//    GameObject fir = Scene::Current()->CreateGameObject();
-//    fir.AddComponent<Camera>();
-//    fir.GetComponent<GameObject>().NameSet("Camera");
-//    Scene::Current()->CreateGameObject();
-//    Transform par = Scene::Current()->CreateGameObject().GetComponent<Transform>();
-//
-//    Transform chil = Scene::Current()->CreateGameObject().GetComponent<Transform>();
-//
-//    chil.AddComponent<SpriteRenderer>();
-//
-//    //chil.AddComponent<GameTest>();
-//
-//    chil.SetParent(par);
-//    chil.GetGameObject().NameSet("Child");
-//}
-
 void Setup(EditorUI& editorUI)
 {
+    AssetPropertiesLoader::Reset();
     PropertiesLoader::Reset();
     SerializerLoader::Reset();
 
@@ -324,6 +308,7 @@ void Editor::Start(Engine& engine)
         editorUI.BuildUI();
 
         Scene::Current()->UpdateTransforms();
+        Scene::Current()->SyncAssetsIfDirty();
 
         SpriteRenderSystem::Submit();
 

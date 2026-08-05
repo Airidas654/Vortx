@@ -91,6 +91,25 @@ namespace Vortx
 		return gameObject;
 	}
 
+	void Scene::DestroyGameObject(GameObject gameObject)
+	{
+		Entity entity = gameObject.GetEntity();
+		Transform transform = gameObject.GetComponent<Transform>();
+
+		std::vector<Transform> &childrenCopy = transform.GetChildren();
+		for (Transform& child : childrenCopy)
+			DestroyGameObject(child.GetGameObject());
+
+		DetachFromParent(transform);
+
+		MetadataData& meta = entity.GetComponent<MetadataData>();
+		gameObjectsRegister.erase(meta.id);
+
+		registry.Destroy(entity);
+
+		MarkAssetsDirty();
+	}
+
 	std::vector<uint8_t> Scene::Serialize()
 	{
 		return SerializerLoader::SerializeScene(*this);
@@ -109,5 +128,12 @@ namespace Vortx
 	{
 		std::vector<AssetID> refs = SerializerLoader::CollectSceneAssets(*this);
 		AssetDatabase::SyncActiveSet(refs);
+		assetsDirty = false;
+	}
+
+	void Scene::SyncAssetsIfDirty()
+	{
+		if (!assetsDirty) return;
+		SyncAssets();
 	}
 }

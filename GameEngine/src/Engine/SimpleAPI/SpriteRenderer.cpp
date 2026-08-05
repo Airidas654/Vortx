@@ -22,6 +22,18 @@ namespace Vortx
 		return entity.GetComponent<SpriteRendererData>();
 	}
 
+	AssetID SpriteRenderer::GetTexture()
+	{
+		return Data().textureID;
+	}
+
+	void SpriteRenderer::SetTexture(const AssetID& textureID)
+	{
+		Data().textureID = textureID;
+		if (Scene::Current())
+			Scene::Current()->MarkAssetsDirty();
+	}
+
 	GameObject SpriteRenderer::GetGameObject()
 	{
 		return GameObject(entity);

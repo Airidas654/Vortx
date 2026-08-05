@@ -26,6 +26,8 @@ namespace Vortx
 
 		GameObject CreateGameObject();
 
+		void DestroyGameObject(GameObject gameObject);
+
 		void UpdateTransforms();
 
 		static std::unique_ptr<Scene>& Current();
@@ -40,10 +42,14 @@ namespace Vortx
 
 		void SyncAssets();
 
+		void MarkAssetsDirty() { assetsDirty = true; }
+		void SyncAssetsIfDirty();
+
 	private:
 		Registry registry;
-
 		std::vector<Transform> children;
+		
+		bool assetsDirty = true;
 
 		void DetachFromParent(Transform& transform);
 	};

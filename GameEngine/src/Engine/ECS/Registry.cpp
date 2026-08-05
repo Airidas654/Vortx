@@ -16,4 +16,9 @@ namespace Vortx
 		auto* storage = registry.storage(id);
 		return storage && storage->contains(entity.GetValue());
 	}
+
+	void Registry::Destroy(Entity& entity)
+	{
+		registry.destroy(entity.GetValue());
+	}
 }

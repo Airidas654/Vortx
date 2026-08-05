@@ -18,8 +18,7 @@ namespace Vortx
     Asset* TextureAsset::Load(const std::string& path, const AssetMeta& meta)
     {
         bool filterLinear = meta.importSettings.value("filterLinear", true);
-        // NOTE: srgb / generateMipmaps are in your import settings but TextureDesc /
-        // IRenderDevice don't support them yet - extend TextureDesc if you need them.
+        bool wrapRepeat = meta.importSettings.value("wrapRepeat", false);
 
         stbi_set_flip_vertically_on_load(true);
 
@@ -38,7 +37,7 @@ namespace Vortx
         desc.channels = 4;
         desc.pixels = pixels;
         desc.filter = filterLinear ? TextureFilter::Linear : TextureFilter::Nearest;
-        desc.wrap = TextureWrap::ClampToEdge;
+        desc.wrap = wrapRepeat ? TextureWrap::Repeat : TextureWrap::ClampToEdge;
 
         TextureAsset* tex = new TextureAsset();
         tex->width = width;

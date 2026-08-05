@@ -1,5 +1,7 @@
 #include "Core/AssetDatabase.h"
 
+#include "SerializerLoader.h"
+
 #include <filesystem>
 #include <iostream>
 
@@ -57,6 +59,11 @@ namespace Vortx
     {
         if (!std::filesystem::exists(root)) return;
 
+        std::string& currentRoot = CurrentRoot();
+        if (!currentRoot.empty() && currentRoot != root)
+            UnloadAll();
+        currentRoot = root;
+
         auto& pathToGuid = PathToGuid();
         auto& guidToPath = GuidToPath();
         auto& guidToMeta = GuidToMeta();
@@ -89,7 +96,14 @@ namespace Vortx
         }
     }
 
-    Asset* AssetDatabase::AcquireInternal(const AssetID& id)
+    Asset* AssetDatabase::GetLoadedInternal(const AssetID& id)
+    {
+        auto& loaded = Loaded();
+        auto it = loaded.find(id);
+        return it != loaded.end() ? it->second.asset : nullptr;
+    }
+
+    Asset* AssetDatabase::AcquireInternal(const AssetID& id, const char* owner)
     {
         auto& loaded = Loaded();
 
@@ -97,6 +111,7 @@ namespace Vortx
         if (it != loaded.end())
         {
             it->second.refCount++;
+            it->second.owners[owner]++;
             return it->second.asset;
         }
 
@@ -111,9 +126,8 @@ namespace Vortx
             return nullptr;
         }
 
-        auto& loadFns = LoadFns();
-        auto loaderIt = loadFns.find(metaIt->second.type);
-        if (loaderIt == loadFns.end())
+        auto loaderIt = LoadFns().find(metaIt->second.type);
+        if (loaderIt == LoadFns().end())
         {
             std::cerr << "No loader registered for asset type '" << AssetTypeToString(metaIt->second.type) << "'\n";
             return nullptr;
@@ -125,30 +139,34 @@ namespace Vortx
         asset->guid = id;
         asset->type = metaIt->second.type;
 
-        loaded[id] = { asset, 1 };
+        LoadedEntry entry;
+        entry.asset = asset;
+        entry.refCount = 1;
+        entry.owners[owner] = 1;
+        loaded[id] = std::move(entry);
         return asset;
     }
 
-    Asset* AssetDatabase::GetLoadedInternal(const AssetID& id)
-    {
-        auto& loaded = Loaded();
-        auto it = loaded.find(id);
-        return it != loaded.end() ? it->second.asset : nullptr;
-    }
-
-    void AssetDatabase::Release(const AssetID& id)
+    void AssetDatabase::Release(const AssetID& id, const char* owner)
     {
         auto& loaded = Loaded();
         auto it = loaded.find(id);
         if (it == loaded.end()) return;
 
         it->second.refCount--;
+
+        auto ownerIt = it->second.owners.find(owner);
+        if (ownerIt != it->second.owners.end())
+        {
+            if (--ownerIt->second <= 0)
+                it->second.owners.erase(ownerIt);
+        }
+
         if (it->second.refCount > 0) return;
 
         AssetType type = it->second.asset->type;
-        auto& unloadFns = UnloadFns();
-        auto unloaderIt = unloadFns.find(type);
-        if (unloaderIt != unloadFns.end())
+        auto unloaderIt = UnloadFns().find(type);
+        if (unloaderIt != UnloadFns().end())
             unloaderIt->second(it->second.asset);
         else
             delete it->second.asset;
@@ -156,18 +174,31 @@ namespace Vortx
         loaded.erase(it);
     }
 
+    std::unordered_map<std::string, int> AssetDatabase::GetRefOwners(const AssetID& id)
+    {
+        auto it = Loaded().find(id);
+        return it != Loaded().end() ? it->second.owners : std::unordered_map<std::string, int>{};
+    }
+
     void AssetDatabase::SyncActiveSet(const std::vector<AssetID>& refs)
     {
         auto& activeSet = ActiveSet();
-        std::unordered_set<AssetID> next(refs.begin(), refs.end());
+        std::unordered_set<AssetID> next;
 
-        for (const AssetID& id : next)
-            if (activeSet.find(id) == activeSet.end())
-                AcquireInternal(id);
+        for (const AssetID& id : refs)
+        {
+            if (activeSet.find(id) != activeSet.end())
+            {
+                next.insert(id);
+                continue;
+            }
+            if (AcquireInternal(id, "Scene"))
+                next.insert(id);
+        }
 
         for (const AssetID& id : activeSet)
             if (next.find(id) == next.end())
-                Release(id);
+                Release(id, "Scene");
 
         activeSet = std::move(next);
     }
@@ -230,5 +261,147 @@ namespace Vortx
         guidToPath.erase(pathIt);
         GuidToMeta().erase(id);
         ActiveSet().erase(id);
+    }
+
+    std::string& AssetDatabase::CurrentRoot()
+    {
+        static std::string value;
+        return value;
+    }
+
+    void AssetDatabase::UnloadAll()
+    {
+        auto& loaded = Loaded();
+        auto& unloadFns = UnloadFns();
+
+        for (auto& [id, entry] : loaded)
+        {
+            auto it = unloadFns.find(entry.asset->type);
+            if (it != unloadFns.end()) it->second(entry.asset);
+            else delete entry.asset;
+        }
+
+        loaded.clear();
+        ActiveSet().clear();
+    }
+
+    bool AssetDatabase::TryGetMeta(const AssetID& id, AssetMeta& outMeta)
+    {
+        auto& guidToMeta = GuidToMeta();
+        auto it = guidToMeta.find(id);
+        if (it == guidToMeta.end()) return false;
+        outMeta = it->second;
+        return true;
+    }
+
+    void AssetDatabase::SaveMeta(const AssetID& id)
+    {
+        auto& guidToMeta = GuidToMeta();
+        auto it = guidToMeta.find(id);
+        if (it == guidToMeta.end()) return;
+
+        std::string path;
+        if (TryGetPath(id, path))
+            AssetMeta::Save(path + ".meta", it->second);
+
+        Reimport(id);
+    }
+
+    void AssetDatabase::SetImportSettings(const AssetID& id, const nlohmann::json& settings)
+    {
+        auto& guidToMeta = GuidToMeta();
+        auto it = guidToMeta.find(id);
+        if (it == guidToMeta.end()) return;
+
+        it->second.importSettings = settings;
+
+        /*std::string path;
+        if (TryGetPath(id, path))
+            AssetMeta::Save(path + ".meta", it->second);
+
+        Reimport(id);*/
+    }
+
+    void AssetDatabase::Reimport(const AssetID& id)
+    {
+        auto& loaded = Loaded();
+        auto it = loaded.find(id);
+        if (it == loaded.end()) return;
+
+        auto& guidToPath = GuidToPath();
+        auto& guidToMeta = GuidToMeta();
+        auto pathIt = guidToPath.find(id);
+        auto metaIt = guidToMeta.find(id);
+        if (pathIt == guidToPath.end() || metaIt == guidToMeta.end()) return;
+
+        auto loaderIt = LoadFns().find(metaIt->second.type);
+        if (loaderIt == LoadFns().end()) return;
+
+        Asset* fresh = loaderIt->second(pathIt->second, metaIt->second);
+        if (!fresh) return;
+        fresh->guid = id;
+        fresh->type = metaIt->second.type;
+
+        auto unloaderIt = UnloadFns().find(it->second.asset->type);
+        if (unloaderIt != UnloadFns().end()) unloaderIt->second(it->second.asset);
+        else delete it->second.asset;
+
+        it->second.asset = fresh;
+    }
+
+    std::unordered_map<std::string, std::vector<AssetID>>& AssetDatabase::PreloadedScenes()
+    {
+        static std::unordered_map<std::string, std::vector<AssetID>> value;
+        return value;
+    }
+
+    void AssetDatabase::Pin(const AssetID& id, const char* owner)
+    {
+        AcquireInternal(id, owner);
+    }
+
+    void AssetDatabase::Unpin(const AssetID& id, const char* owner)
+    {
+        Release(id, owner);
+    }
+
+    void AssetDatabase::PreloadScene(const std::string& scenePath)
+    {
+        if (PreloadedScenes().count(scenePath)) return;
+
+        std::vector<AssetID> refs = SerializerLoader::CollectSceneAssetsFromFile(scenePath);
+        std::string owner = "Preload:" + scenePath;
+        for (const AssetID& id : refs)
+            Pin(id, owner.c_str());
+
+        PreloadedScenes()[scenePath] = std::move(refs);
+    }
+
+    void AssetDatabase::ReleasePreloadedScene(const std::string& scenePath)
+    {
+        auto it = PreloadedScenes().find(scenePath);
+        if (it == PreloadedScenes().end()) return;
+
+        std::string owner = "Preload:" + scenePath;
+        for (const AssetID& id : it->second)
+            Unpin(id, owner.c_str());
+
+        PreloadedScenes().erase(it);
+    }
+
+    bool AssetDatabase::IsScenePreloaded(const std::string& scenePath)
+    {
+        return PreloadedScenes().count(scenePath) != 0;
+    }
+
+    int AssetDatabase::GetRefCount(const AssetID& id)
+    {
+        auto it = Loaded().find(id);
+
+        if (it != Loaded().end()) {
+            return it->second.refCount;
+        }
+
+        return 0;
     }
 }

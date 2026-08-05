@@ -36,6 +36,9 @@ namespace Vortx
 			registry.clear();
 		}
 
+		void Destroy(Entity& entity);
+		
+
 		template<typename T>
 		auto View()
 		{
@@ -69,9 +72,12 @@ namespace Vortx
 		template<typename T>
 		bool HasComponent(Entity& entity)
 		{
-			if (registry.try_get<T>(entity.GetValue()))
+			if (registry.valid(entity.GetValue()))
 			{
-				return 1;
+				if (registry.try_get<T>(entity.GetValue()))
+				{
+					return 1;
+				}
 			}
 			return 0;
 		}

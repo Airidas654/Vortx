@@ -34,6 +34,9 @@ namespace Vortx
 
 		SpriteRendererData& Data();
 
+		Vortx::AssetID GetTexture();
+		void SetTexture(const Vortx::AssetID& textureID);
+
 		GameObject GetGameObject();
 
 		bool operator== (SpriteRenderer& other) { return entity == other.entity; }

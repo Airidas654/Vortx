@@ -13,7 +13,8 @@ namespace Vortx
         Unknown = 0,
         Texture,
         Audio,
-        Font
+        Font,
+        Scene
     };
 
     ENGINE_API const char* AssetTypeToString(AssetType type);

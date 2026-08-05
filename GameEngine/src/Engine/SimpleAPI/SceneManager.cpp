@@ -1,6 +1,7 @@
 #include "SimpleAPI/SceneManager.h"
 
 #include "Project.h"
+#include "SerializerLoader.h"
 
 #include <iostream>
 #include <fstream>
@@ -65,6 +66,8 @@ namespace Vortx
 			out.write(reinterpret_cast<char*>(data.data()), data.size());
 
 			out.close();
+
+			SerializerLoader::InvalidateSceneDependencyCache(path);
 		}
 	}
 

@@ -58,6 +58,13 @@ public:
 
 private:
 
+    enum class InspectorTarget 
+    { 
+        None, 
+        Scene, 
+        Asset 
+    };
+
     bool sceneWindowOpen = true;
     bool propertiesWindowOpen = true;
     bool consoleWindowOpen = true;
@@ -72,6 +79,8 @@ private:
     std::string currentAssetFolder;
     std::unordered_set<Vortx::AssetID> previewAcquired;
 
+    std::string previewedFolder;
+
     float cellSize = 100;
 
     RenderTargetHandle sceneRenderTarget;
@@ -80,6 +89,13 @@ private:
 
     glm::mat4 gameViewProjViewMat = glm::mat4(1.0f);
     bool gameViewReady = false;
+
+    Vortx::AssetID selectedAsset = Vortx::AssetID(0);
+    std::string selectedAssetPath;
+    
+    InspectorTarget inspectorTarget = InspectorTarget::None;
+
+    void SelectAsset(const Vortx::AssetID& id, const std::string& path);
 
     void RenderEditorView();
     void DrawMenuBar();

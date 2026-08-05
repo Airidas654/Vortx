@@ -146,9 +146,7 @@ void PropertiesLoader::Reset()
         {
             if (auto* payload = ImGui::AcceptDragDropPayload("ASSET_TEXTURE"))
             {
-                sr.textureID = *(Vortx::AssetID*)payload->Data;
-                if (Vortx::Scene::Current())
-                    Vortx::Scene::Current()->SyncAssets();
+                SpriteRenderer(entity).SetTexture(*(Vortx::AssetID*)payload->Data);
             }
             ImGui::EndDragDropTarget();
         }

@@ -15,6 +15,8 @@ namespace Vortx
                 return "Audio";
             case AssetType::Font:
                 return "Font";
+            case AssetType::Scene:
+                return "Scene";
             default:
                 return "Unknown";
         }
@@ -25,6 +27,7 @@ namespace Vortx
         if (str == "Texture") return AssetType::Texture;
         if (str == "Audio") return AssetType::Audio;
         if (str == "Font") return AssetType::Font;
+        if (str == "Scene") return AssetType::Scene;
         return AssetType::Unknown;
     }
 
@@ -42,6 +45,9 @@ namespace Vortx
 
         if (ext == ".ttf" || ext == ".otf")
             return AssetType::Font;
+
+        if (ext == ".scene")
+            return AssetType::Scene;
 
         return AssetType::Unknown;
     }
