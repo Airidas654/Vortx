@@ -9,6 +9,11 @@
 namespace Vortx
 {
 
+	bool Transform::Exists()
+	{
+		return entity.HasComponent<TransformData>();
+	}
+
 	void Transform::_InternalCreate()
 	{
 		entity.AddComponent<TransformData>();

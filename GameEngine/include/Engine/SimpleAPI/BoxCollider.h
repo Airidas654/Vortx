@@ -20,6 +20,8 @@ namespace Vortx
     public:
         BoxCollider() = default;
 
+        bool Exists() override;
+
         BoxCollider(const BoxCollider&) = default;
         BoxCollider& operator=(const BoxCollider&) = default;
 
@@ -42,7 +44,7 @@ namespace Vortx
         void SetTrigger(bool isTrigger);
 
         float GetDensity();
-        void SetDensity(float density); // marks owning Rigidbody2D's mass dirty if useAutoMass is on
+        void SetDensity(float density);
 
         float GetFriction();
         void SetFriction(float friction);

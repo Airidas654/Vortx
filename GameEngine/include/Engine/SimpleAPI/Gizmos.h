@@ -16,7 +16,8 @@ namespace Vortx
 		{
 			Circle,
 			Line,
-			Triangle
+			Triangle,
+			Box
 		};
 
 		struct Command
@@ -32,6 +33,7 @@ namespace Vortx
 
 		static void Clear();
 		static void DrawCircle(const glm::vec2& position, const float& radius, const float thickness = 1);
+		static void DrawBox(const glm::vec2& position, const glm::vec2& size, const float thickness = 1);
 		static void DrawLine(const glm::vec2& p1, const glm::vec2& p2, const float thickness = 1);
 		static void DrawRay(const glm::vec2 &position, const glm::vec2 &direction, const float thickness = 1);
 	};

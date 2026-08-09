@@ -16,6 +16,8 @@ namespace Vortx
     public:
         GameObject() : BaseComponent() {}
 
+        bool Exists() override;
+
         GameObject(Entity entity) : BaseComponent(entity) {}
 
         GameObject(Entity entity, bool create);

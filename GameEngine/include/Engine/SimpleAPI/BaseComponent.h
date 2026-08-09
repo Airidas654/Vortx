@@ -14,6 +14,8 @@ namespace Vortx
     public:
         Entity GetEntity() const { return entity; }
 
+        virtual bool Exists() = 0;
+
         template<typename T>
         decltype(auto) AddComponent()
         {
@@ -42,6 +44,19 @@ namespace Vortx
             else
             {
                 return entity.GetComponent<T>();
+            }
+        }
+
+        template<typename T>
+        bool HasComponent()
+        {
+            if constexpr (std::is_base_of_v<BaseComponent, T>)
+            {
+                return T(entity).Exists();
+            }
+            else
+            {
+                return entity.HasComponent<T>();
             }
         }
 

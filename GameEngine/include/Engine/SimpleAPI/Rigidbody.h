@@ -20,6 +20,8 @@ namespace Vortx
     public:
         Rigidbody() = default;
 
+        bool Exists() override;
+
         Rigidbody(const Rigidbody&) = default;
         Rigidbody& operator=(const Rigidbody&) = default;
 

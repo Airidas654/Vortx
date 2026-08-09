@@ -7,6 +7,11 @@
 namespace Vortx
 {
 
+	bool SpriteRenderer::Exists()
+	{
+		return entity.HasComponent<SpriteRendererData>();
+	}
+
 	void SpriteRenderer::_InternalCreate()
 	{
 		entity.AddComponent<SpriteRendererData>();

@@ -20,6 +20,8 @@ namespace Vortx
     public:
         CircleCollider() = default;
 
+        bool Exists() override;
+
         CircleCollider(const CircleCollider&) = default;
         CircleCollider& operator=(const CircleCollider&) = default;
 

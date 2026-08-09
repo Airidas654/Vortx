@@ -44,6 +44,16 @@ void GizmosManager::Draw(ImDrawList* drawList)
 			);
 			break;
 		}
+		case Vortx::Gizmos::Shape::Box:
+		{
+			DrawBox(
+				drawList,
+				glm::vec2(data.data[0], data.data[1]),
+				glm::vec2(data.data[2], data.data[3]),
+				data.data[4],
+				data.color
+			);
+		}
 		default:
 			break;
 		}
@@ -62,6 +72,30 @@ void GizmosManager::DrawCircle(ImDrawList* drawList, const glm::vec2& position, 
 	float radiusScreen = WorldToScreen(radius, viewportSize);
 
 	drawList->AddCircle(center, radiusScreen, color, 32, thickness);
+}
+
+void GizmosManager::DrawBox(ImDrawList* drawList, const glm::vec2& position, const glm::vec2& size, const float& thickness, const glm::u8vec4& col)
+{
+	ImU32 color = IM_COL32(col.r, col.g, col.b, col.a);
+
+	glm::vec2 p1 = position - size/2.0f;
+	glm::vec2 p2 = position + glm::vec2(-size.x, size.y)/2.0f;
+	glm::vec2 p3 = position + size/2.0f;
+	glm::vec2 p4 = position + glm::vec2(size.x, -size.y) / 2.0f;
+
+	glm::vec2 p1Local = WorldToScreen(p1, viewportSize);
+	ImVec2 p1Screen = { screenOrigin.x + p1Local.x, screenOrigin.y + p1Local.y };
+
+	glm::vec2 p2Local = WorldToScreen(p2, viewportSize);
+	ImVec2 p2Screen = { screenOrigin.x + p2Local.x, screenOrigin.y + p2Local.y };
+
+	glm::vec2 p3Local = WorldToScreen(p3, viewportSize);
+	ImVec2 p3Screen = { screenOrigin.x + p3Local.x, screenOrigin.y + p3Local.y };
+
+	glm::vec2 p4Local = WorldToScreen(p4, viewportSize);
+	ImVec2 p4Screen = { screenOrigin.x + p4Local.x, screenOrigin.y + p4Local.y };
+
+	drawList->AddQuad(p1Screen, p2Screen, p3Screen, p4Screen, color, thickness);
 }
 
 void GizmosManager::DrawLine(ImDrawList* drawList, const glm::vec2& p1, const glm::vec2& p2, const float& thickness, const glm::u8vec4& col)

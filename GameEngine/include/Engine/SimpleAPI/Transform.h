@@ -22,6 +22,8 @@ namespace Vortx
 
 		Transform() = default;
 
+		bool Exists() override;
+
 		Transform(const Transform&) = default;
 		Transform& operator=(const Transform&) = default;
 

@@ -12,6 +12,11 @@ namespace Vortx
 {
 	Camera Camera::main = Camera();
 
+	bool Camera::Exists()
+	{
+		return entity.HasComponent<CameraData>();
+	}
+
 	void Camera::_InternalCreate()
 	{
 		entity.AddComponent<CameraData>();

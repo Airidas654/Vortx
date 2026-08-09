@@ -4,6 +4,8 @@
 #include "Components/ComponentMetadata.h"
 #include "Components\ComponentScript.h"
 #include "Components\ComponentCamera.h"
+#include "Components\ComponentBoxCollider.h"
+#include "Components\ComponentRigidbody.h"
 #include "Scene.h"
 #include "Scripting\ScriptSystem.h"
 #include "Scripting\ScriptRegistry.h"
@@ -13,6 +15,9 @@
 #include "SimpleAPI\Renderer.h"
 #include "SimpleAPI/SpriteRenderer.h"
 #include "SimpleAPI/Camera.h"
+#include "SimpleAPI\BoxCollider.h"
+#include "SimpleAPI\Rigidbody.h"
+#include "SimpleAPI\Gizmos.h"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -188,6 +193,153 @@ void PropertiesLoader::Reset()
         ImGui::Spacing();
     }, [](Entity entity) {
         GameObject(entity).AddComponent<Camera>();
+    });
+
+    RegisterComponent<Vortx::BoxColliderData>("BoxCollider", "Physics", true, [](Entity entity) {
+        //auto& t = entity.GetComponent<Vortx::CameraData>();
+        BoxCollider t = BoxCollider(entity);
+
+        ImGui::Spacing();
+
+        glm::vec2 offset = t.GetOffset();
+        glm::vec2 size = t.GetSize();
+
+        ImGui::TextDisabled("Offset");
+        if (ImGui::DragFloat2("##off", (float*)(&offset), 0.1f, 0.0f, 0.0f, "%.2f", 0))
+        {
+            t.SetOffset(offset);
+        }
+
+        ImGui::TextDisabled("Size");
+        if (ImGui::DragFloat2("##siz", (float*)(&size), 0.1f, 0.0f, 0.0f, "%.2f", 0))
+        {
+            t.SetSize(size);
+        }
+
+        ImGui::Spacing();
+
+        bool trigger = t.IsTrigger();
+
+        if (ImGui::Checkbox("Trigger", &trigger)) {
+            t.SetTrigger(trigger);
+        }
+
+        float density = t.GetDensity();
+
+        ImGui::TextDisabled("Density");
+        if (ImGui::DragFloat("##den", (&density), 0.1f, 0.0f, 0.0f, "%.2f", 0))
+        {
+            t.SetDensity(density);
+        }
+
+        ImGui::Spacing();
+
+        float friction = t.GetFriction();
+        float restitution = t.GetRestitution();
+
+        ImGui::TextDisabled("Friction");
+        if (ImGui::DragFloat("##fri", (&friction), 0.1f, 0.0f, 1.0f, "%.2f", 0))
+        {
+            t.SetFriction(friction);
+        }
+
+        ImGui::TextDisabled("Restitution");
+        if (ImGui::DragFloat("##res", (&restitution), 0.1f, 0.0f, 1.0f, "%.2f", 0))
+        {
+            t.SetRestitution(restitution);
+        }
+
+        glm::vec2 outMin, outMax;
+
+        t.GetWorldBounds(outMin, outMax);
+
+        Gizmos::color = glm::u8vec4(50,255,50,255);
+        Gizmos::DrawBox((outMax + outMin) / 2.0f, glm::vec2(outMax.x - outMin.x, outMax.y - outMin.y), 2.0f);
+
+        // TODO add restitutionThreshold and filters
+
+        ImGui::Spacing();
+    }, [](Entity entity) {
+        GameObject(entity).AddComponent<BoxCollider>();
+    });
+
+    RegisterComponent<Vortx::RigidbodyData>("Rigidbody", "Physics", true, [](Entity entity) {
+        //auto& t = entity.GetComponent<Vortx::CameraData>();
+        Rigidbody t = Rigidbody(entity);
+
+        ImGui::Spacing();
+
+        const char* items[]{ "Static","Kinematic","Dynamic" };
+        int selectedItem = (int)t.GetBodyType();
+        if (ImGui::Combo("Type", &selectedItem, items, 3))
+        {
+            t.SetBodyType((Vortx::BodyType)selectedItem);
+        }
+
+        ImGui::Spacing();
+
+        bool autoMass = t.GetAutoMass();
+
+        if (ImGui::Checkbox("Auto Mass", &autoMass)) {
+            t.SetAutoMass(autoMass);
+        }
+
+        float mass = t.GetMass();
+
+        if (!autoMass) {
+            ImGui::TextDisabled("Mass");
+
+            if (ImGui::DragFloat("##mas", (&mass), 0.1f, 0.0f, 0.0f, "%.2f", 0))
+            {
+                t.SetMass(mass);
+            }
+        }
+        else {
+            ImGui::TextDisabled("Mass: %f", mass);
+        }
+
+        ImGui::TextDisabled("Gravity Scale");
+        float gravityScale = t.GetGravityScale();
+
+        if (ImGui::DragFloat("##grav", (&gravityScale), 0.1f, 0.0f, 0.0f, "%.2f", 0))
+        {
+            t.SetGravityScale(gravityScale);
+        }
+
+        ImGui::Spacing();
+
+        bool fixedRotation = t.IsFixedRotation();
+
+        if (ImGui::Checkbox("Fixed Rotation", &fixedRotation)) {
+            t.SetFixedRotation(fixedRotation);
+        }
+
+        float linearDamping = t.GetLinearDamping();
+        float angularDamping = t.GetAngularDamping();
+
+        ImGui::TextDisabled("Linear Damping");
+        if (ImGui::DragFloat("##ldamp", (&linearDamping), 0.1f, 0.0f, 0.0f, "%.2f", 0))
+        {
+            t.SetLinearDamping(linearDamping);
+        }
+
+        ImGui::TextDisabled("Angular Damping");
+        if (ImGui::DragFloat("##adamp", (&angularDamping), 0.1f, 0.0f, 0.0f, "%.2f", 0))
+        {
+            t.SetAngularDamping(angularDamping);
+        }
+
+        ImGui::Spacing();
+
+        bool allowSleep = t.IsSleepingAllowed();
+
+        if (ImGui::Checkbox("Allow Sleep", &allowSleep)) {
+            t.SetSleepingAllowed(allowSleep);
+        }
+
+        ImGui::Spacing();
+    }, [](Entity entity) {
+        GameObject(entity).AddComponent<Rigidbody>();
     });
 }
 

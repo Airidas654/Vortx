@@ -23,6 +23,7 @@
 #include "Core/WindowManager.h"
 #include "Renderer\SpriteRendererSystem.h"
 #include "AssetPropertiesLoader.h"
+#include "Physics/Physics.h"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -238,6 +239,15 @@ void Editor::Start(Engine& engine)
 
     //Test(engine);
 
+    Physics::Init();
+
+    Vortx::Time::_SetOnFixedUpdate([]() {
+        if (PlayModeManager::state == PlayState::Playing || (PlayModeManager::state == PlayState::Paused && PlayModeManager::stepRequested))
+        {
+            Physics::Step(Time::fixedDeltaTime);
+        }
+    });
+
     while (!glfwWindowShouldClose(window))
     {
         Vortx::Time::_Update();
@@ -319,6 +329,7 @@ void Editor::Start(Engine& engine)
         Renderer::Present();
     }
     }
+    Physics::Shutdown();
     GameViewport::Shutdown();
     Renderer::Shutdown();
     WindowManager::Shutdown();

@@ -24,6 +24,8 @@ namespace Vortx
 
 		Camera() = default;
 
+		bool Exists() override;
+
 		Camera(const Camera&) = default;
 		Camera& operator=(const Camera&) = default;
 

@@ -7,6 +7,11 @@
 namespace Vortx
 {
 
+	bool GameObject::Exists()
+	{
+		return entity.HasComponent<MetadataData>();
+	}
+
 	void GameObject::_InternalCreate()
 	{
 	}

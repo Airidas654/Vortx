@@ -20,6 +20,7 @@ private:
 	glm::vec2 viewportSize;
 
 	void DrawCircle(ImDrawList* drawList, const glm::vec2& position, const float& radius, const float& thickness, const glm::u8vec4& col);
+	void DrawBox(ImDrawList* drawList, const glm::vec2& position, const glm::vec2& size, const float& thickness, const glm::u8vec4& col);
 	void DrawLine(ImDrawList* drawList, const glm::vec2& p1, const glm::vec2& p2, const float& thickness, const glm::u8vec4& col);
 
 	glm::vec2 WorldToScreen(const glm::vec2& worldPos, const glm::vec2& viewportSize) const;

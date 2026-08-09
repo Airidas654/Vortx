@@ -22,6 +22,8 @@ namespace Vortx
 
 		SpriteRenderer() = default;
 
+		bool Exists() override;
+
 		SpriteRenderer(const SpriteRenderer&) = default;
 		SpriteRenderer& operator=(const SpriteRenderer&) = default;
 

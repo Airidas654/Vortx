@@ -5,7 +5,7 @@
 namespace Vortx
 {
 	bool Gizmos::enabled = false;
-	glm::u8vec4 Gizmos::color = glm::u8vec4(1);
+	glm::u8vec4 Gizmos::color = glm::u8vec4(255, 255, 255, 255);
 	std::vector<Gizmos::Command> Gizmos::commands = std::vector<Gizmos::Command>();
 
 	void Gizmos::Clear()
@@ -23,6 +23,23 @@ namespace Vortx
 		com.data[1] = position.y;
 		com.data[2] = radius;
 		com.data[3] = thickness;
+
+		com.color = color;
+
+		commands.emplace_back(com);
+	}
+
+	void Gizmos::DrawBox(const glm::vec2& position, const glm::vec2& size, const float thickness)
+	{
+		if (!enabled) return;
+
+		Command com;
+		com.type = Gizmos::Shape::Box;
+		com.data[0] = position.x;
+		com.data[1] = position.y;
+		com.data[2] = size.x;
+		com.data[3] = size.y;
+		com.data[4] = thickness;
 
 		com.color = color;
 

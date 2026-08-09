@@ -9,6 +9,11 @@
 namespace Vortx
 {
 
+	bool Rigidbody::Exists()
+	{
+		return entity.HasComponent<RigidbodyData>();
+	}
+
 	void Rigidbody::_InternalCreate()
 	{
 		entity.AddComponent<RigidbodyData>();
