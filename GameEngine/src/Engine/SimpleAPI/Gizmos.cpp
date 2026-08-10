@@ -29,7 +29,7 @@ namespace Vortx
 		commands.emplace_back(com);
 	}
 
-	void Gizmos::DrawBox(const glm::vec2& position, const glm::vec2& size, const float thickness)
+	void Gizmos::DrawBox(const glm::vec2& position, const glm::vec2& size, const float &rotation, const float thickness)
 	{
 		if (!enabled) return;
 
@@ -40,6 +40,7 @@ namespace Vortx
 		com.data[2] = size.x;
 		com.data[3] = size.y;
 		com.data[4] = thickness;
+		com.data[5] = rotation;
 
 		com.color = color;
 

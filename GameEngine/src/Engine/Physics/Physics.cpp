@@ -16,7 +16,7 @@ namespace Vortx
     namespace
     {
 
-        glm::vec2 InverseRotate(const glm::vec2& v, float angle) { return Rotate(v, -angle); }
+        glm::vec2 InverseRotate(const glm::vec2& v, float angle) { return Math::Rotate(v, -angle); }
 
         struct ShapeProxy
         {
@@ -101,7 +101,7 @@ namespace Vortx
             }
 
             m.hit = true;
-            m.normal = Rotate(localNormal, box.rotation);
+            m.normal = Math::Rotate(localNormal, box.rotation);
             m.penetration = penetration;
             m.point = circle.center - m.normal * circle.radius;
             return m;
@@ -113,8 +113,8 @@ namespace Vortx
 
             glm::vec2 axes[4] =
             {
-                Rotate({1,0}, a.rotation), Rotate({0,1}, a.rotation),
-                Rotate({1,0}, b.rotation), Rotate({0,1}, b.rotation)
+                Math::Rotate({1,0}, a.rotation), Math::Rotate({0,1}, a.rotation),
+                Math::Rotate({1,0}, b.rotation), Math::Rotate({0,1}, b.rotation)
             };
 
             glm::vec2 d = b.center - a.center;
@@ -126,8 +126,8 @@ namespace Vortx
             {
                 auto ProjectRadius = [&](const ShapeProxy& box)
                     {
-                        glm::vec2 bx = Rotate({ 1,0 }, box.rotation);
-                        glm::vec2 by = Rotate({ 0,1 }, box.rotation);
+                        glm::vec2 bx = Math::Rotate({ 1,0 }, box.rotation);
+                        glm::vec2 by = Math::Rotate({ 0,1 }, box.rotation);
                         return box.halfExtents.x * fabsf(glm::dot(bx, axis)) +
                             box.halfExtents.y * fabsf(glm::dot(by, axis));
                     };
@@ -209,12 +209,12 @@ namespace Vortx
             float wA = bodyA ? bodyA->angularVelocity : 0.0f;
             float wB = bodyB ? bodyB->angularVelocity : 0.0f;
 
-            glm::vec2 relVel = (velB + Cross(wB, rB)) - (velA + Cross(wA, rA));
+            glm::vec2 relVel = (velB + Math::Cross(wB, rB)) - (velA + Math::Cross(wA, rA));
             float velAlongNormal = glm::dot(relVel, man.normal);
             if (velAlongNormal > 0.0f) return;
 
-            float raCrossN = Cross(rA, man.normal);
-            float rbCrossN = Cross(rB, man.normal);
+            float raCrossN = Math::Cross(rA, man.normal);
+            float rbCrossN = Math::Cross(rB, man.normal);
             float invMassSum = invMassA + invMassB +
                 invInertiaA * raCrossN * raCrossN + invInertiaB * rbCrossN * rbCrossN;
             if (invMassSum <= 0.0f) return;
@@ -225,14 +225,14 @@ namespace Vortx
             float j = -(1.0f + e) * velAlongNormal / invMassSum;
             glm::vec2 impulse = j * man.normal;
 
-            if (bodyA) { bodyA->velocity -= impulse * invMassA; bodyA->angularVelocity -= invInertiaA * Cross(rA, impulse); }
-            if (bodyB) { bodyB->velocity += impulse * invMassB; bodyB->angularVelocity += invInertiaB * Cross(rB, impulse); }
+            if (bodyA) { bodyA->velocity -= impulse * invMassA; bodyA->angularVelocity -= invInertiaA * Math::Cross(rA, impulse); }
+            if (bodyB) { bodyB->velocity += impulse * invMassB; bodyB->angularVelocity += invInertiaB * Math::Cross(rB, impulse); }
 
             velA = bodyA ? bodyA->velocity : glm::vec2(0.0f);
             velB = bodyB ? bodyB->velocity : glm::vec2(0.0f);
             wA = bodyA ? bodyA->angularVelocity : 0.0f;
             wB = bodyB ? bodyB->angularVelocity : 0.0f;
-            relVel = (velB + Cross(wB, rB)) - (velA + Cross(wA, rA));
+            relVel = (velB + Math::Cross(wB, rB)) - (velA + Math::Cross(wA, rA));
 
             glm::vec2 tangent = relVel - glm::dot(relVel, man.normal) * man.normal;
             float tangentLen = glm::length(tangent);
@@ -240,8 +240,8 @@ namespace Vortx
             {
                 tangent /= tangentLen;
 
-                float raCrossT = Cross(rA, tangent);
-                float rbCrossT = Cross(rB, tangent);
+                float raCrossT = Math::Cross(rA, tangent);
+                float rbCrossT = Math::Cross(rB, tangent);
                 float invMassSumT = invMassA + invMassB +
                     invInertiaA * raCrossT * raCrossT + invInertiaB * rbCrossT * rbCrossT;
 
@@ -252,8 +252,8 @@ namespace Vortx
                     jt = std::clamp(jt, -j * mu, j * mu);
 
                     glm::vec2 frictionImpulse = jt * tangent;
-                    if (bodyA) { bodyA->velocity -= frictionImpulse * invMassA; bodyA->angularVelocity -= invInertiaA * Cross(rA, frictionImpulse); }
-                    if (bodyB) { bodyB->velocity += frictionImpulse * invMassB; bodyB->angularVelocity += invInertiaB * Cross(rB, frictionImpulse); }
+                    if (bodyA) { bodyA->velocity -= frictionImpulse * invMassA; bodyA->angularVelocity -= invInertiaA * Math::Cross(rA, frictionImpulse); }
+                    if (bodyB) { bodyB->velocity += frictionImpulse * invMassB; bodyB->angularVelocity += invInertiaB * Math::Cross(rB, frictionImpulse); }
                 }
             }
         }
@@ -368,14 +368,14 @@ namespace Vortx
                 if (isCircle)
                 {
                     auto& c = entity.GetComponent<CircleColliderData>();
-                    p.center += Rotate(c.offset, p.rotation) * t.Scale();
+                    p.center += Math::Rotate(c.offset, p.rotation) * t.Scale();
                     p.radius = c.radius * t.Scale().x;
                     p.isTrigger = c.isTrigger; p.material = c.material; p.filter = c.filter;
                 }
                 else
                 {
                     auto& c = entity.GetComponent<BoxColliderData>();
-                    p.center += Rotate(c.offset, p.rotation) * t.Scale();
+                    p.center += Math::Rotate(c.offset, p.rotation) * t.Scale();
                     p.halfExtents = c.size * 0.5f * t.Scale();
                     p.isTrigger = c.isTrigger; p.material = c.material; p.filter = c.filter;
                 }

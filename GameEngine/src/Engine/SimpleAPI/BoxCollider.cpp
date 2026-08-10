@@ -117,7 +117,7 @@ namespace Vortx
 
 		float rotation = t.Rotation();
 		glm::vec2 scale = t.Scale();
-		glm::vec2 center = t.Position() + Rotate(data.offset, rotation) * scale;
+		glm::vec2 center = t.Position() + Math::Rotate(data.offset, rotation) * scale;
 		glm::vec2 halfExtents = data.size * 0.5f * scale;
 
 		float c = fabsf(cosf(rotation));

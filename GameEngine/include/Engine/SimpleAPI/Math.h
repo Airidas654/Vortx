@@ -2,7 +2,11 @@
 
 #include <glm/glm.hpp>
 
-namespace Vortx
+#define _USE_MATH_DEFINES
+
+#include <math.h>
+
+namespace Vortx::Math
 {
     inline float Cross(const glm::vec2& a, const glm::vec2& b)
     {
@@ -18,5 +22,12 @@ namespace Vortx
     {
         float c = cosf(angle), s = sinf(angle);
         return { v.x * c - v.y * s, v.x * s + v.y * c };
+
+
     }
+
+    static constexpr float Pi = M_PI;
+
+    static constexpr float RadToDeg = 180.0f / Pi;
+    static constexpr float DegToRad = Pi / 180.0f;
 }

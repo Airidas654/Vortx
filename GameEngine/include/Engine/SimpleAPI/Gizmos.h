@@ -24,7 +24,7 @@ namespace Vortx
 		{
 			Shape type;
 			glm::u8vec4 color;
-			float data[5];
+			float data[6];
 		};
 
 		static bool enabled;
@@ -33,7 +33,7 @@ namespace Vortx
 
 		static void Clear();
 		static void DrawCircle(const glm::vec2& position, const float& radius, const float thickness = 1);
-		static void DrawBox(const glm::vec2& position, const glm::vec2& size, const float thickness = 1);
+		static void DrawBox(const glm::vec2& position, const glm::vec2& size, const float& rotation = 0, const float thickness = 1);
 		static void DrawLine(const glm::vec2& p1, const glm::vec2& p2, const float thickness = 1);
 		static void DrawRay(const glm::vec2 &position, const glm::vec2 &direction, const float thickness = 1);
 	};

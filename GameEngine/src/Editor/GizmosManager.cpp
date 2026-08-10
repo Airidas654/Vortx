@@ -1,6 +1,8 @@
 #include "GizmosManager.h"
+
 #include "SimpleAPI/Gizmos.h"
 #include "EditorController.h"
+#include "SimpleAPI/Math.h"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -50,6 +52,7 @@ void GizmosManager::Draw(ImDrawList* drawList)
 				drawList,
 				glm::vec2(data.data[0], data.data[1]),
 				glm::vec2(data.data[2], data.data[3]),
+				data.data[5],
 				data.data[4],
 				data.color
 			);
@@ -74,14 +77,19 @@ void GizmosManager::DrawCircle(ImDrawList* drawList, const glm::vec2& position, 
 	drawList->AddCircle(center, radiusScreen, color, 32, thickness);
 }
 
-void GizmosManager::DrawBox(ImDrawList* drawList, const glm::vec2& position, const glm::vec2& size, const float& thickness, const glm::u8vec4& col)
+void GizmosManager::DrawBox(ImDrawList* drawList, const glm::vec2& position, const glm::vec2& size, const float& rotation, const float& thickness, const glm::u8vec4& col)
 {
 	ImU32 color = IM_COL32(col.r, col.g, col.b, col.a);
 
-	glm::vec2 p1 = position - size/2.0f;
-	glm::vec2 p2 = position + glm::vec2(-size.x, size.y)/2.0f;
-	glm::vec2 p3 = position + size/2.0f;
-	glm::vec2 p4 = position + glm::vec2(size.x, -size.y) / 2.0f;
+	glm::vec2 p1 = size/2.0f;
+	glm::vec2 p2 = glm::vec2(-size.x, size.y)/2.0f;
+	glm::vec2 p3 = size/2.0f;
+	glm::vec2 p4 = glm::vec2(size.x, -size.y) / 2.0f;
+
+	p1 = position - Vortx::Math::Rotate(p1, rotation);
+	p2 = position + Vortx::Math::Rotate(p2, rotation);
+	p3 = position + Vortx::Math::Rotate(p3, rotation);
+	p4 = position + Vortx::Math::Rotate(p4, rotation);
 
 	glm::vec2 p1Local = WorldToScreen(p1, viewportSize);
 	ImVec2 p1Screen = { screenOrigin.x + p1Local.x, screenOrigin.y + p1Local.y };

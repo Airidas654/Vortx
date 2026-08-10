@@ -7,6 +7,9 @@
 #include "Components/ComponentTransform.h"
 #include "Components/ComponentSpriteRenderer.h"
 #include "Components/ComponentMetadata.h"
+#include "SimpleAPI/BoxCollider.h"
+#include "SimpleAPI/CircleCollider.h"
+#include "SimpleAPI/Gizmos.h"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -274,6 +277,32 @@ void EditorController::DrawGizmo(ImDrawList* drawList, const glm::vec2& screenOr
 
     glm::vec2 xHandle = objLocal + glm::vec2(axisLength, 0.0f);
     glm::vec2 yHandle = objLocal + glm::vec2(0.0f, -axisLength);
+
+    if (t.HasComponent<BoxCollider>())
+    {
+        BoxCollider box = t.GetComponent<BoxCollider>();
+
+        glm::vec2 scale = t.Scale();
+        glm::vec2 sizeBox = box.GetSize();
+
+        glm::vec2 size = glm::vec2(scale.x * sizeBox.x, scale.y * sizeBox.y);
+        glm::vec2 offset = t.Right() * box.GetOffset().x + t.Up() * box.GetOffset().y;
+
+        Gizmos::color = glm::u8vec4(50, 255, 50, 255);
+
+        Gizmos::DrawBox(t.Position() + offset, size, t.Rotation(), 2.0f);
+    }
+
+    if (t.HasComponent<CircleCollider>())
+    {
+        CircleCollider circ = t.GetComponent<CircleCollider>();
+
+        glm::vec2 offset = t.Right() * circ.GetOffset().x + t.Up() * circ.GetOffset().y;
+
+        Gizmos::color = glm::u8vec4(50, 255, 50, 255);
+
+        Gizmos::DrawCircle(t.Position() + offset, circ.GetRadius(), 2.0f);
+    }
 
     if ((gizmoSpaceMode == SpaceMode::Local && gizmoMode == GizmoMode::Move) || gizmoMode == GizmoMode::Scale)
     {

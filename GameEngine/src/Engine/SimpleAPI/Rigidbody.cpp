@@ -155,7 +155,7 @@ namespace Vortx
 	{
 		Transform t(entity);
 		
-		return t.Position() + Rotate(Data().centerOfMass, t.Rotation()) * t.Scale();
+		return t.Position() + Math::Rotate(Data().centerOfMass, t.Rotation()) * t.Scale();
 	}
 
 	bool Rigidbody::IsSleepingAllowed()
@@ -209,7 +209,7 @@ namespace Vortx
 		data.forceAccum += force;
 
 		glm::vec2 r = worldPoint - GetWorldCenterOfMass();
-		data.torqueAccum += Cross(r, force);
+		data.torqueAccum += Math::Cross(r, force);
 
 		WakeUp();
 	}
@@ -241,7 +241,7 @@ namespace Vortx
 		data.velocity += impulse * data.inverseMass;
 
 		glm::vec2 r = worldPoint - GetWorldCenterOfMass();
-		data.angularVelocity += data.inverseInertia * Cross(r, impulse);
+		data.angularVelocity += data.inverseInertia * Math::Cross(r, impulse);
 
 		WakeUp();
 	}
@@ -259,7 +259,7 @@ namespace Vortx
 	{
 		RigidbodyData& data = Data();
 		glm::vec2 r = worldPoint - GetWorldCenterOfMass();
-		return data.velocity + Cross(data.angularVelocity, r);
+		return data.velocity + Math::Cross(data.angularVelocity, r);
 	}
 
 }

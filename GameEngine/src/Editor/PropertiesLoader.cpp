@@ -5,6 +5,7 @@
 #include "Components\ComponentScript.h"
 #include "Components\ComponentCamera.h"
 #include "Components\ComponentBoxCollider.h"
+#include "Components\ComponentCircleCollider.h"
 #include "Components\ComponentRigidbody.h"
 #include "Scene.h"
 #include "Scripting\ScriptSystem.h"
@@ -16,8 +17,10 @@
 #include "SimpleAPI/SpriteRenderer.h"
 #include "SimpleAPI/Camera.h"
 #include "SimpleAPI\BoxCollider.h"
+#include "SimpleAPI\CircleCollider.h"
 #include "SimpleAPI\Rigidbody.h"
 #include "SimpleAPI\Gizmos.h"
+#include "SimpleAPI/Math.h"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -49,7 +52,7 @@ void PropertiesLoader::Reset()
         ImGui::Spacing();
 
         glm::vec2 pos = t.LocalPosition();
-        float rot = t.LocalRotation();
+        float rot = t.LocalRotation() * Vortx::Math::RadToDeg;
         glm::vec2 sca = t.LocalScale();
 
         ImGui::TextDisabled("Position");
@@ -61,7 +64,7 @@ void PropertiesLoader::Reset()
         ImGui::TextDisabled("Rotation");
         if (ImGui::DragFloat("##rot", (float*)&rot, 0.1f, 0.0f, 0.0f, "%.2f", 0))
         {
-            t.SetLocalRotation(rot);
+            t.SetLocalRotation(rot * Vortx::Math::DegToRad);
         }
 
         ImGui::TextDisabled("Scale");
@@ -249,19 +252,73 @@ void PropertiesLoader::Reset()
             t.SetRestitution(restitution);
         }
 
-        glm::vec2 outMin, outMax;
-
-        t.GetWorldBounds(outMin, outMax);
-
-        Gizmos::color = glm::u8vec4(50,255,50,255);
-        Gizmos::DrawBox((outMax + outMin) / 2.0f, glm::vec2(outMax.x - outMin.x, outMax.y - outMin.y), 2.0f);
-
         // TODO add restitutionThreshold and filters
 
         ImGui::Spacing();
     }, [](Entity entity) {
         GameObject(entity).AddComponent<BoxCollider>();
     });
+
+    RegisterComponent<Vortx::CircleColliderData>("CircleCollider", "Physics", true, [](Entity entity) {
+        //auto& t = entity.GetComponent<Vortx::CameraData>();
+        CircleCollider t = CircleCollider(entity);
+
+        ImGui::Spacing();
+
+        glm::vec2 offset = t.GetOffset();
+        float radius = t.GetRadius();
+
+        ImGui::TextDisabled("Offset");
+        if (ImGui::DragFloat2("##off", (float*)(&offset), 0.1f, 0.0f, 0.0f, "%.2f", 0))
+        {
+            t.SetOffset(offset);
+        }
+
+        ImGui::TextDisabled("Radius");
+        if (ImGui::DragFloat("##rad", &radius, 0.1f, 0.0f, 0.0f, "%.2f", 0))
+        {
+            t.SetRadius(radius);
+        }
+
+        ImGui::Spacing();
+
+        bool trigger = t.IsTrigger();
+
+        if (ImGui::Checkbox("Trigger", &trigger)) {
+            t.SetTrigger(trigger);
+        }
+
+        float density = t.GetDensity();
+
+        ImGui::TextDisabled("Density");
+        if (ImGui::DragFloat("##den", (&density), 0.1f, 0.0f, 0.0f, "%.2f", 0))
+        {
+            t.SetDensity(density);
+        }
+
+        ImGui::Spacing();
+
+        float friction = t.GetFriction();
+        float restitution = t.GetRestitution();
+
+        ImGui::TextDisabled("Friction");
+        if (ImGui::DragFloat("##fri", (&friction), 0.1f, 0.0f, 1.0f, "%.2f", 0))
+        {
+            t.SetFriction(friction);
+        }
+
+        ImGui::TextDisabled("Restitution");
+        if (ImGui::DragFloat("##res", (&restitution), 0.1f, 0.0f, 1.0f, "%.2f", 0))
+        {
+            t.SetRestitution(restitution);
+        }
+
+        // TODO add restitutionThreshold and filters
+
+        ImGui::Spacing();
+        }, [](Entity entity) {
+            GameObject(entity).AddComponent<CircleCollider>();
+            });
 
     RegisterComponent<Vortx::RigidbodyData>("Rigidbody", "Physics", true, [](Entity entity) {
         //auto& t = entity.GetComponent<Vortx::CameraData>();
