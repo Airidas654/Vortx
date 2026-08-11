@@ -10,6 +10,7 @@
 #include <algorithm>
 #include <unordered_set>
 #include <cmath>
+#include <iostream>
 
 namespace Vortx
 {
@@ -119,21 +120,27 @@ namespace Vortx
 
             glm::vec2 d = b.center - a.center;
 
+            // Projection radius along an *explicit* axis (generalized from the
+            // old closure-captured version so it can also be used for the
+            // tangent-axis clamp below, not just the SAT test loop).
+            auto ProjectRadius = [](const ShapeProxy& box, const glm::vec2& axis)
+                {
+                    glm::vec2 bx = Math::Rotate({ 1,0 }, box.rotation);
+                    glm::vec2 by = Math::Rotate({ 0,1 }, box.rotation);
+                    return box.halfExtents.x * fabsf(glm::dot(bx, axis)) +
+                        box.halfExtents.y * fabsf(glm::dot(by, axis));
+                };
+
             float minOverlap = FLT_MAX;
             glm::vec2 minAxis{ 0.0f };
+            bool refIsA = true; // which box's face the chosen separating axis came from
 
-            for (const glm::vec2& axis : axes)
+            for (int i = 0; i < 4; i++)
             {
-                auto ProjectRadius = [&](const ShapeProxy& box)
-                    {
-                        glm::vec2 bx = Math::Rotate({ 1,0 }, box.rotation);
-                        glm::vec2 by = Math::Rotate({ 0,1 }, box.rotation);
-                        return box.halfExtents.x * fabsf(glm::dot(bx, axis)) +
-                            box.halfExtents.y * fabsf(glm::dot(by, axis));
-                    };
+                const glm::vec2& axis = axes[i];
 
-                float ra = ProjectRadius(a);
-                float rb = ProjectRadius(b);
+                float ra = ProjectRadius(a, axis);
+                float rb = ProjectRadius(b, axis);
                 float dist = fabsf(glm::dot(d, axis));
                 float overlap = ra + rb - dist;
 
@@ -143,13 +150,50 @@ namespace Vortx
                 {
                     minOverlap = overlap;
                     minAxis = (glm::dot(d, axis) < 0.0f) ? -axis : axis;
+                    refIsA = (i < 2);
                 }
             }
 
+            const ShapeProxy& refBox = refIsA ? a : b;
+            const ShapeProxy& incBox = refIsA ? b : a;
+            glm::vec2 normal = minAxis; // A -> B
+
+            // The incident box's deepest corner along -normal - the actual vertex
+            // poking into the reference box. This is the information the old
+            // formula never looked at.
+            auto GetSupportVertex = [](const ShapeProxy& box, const glm::vec2& dir) -> glm::vec2
+                {
+                    glm::vec2 bx = Math::Rotate({ 1,0 }, box.rotation);
+                    glm::vec2 by = Math::Rotate({ 0,1 }, box.rotation);
+                    glm::vec2 result = box.center;
+                    result += (glm::dot(bx, dir) >= 0.0f ? box.halfExtents.x : -box.halfExtents.x) * bx;
+                    result += (glm::dot(by, dir) >= 0.0f ? box.halfExtents.y : -box.halfExtents.y) * by;
+                    return result;
+                };
+
+            glm::vec2 incidentVertex = GetSupportVertex(incBox, -normal);
+
+            // Clamp that vertex's tangential position to the reference face's own
+            // width, then project it onto the reference face - i.e. clip the
+            // incident corner to the reference face instead of discarding its
+            // tangential position entirely.
+            glm::vec2 tangent(-normal.y, normal.x);
+
+            float refTangentExtent = ProjectRadius(refBox, tangent);
+            float refCenterTangent = glm::dot(refBox.center, tangent);
+            float incidentTangent = glm::dot(incidentVertex, tangent);
+            float clampedTangent = std::clamp(incidentTangent,
+                refCenterTangent - refTangentExtent, refCenterTangent + refTangentExtent);
+
+            float refNormalRadius = ProjectRadius(refBox, normal);
+            glm::vec2 refFaceOrigin = refIsA
+                ? refBox.center + normal * refNormalRadius
+                : refBox.center - normal * refNormalRadius;
+
             m.hit = true;
-            m.normal = minAxis;
+            m.normal = normal;
             m.penetration = minOverlap;
-            m.point = a.center + m.normal * (glm::dot(a.halfExtents, glm::abs(InverseRotate(m.normal, a.rotation))));
+            m.point = refFaceOrigin + tangent * (clampedTangent - refCenterTangent);
             return m;
         }
 
@@ -398,7 +442,9 @@ namespace Vortx
 
                 bool filtered;
                 if (a.filter.groupIndex != 0 && a.filter.groupIndex == b.filter.groupIndex)
+                {
                     filtered = a.filter.groupIndex < 0;
+                }
                 else
                     filtered = !((a.filter.categoryBits & b.filter.maskBits) &&
                         (b.filter.categoryBits & a.filter.maskBits));

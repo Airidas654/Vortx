@@ -14,15 +14,15 @@
   "ExpandedNodes": [
     "",
     "\\include",
-    "\\include\\Editor",
     "\\include\\Engine",
-    "\\include\\Engine\\Components",
+    "\\include\\Engine\\Physics",
+    "\\include\\Engine\\Renderer",
+    "\\include\\Engine\\SimpleAPI",
     "\\src",
+    "\\src\\Editor",
     "\\src\\Engine",
-    "\\src\\Engine\\Renderer",
-    "\\src\\Engine\\SimpleAPI",
-    "\\src\\Executable"
+    "\\src\\Engine\\Physics"
   ],
-  "SelectedNode": "\\src\\Engine\\SerializerLoader.cpp",
+  "SelectedNode": "\\src\\Engine\\Renderer\\GameViewport.cpp",
   "PreviewInSolutionExplorer": false
 }

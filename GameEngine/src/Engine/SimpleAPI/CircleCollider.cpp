@@ -82,6 +82,30 @@ namespace Vortx
 		Data().material.restitution = restitution;
 	}
 
+	glm::vec2 CircleCollider::ClosestPoint(const glm::vec2& point)
+	{
+		CircleColliderData& data = Data();
+		Transform t = GetComponent<Transform>();
+
+		glm::vec2 posCircle = t.Position();
+
+		glm::vec2 diff = point - posCircle;
+		float distSqr = glm::dot(diff, diff);
+
+		if (distSqr > data.radius * data.radius)
+		{
+			float dist = sqrtf(distSqr);
+
+			glm::vec2 dir = diff / dist;
+
+			return posCircle + dir * data.radius;
+		}
+		else
+		{
+			return point;
+		}
+	}
+
 	CollisionFilter CircleCollider::GetFilter()
 	{
 		return Data().filter;

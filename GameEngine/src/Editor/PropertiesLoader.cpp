@@ -252,7 +252,33 @@ void PropertiesLoader::Reset()
             t.SetRestitution(restitution);
         }
 
-        // TODO add restitutionThreshold and filters
+        ImGui::Spacing();
+
+        CollisionFilter filter = t.GetFilter();
+        uint32_t categoryBits = filter.categoryBits;
+        uint32_t maskBits = filter.maskBits;
+        uint16_t groupIndex = filter.groupIndex;
+        bool changed = 0;
+
+        ImGui::TextDisabled("Category Bits");
+        changed |= ImGui::InputScalar("##categ", ImGuiDataType_U32, &categoryBits);
+
+        ImGui::TextDisabled("Mask Bits");
+        changed |= ImGui::InputScalar("##mask", ImGuiDataType_U32, &maskBits);
+
+        ImGui::TextDisabled("Group");
+        changed |= ImGui::InputScalar("##group", ImGuiDataType_U16, &groupIndex);
+
+        if (changed)
+        {
+            filter.categoryBits = categoryBits;
+            filter.maskBits = maskBits;
+            filter.groupIndex = groupIndex;
+
+            t.SetFilter(filter);
+        }
+
+        // TODO add restitutionThreshold
 
         ImGui::Spacing();
     }, [](Entity entity) {
@@ -313,7 +339,33 @@ void PropertiesLoader::Reset()
             t.SetRestitution(restitution);
         }
 
-        // TODO add restitutionThreshold and filters
+        ImGui::Spacing();
+
+        CollisionFilter filter = t.GetFilter();
+        uint32_t categoryBits = filter.categoryBits;
+        uint32_t maskBits = filter.maskBits;
+        uint16_t groupIndex = filter.groupIndex;
+        bool changed = 0;
+
+        ImGui::TextDisabled("Category Bits");
+        changed |= ImGui::InputScalar("##categ", ImGuiDataType_U32, &categoryBits);
+
+        ImGui::TextDisabled("Mask Bits");
+        changed |= ImGui::InputScalar("##mask", ImGuiDataType_U32, &maskBits);
+
+        ImGui::TextDisabled("Group");
+        changed |= ImGui::InputScalar("##group", ImGuiDataType_U16, &groupIndex);
+
+        if (changed)
+        {
+            filter.categoryBits = categoryBits;
+            filter.maskBits = maskBits;
+            filter.groupIndex = groupIndex;
+
+            t.SetFilter(filter);
+        }
+
+        // TODO add restitutionThreshold
 
         ImGui::Spacing();
         }, [](Entity entity) {

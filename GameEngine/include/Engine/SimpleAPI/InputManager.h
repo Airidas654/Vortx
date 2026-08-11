@@ -66,6 +66,7 @@ namespace Vortx
         static bool AnyKeyPressed();
 
         static glm::vec2 GetMousePosition();
+        static glm::vec2 GetMouseWorldPosition();
         static glm::vec2 GetMouseDelta();
         static glm::vec2 GetScrollDelta();
 

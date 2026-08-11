@@ -87,6 +87,14 @@ namespace Vortx
 		return Data().filter;
 	}
 
+	glm::vec2 BoxCollider::ClosestPoint(const glm::vec2& point)
+	{
+		BoxColliderData& data = Data();
+		Transform t = GetComponent<Transform>();
+
+		return t.Position();
+	}
+
 	void BoxCollider::SetFilter(const CollisionFilter& filter)
 	{
 		Data().filter = filter;

@@ -51,6 +51,8 @@ namespace Vortx
         float GetRestitution();
         void SetRestitution(float restitution);
 
+        glm::vec2 ClosestPoint(const glm::vec2& point);
+
         CollisionFilter GetFilter();
         void SetFilter(const CollisionFilter& filter);
 

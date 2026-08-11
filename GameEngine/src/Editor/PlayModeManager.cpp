@@ -1,5 +1,7 @@
 #include "PlayModeManager.h"
+
 #include "Editor.h"
+#include "Physics/Physics.h"
 
 #include "Scene.h"
 #include "PropertiesLoader.h"
@@ -27,6 +29,7 @@ void PlayModeManager::ExitPlay()
 {
 	ScriptSystem::Instance().DestroyAll();
 	Scene::Current()->Deserialize(snapshot);
+	Physics::Reset();
 	state = PlayState::Editing;
 }
 

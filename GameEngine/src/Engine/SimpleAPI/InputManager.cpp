@@ -1,5 +1,9 @@
 #include "SimpleAPI/InputManager.h"
 
+#include "Renderer/GameViewport.h"
+#include "SimpleAPI/Camera.h"
+#include "Core/WindowManager.h"
+
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "json.hpp"
@@ -363,6 +367,25 @@ namespace Vortx
     }
 
     glm::vec2 InputManager::GetMousePosition() { return mousePos; }
+    glm::vec2 InputManager::GetMouseWorldPosition() 
+    { 
+        Camera cam = Camera::Main();
+
+        if (cam == Camera()) return glm::vec2(0.0f);
+
+        float size = cam.GetSize();
+
+        uint32_t width = GameViewport::GetWidth();
+        uint32_t height = GameViewport::GetHeight();
+
+        int x, y;
+
+        WindowManager::GetPosition(x,y);
+
+        std::cout << x << "  " << y << "  " << mousePos.x << " " << mousePos.y << std::endl;
+
+        return mousePos; 
+    }
     glm::vec2 InputManager::GetMouseDelta() { return mouseDelta; }
     glm::vec2 InputManager::GetScrollDelta() { return scrollDelta; }
 
