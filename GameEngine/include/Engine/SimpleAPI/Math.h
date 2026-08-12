@@ -22,8 +22,11 @@ namespace Vortx::Math
     {
         float c = cosf(angle), s = sinf(angle);
         return { v.x * c - v.y * s, v.x * s + v.y * c };
+    }
 
-
+    inline float Distance(const glm::vec2& a, const glm::vec2& b)
+    {
+        return glm::distance(a, b);
     }
 
     static constexpr float Pi = M_PI;

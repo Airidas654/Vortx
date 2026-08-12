@@ -244,6 +244,7 @@ void Editor::Start(Engine& engine)
     Vortx::Time::_SetOnFixedUpdate([]() {
         if (PlayModeManager::state == PlayState::Playing || (PlayModeManager::state == PlayState::Paused && PlayModeManager::stepRequested))
         {
+            ScriptSystem::Instance().FixedUpdate();
             Physics::Step(Time::fixedDeltaTime);
         }
     });

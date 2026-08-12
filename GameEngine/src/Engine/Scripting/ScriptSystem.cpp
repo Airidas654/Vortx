@@ -37,6 +37,23 @@ namespace Vortx
         });
     }
 
+    void ScriptSystem::FixedUpdate()
+    {
+        if (!Vortx::SceneManager::current) return;
+
+        Vortx::SceneManager::current->GetRegistry()
+            .View<ScriptComponent>()
+            .each([](ScriptComponent& sc)
+                {
+                    for (auto& entry : sc.scripts)
+                    {
+                        if (!entry.instance) continue;
+
+                        entry.instance->FixedUpdate();
+                    }
+                });
+    }
+
     void ScriptSystem::Update()
     {
         if (!Vortx::SceneManager::current) return;

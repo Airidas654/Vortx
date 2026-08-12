@@ -16,6 +16,10 @@ namespace Vortx
 {
     GLFWwindow* InputManager::window = nullptr;
 
+    bool InputManager::viewportOverrideActive = false;
+    glm::vec2 InputManager::viewportOrigin = glm::vec2(0.0f);
+    glm::vec2 InputManager::viewportSize = glm::vec2(0.0f);
+
     bool InputManager::keyCurr[kMaxTrackedKeys] = {};
     bool InputManager::keyPrev[kMaxTrackedKeys] = {};
 
@@ -366,26 +370,43 @@ namespace Vortx
         return AnyKeyPressed(dummy);
     }
 
-    glm::vec2 InputManager::GetMousePosition() { return mousePos; }
-    glm::vec2 InputManager::GetMouseWorldPosition() 
-    { 
-        Camera cam = Camera::Main();
+    void InputManager::_SetViewportOverride(bool active, const glm::vec2& originScreen, const glm::vec2& size)
+    {
+        viewportOverrideActive = active;
+        viewportOrigin = originScreen;
+        viewportSize = size;
+    }
 
+    glm::vec2 InputManager::GetMousePosition() 
+    {
+        if (viewportOverrideActive)
+            return mousePos - viewportOrigin;
+
+        return mousePos;
+    }
+
+    glm::vec2 InputManager::GetMouseWorldPosition()
+    {
+        glm::vec2 local = GetMousePosition();
+
+        glm::vec2 size = viewportOverrideActive ? viewportSize
+            : glm::vec2((float)GameViewport::GetWidth(), (float)GameViewport::GetHeight());
+
+        if (size.x <= 0.0f || size.y <= 0.0f) return glm::vec2(0.0f);
+
+        glm::vec2 ndc;
+        ndc.x = (local.x / size.x) * 2.0f - 1.0f;
+        ndc.y = 1.0f - (local.y / size.y) * 2.0f;
+
+        Camera cam = Camera::Main();
         if (cam == Camera()) return glm::vec2(0.0f);
 
-        float size = cam.GetSize();
+        glm::mat4 invVP = glm::inverse(cam.GetProjectionViewMatrix());
+        glm::vec4 world = invVP * glm::vec4(ndc, 0.0f, 1.0f);
 
-        uint32_t width = GameViewport::GetWidth();
-        uint32_t height = GameViewport::GetHeight();
-
-        int x, y;
-
-        WindowManager::GetPosition(x,y);
-
-        std::cout << x << "  " << y << "  " << mousePos.x << " " << mousePos.y << std::endl;
-
-        return mousePos; 
+        return glm::vec2(world.x, world.y);
     }
+
     glm::vec2 InputManager::GetMouseDelta() { return mouseDelta; }
     glm::vec2 InputManager::GetScrollDelta() { return scrollDelta; }
 

@@ -70,6 +70,8 @@ namespace Vortx
         static glm::vec2 GetMouseDelta();
         static glm::vec2 GetScrollDelta();
 
+        static void _SetViewportOverride(bool active, const glm::vec2& originScreen, const glm::vec2& size);
+
         static bool GetMouseButton(int glfwMouseButton);
         static bool GetMouseButtonDown(int glfwMouseButton);
         static bool GetMouseButtonUp(int glfwMouseButton);
@@ -88,6 +90,10 @@ namespace Vortx
 
     private:
         static GLFWwindow* window;
+
+        static bool viewportOverrideActive;
+        static glm::vec2 viewportOrigin;
+        static glm::vec2 viewportSize;
 
         static constexpr int kMaxTrackedKeys = 349;     // GLFW_KEY_LAST + 1
         static constexpr int kMaxMouseButtons = 8;       // GLFW_MOUSE_BUTTON_LAST + 1

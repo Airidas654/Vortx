@@ -13,6 +13,7 @@
 #include "SimpleAPI/Rigidbody.h"
 #include "SimpleAPI/BoxCollider.h"
 #include "SimpleAPI/CircleCollider.h"
+#include "SimpleAPI/Math.h"
 #include "Scripting/ScriptSystem.h"
 #include "Scripting/ScriptBase.h"
 #include "ECS/Entity.h"

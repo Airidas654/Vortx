@@ -15,14 +15,14 @@
     "",
     "\\include",
     "\\include\\Engine",
-    "\\include\\Engine\\Physics",
-    "\\include\\Engine\\Renderer",
+    "\\include\\Engine\\Scripting",
     "\\include\\Engine\\SimpleAPI",
     "\\src",
     "\\src\\Editor",
     "\\src\\Engine",
-    "\\src\\Engine\\Physics"
+    "\\src\\Engine\\Physics",
+    "\\src\\Engine\\Scripting"
   ],
-  "SelectedNode": "\\src\\Engine\\Renderer\\GameViewport.cpp",
+  "SelectedNode": "\\src\\Engine\\SerializerLoader.cpp",
   "PreviewInSolutionExplorer": false
 }
