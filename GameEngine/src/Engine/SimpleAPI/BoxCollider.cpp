@@ -90,9 +90,18 @@ namespace Vortx
 	glm::vec2 BoxCollider::ClosestPoint(const glm::vec2& point)
 	{
 		BoxColliderData& data = Data();
-		Transform t = GetComponent<Transform>();
+		Transform t(entity);
 
-		return t.Position();
+		float rotation = t.Rotation();
+		glm::vec2 scale = t.Scale();
+		glm::vec2 center = t.Position() + Math::Rotate(data.offset, rotation) * scale;
+		glm::vec2 halfExtents = data.size * 0.5f * scale;
+
+		glm::vec2 local = Math::Rotate(point - center, -rotation);
+
+		glm::vec2 clampedLocal = glm::clamp(local, -halfExtents, halfExtents);
+
+		return center + Math::Rotate(clampedLocal, rotation);
 	}
 
 	void BoxCollider::SetFilter(const CollisionFilter& filter)

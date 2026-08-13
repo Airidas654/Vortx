@@ -171,7 +171,7 @@ void Editor::Compile()
             "\"" + cmakePath + "\" -S \"" + path.string() +
             "\" -B \"" + path.string() + "/build\" "+
             "-DENGINE_BIN_PATH=\"" + editorPath.string() + "\" " +
-            "-DENGINE_PATH=\"" + "C:/Users/Airidas/Desktop/GameEngine/GameEngine" + '\"';
+            "-DENGINE_PATH=\"" + "C:/Users/airid/Desktop/GameEngine/GameEngine" + '\"';
 
         std::string buildCmd =
             "\"" + cmakePath + "\" --build \"" + path.string() +
