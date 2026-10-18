@@ -14,15 +14,13 @@
   "ExpandedNodes": [
     "",
     "\\include",
-    "\\include\\Engine",
     "\\include\\Engine\\Scripting",
     "\\include\\Engine\\SimpleAPI",
     "\\src",
     "\\src\\Editor",
-    "\\src\\Engine",
     "\\src\\Engine\\Physics",
     "\\src\\Engine\\Scripting"
   ],
-  "SelectedNode": "\\src\\Engine\\SerializerLoader.cpp",
+  "SelectedNode": "\\src\\Editor\\Editor.cpp",
   "PreviewInSolutionExplorer": false
 }

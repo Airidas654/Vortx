@@ -14,6 +14,7 @@
 #include "SimpleAPI/BoxCollider.h"
 #include "SimpleAPI/CircleCollider.h"
 #include "SimpleAPI/Math.h"
+#include "SimpleAPI/KeyCode.h"
 #include "Scripting/ScriptSystem.h"
 #include "Scripting/ScriptBase.h"
 #include "ECS/Entity.h"
