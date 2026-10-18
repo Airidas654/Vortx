@@ -12,3 +12,4 @@ _deps
 CMakeUserPresets.json
 /GameEngine/.vs
 /GameEngine/out
+EnginePaths.cmake

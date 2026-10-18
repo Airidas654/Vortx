@@ -305,6 +305,8 @@ void ProjectHub::LoadProject(const std::string& path)
 {
     Vortx::Project::LoadProject(path);
 
+    Editor::WriteEnginePaths();
+
     Editor::Compile();
 
     Editor::autoCompile = (bool)Project::current.LoadEditorSettingValue("AutoCompile", false);

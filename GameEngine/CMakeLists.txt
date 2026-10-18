@@ -128,6 +128,14 @@ if(MSVC)
     )
 endif()
 
+add_custom_command(TARGET Editor POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/include/Engine   $<TARGET_FILE_DIR:Editor>/EngineSDK/include/Engine
+    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/include/Executable   $<TARGET_FILE_DIR:Editor>/EngineSDK/include/Executable
+    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/external/glm  $<TARGET_FILE_DIR:Editor>/EngineSDK/external/glm
+    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/external/entt $<TARGET_FILE_DIR:Editor>/EngineSDK/external/entt
+    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/external/nlohmann $<TARGET_FILE_DIR:Editor>/EngineSDK/external/nlohmann
+)
+
 set_target_properties(Editor PROPERTIES
     WIN32_EXECUTABLE $<NOT:$<CONFIG:Debug>>)
 

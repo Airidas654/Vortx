@@ -13,16 +13,14 @@
   },
   "ExpandedNodes": [
     "",
-    "\\include\\Engine",
-    "\\include\\Engine\\SimpleAPI",
+    "\\external",
+    "\\include",
+    "\\include\\Editor",
+    "\\src",
     "\\src\\Editor",
-    "\\src\\Engine",
-    "\\src\\Engine\\Physics",
-    "\\src\\Engine\\Scripting",
-    "\\src\\Engine\\SimpleAPI",
     "\\tests",
     "\\tests\\unit"
   ],
-  "SelectedNode": "\\CMakeLists.txt",
+  "SelectedNode": "\\src\\Editor\\ProjectHub.cpp",
   "PreviewInSolutionExplorer": false
 }

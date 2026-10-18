@@ -10,6 +10,7 @@ class Editor
 public:
 	static void Start(Engine& engine);
 	static void Compile();
+	static void WriteEnginePaths();
 	static bool isBuilding;
 	static bool autoCompile;
 private:
