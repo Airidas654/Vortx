@@ -13,14 +13,16 @@
   },
   "ExpandedNodes": [
     "",
-    "\\include",
-    "\\include\\Engine\\Scripting",
+    "\\include\\Engine",
     "\\include\\Engine\\SimpleAPI",
-    "\\src",
     "\\src\\Editor",
+    "\\src\\Engine",
     "\\src\\Engine\\Physics",
-    "\\src\\Engine\\Scripting"
+    "\\src\\Engine\\Scripting",
+    "\\src\\Engine\\SimpleAPI",
+    "\\tests",
+    "\\tests\\unit"
   ],
-  "SelectedNode": "\\src\\Editor\\Editor.cpp",
+  "SelectedNode": "\\CMakeLists.txt",
   "PreviewInSolutionExplorer": false
 }

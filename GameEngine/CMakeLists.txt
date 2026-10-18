@@ -130,3 +130,37 @@ endif()
 
 set_target_properties(Editor PROPERTIES
     WIN32_EXECUTABLE $<NOT:$<CONFIG:Debug>>)
+
+option(ENABLE_TESTS "Build unit tests" ON)
+
+if(ENABLE_TESTS)
+
+set(INSTALL_GTEST OFF)
+set(BUILD_GMOCK OFF)
+
+add_subdirectory(external/googletest)
+
+enable_testing()
+
+file(GLOB TEST_SRC CONFIGURE_DEPENDS
+    tests/unit/*.cpp
+)
+
+add_executable(UnitTests ${TEST_SRC})
+
+target_compile_definitions(UnitTests PRIVATE
+    TEST_DATA_DIR="${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/tests/data"
+)
+
+target_compile_options(UnitTests PRIVATE /EHsc)
+
+target_link_libraries(UnitTests
+    PRIVATE
+    GameEngineLib
+    GTest::gtest_main
+)
+
+include(GoogleTest)
+gtest_discover_tests(UnitTests)
+
+endif()
