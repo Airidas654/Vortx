@@ -88,58 +88,69 @@ if(WIN32)
     target_link_libraries(GameEngineLib PUBLIC opengl32)
 endif()
 
-# ===============================================================
-# EDITOR (ONLY PLACE GLFW IS LINKED)
-# ===============================================================
+
 file(GLOB_RECURSE SRC_EDITOR CONFIGURE_DEPENDS
     src/Editor/*.cpp
     src/Common/*.cpp
-    src/Executable/*.cpp
 )
 
-add_executable(Editor ${SRC_EDITOR})
+add_library(EditorLib STATIC ${SRC_EDITOR})
 
-target_include_directories(Editor PRIVATE
+target_include_directories(EditorLib PUBLIC
     include/Engine
-    include/Executable
     include/Editor
     external/nlohmann
     external/glfw/include
 )
 
-target_link_libraries(Editor PRIVATE
+target_link_libraries(EditorLib PUBLIC
     GameEngineLib
     imgui
-    glfw            # <-- ONLY HERE
+    glfw            
     OpenGL::GL
 )
 
 if(WIN32)
-    target_link_libraries(Editor PRIVATE opengl32)
+    target_link_libraries(EditorLib PUBLIC opengl32)
 endif()
 
-# ===============================================================
-# WINDOWS SUBSYSTEM SETTINGS
-# ===============================================================
+
 if(MSVC)
-    target_link_options(Editor PRIVATE
+    target_link_options(EditorLib PUBLIC
         $<$<NOT:$<CONFIG:Debug>>:/SUBSYSTEM:WINDOWS>
         $<$<NOT:$<CONFIG:Debug>>:/ENTRY:mainCRTStartup> 
     )
 endif()
 
-add_custom_command(TARGET Editor POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/include/Engine   $<TARGET_FILE_DIR:Editor>/EngineSDK/include/Engine
-    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/include/Executable   $<TARGET_FILE_DIR:Editor>/EngineSDK/include/Executable
-    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/external/glm  $<TARGET_FILE_DIR:Editor>/EngineSDK/external/glm
-    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/external/entt $<TARGET_FILE_DIR:Editor>/EngineSDK/external/entt
-    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/external/nlohmann $<TARGET_FILE_DIR:Editor>/EngineSDK/external/nlohmann
+add_custom_command(TARGET EditorLib POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/include/Engine   $<TARGET_FILE_DIR:EditorLib>/EngineSDK/include/Engine
+    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/include/Executable   $<TARGET_FILE_DIR:EditorLib>/EngineSDK/include/Executable
+    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/external/glm  $<TARGET_FILE_DIR:EditorLib>/EngineSDK/external/glm
+    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/external/entt $<TARGET_FILE_DIR:EditorLib>/EngineSDK/external/entt
+    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/external/nlohmann $<TARGET_FILE_DIR:EditorLib>/EngineSDK/external/nlohmann
 )
 
-set_target_properties(Editor PROPERTIES
+set_target_properties(EditorLib PROPERTIES
     WIN32_EXECUTABLE $<NOT:$<CONFIG:Debug>>)
 
-option(ENABLE_TESTS "Build unit tests" ON)
+file(GLOB_RECURSE SRC_EDITOR_EXECUTABLE CONFIGURE_DEPENDS
+    src/Main/main.cpp
+    src/Executable/*.cpp
+)
+
+add_executable(Editor ${SRC_EDITOR_EXECUTABLE})
+
+target_link_libraries(Editor 
+    PRIVATE 
+    EditorLib
+)
+
+target_link_directories(Editor
+    PUBLIC
+    include/Executable 
+)
+
+option(ENABLE_TESTS "Build unit tests" ON) 
 
 if(ENABLE_TESTS)
 
@@ -164,7 +175,7 @@ target_compile_options(UnitTests PRIVATE /EHsc)
 
 target_link_libraries(UnitTests
     PRIVATE
-    GameEngineLib
+    EditorLib
     GTest::gtest_main
 )
 

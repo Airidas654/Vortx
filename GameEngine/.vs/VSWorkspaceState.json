@@ -13,14 +13,16 @@
   },
   "ExpandedNodes": [
     "",
-    "\\external",
-    "\\include",
-    "\\include\\Editor",
     "\\src",
     "\\src\\Editor",
+    "\\src\\Engine",
+    "\\src\\Engine\\Core",
+    "\\src\\Executable",
+    "\\src\\Executable\\Assets",
+    "\\src\\Main",
     "\\tests",
     "\\tests\\unit"
   ],
-  "SelectedNode": "\\src\\Editor\\ProjectHub.cpp",
+  "SelectedNode": "\\CMakeLists.txt",
   "PreviewInSolutionExplorer": false
 }
