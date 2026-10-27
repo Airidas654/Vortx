@@ -13,16 +13,17 @@
   },
   "ExpandedNodes": [
     "",
-    "\\src",
-    "\\src\\Editor",
-    "\\src\\Engine",
-    "\\src\\Engine\\Core",
+    "\\Assets",
+    "\\Assets\\ProjectTemplate",
+    "\\include",
+    "\\out",
+    "\\out\\build",
     "\\src\\Executable",
     "\\src\\Executable\\Assets",
     "\\src\\Main",
     "\\tests",
     "\\tests\\unit"
   ],
-  "SelectedNode": "\\CMakeLists.txt",
+  "SelectedNode": "\\out",
   "PreviewInSolutionExplorer": false
 }

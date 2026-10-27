@@ -8,14 +8,13 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # ENGINE_BIN_PATH = engine bin output   (for GameEngineLib.lib import stub)
 # Both are passed in by the editor via -DENGINE_PATH=... -DENGINE_BIN_PATH=... 
 
-if(NOT ENGINE_PATH)
-    #set(ENGINE_PATH "C:/Users/airid/Desktop/GameEngine/GameEngine") 
-    message(FATAL_ERROR "ENGINE_PATH not set. Pass -DENGINE_PATH=<engine source root>")
-endif()
+# Written by the editor on project load/compile. VS picks it up automatically.
+include("${CMAKE_SOURCE_DIR}/EnginePaths.cmake" OPTIONAL)
 
-if(NOT ENGINE_BIN_PATH)
-    #set(ENGINE_BIN_PATH "C:/Users/airid/Desktop/GameEngine/GameEngine/out/build/x64-debug/bin")
-    message(FATAL_ERROR "ENGINE_BIN_PATH not set. Pass -DENGINE_BIN_PATH=<engine bin output>")
+if(NOT ENGINE_PATH OR NOT ENGINE_BIN_PATH)
+    message(FATAL_ERROR
+        "ENGINE_PATH / ENGINE_BIN_PATH not set. Open this project once in the "
+        "Vortx editor so it generates EnginePaths.cmake, or pass them with -D.")
 endif()
 
 # ===============================================================
@@ -38,7 +37,7 @@ file(GLOB_RECURSE GAME_SCRIPT_HEADERS Assets/*.h)
 set(GENERATED_FILE "${CMAKE_BINARY_DIR}/generated/RegisterScripts.cpp") 
 file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/generated")
 
-set(GENERATED_CONTENT "// AUTO-GENERATED â€” do not edit\n")
+set(GENERATED_CONTENT "// AUTO-GENERATED — do not edit\n")
 foreach(HEADER ${GAME_SCRIPT_HEADERS})
     file(READ ${HEADER} CONTENT)
     if(CONTENT MATCHES "ScriptBase<")
@@ -65,7 +64,7 @@ target_compile_definitions(Game
 #message(STATUS "Linking against: ${GAME_ENGINE_LIB}")
 
 # Only include/Game is the public API the user's scripts need.
-# include/Engine is internal â€” users should never include engine internals directly.
+# include/Engine is internal — users should never include engine internals directly.
 target_include_directories(Game PRIVATE
     "${ENGINE_PATH}/include/Game"
     "${ENGINE_PATH}/include/Engine"
@@ -75,7 +74,7 @@ target_include_directories(Game PRIVATE
     "${CMAKE_SOURCE_DIR}"
 )
 
-# Link against the DLL import stub â€” NOT a static lib copy.
+# Link against the DLL import stub — NOT a static lib copy.
 # This ensures Game.dll shares the same GameEngineLib.dll instance as Editor.exe.
 target_link_libraries(Game PRIVATE
     "${GAME_ENGINE_LIB}"

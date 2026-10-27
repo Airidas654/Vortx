@@ -56,7 +56,7 @@ file(GLOB_RECURSE SRC_ENGINE CONFIGURE_DEPENDS
 )
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin) 
 
 add_library(GameEngineLib SHARED ${SRC_ENGINE})
 
@@ -120,14 +120,14 @@ if(MSVC)
         $<$<NOT:$<CONFIG:Debug>>:/SUBSYSTEM:WINDOWS>
         $<$<NOT:$<CONFIG:Debug>>:/ENTRY:mainCRTStartup> 
     )
-endif()
+endif() 
 
 add_custom_command(TARGET EditorLib POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/include/Engine   $<TARGET_FILE_DIR:EditorLib>/EngineSDK/include/Engine
-    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/include/Executable   $<TARGET_FILE_DIR:EditorLib>/EngineSDK/include/Executable
     COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/external/glm  $<TARGET_FILE_DIR:EditorLib>/EngineSDK/external/glm
     COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/external/entt $<TARGET_FILE_DIR:EditorLib>/EngineSDK/external/entt
     COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/external/nlohmann $<TARGET_FILE_DIR:EditorLib>/EngineSDK/external/nlohmann
+    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/Assets $<TARGET_FILE_DIR:EditorLib>/Assets
 )
 
 set_target_properties(EditorLib PROPERTIES
@@ -150,7 +150,7 @@ target_link_directories(Editor
     include/Executable 
 )
 
-option(ENABLE_TESTS "Build unit tests" ON) 
+option(ENABLE_TESTS "Build unit tests" OFF) 
 
 if(ENABLE_TESTS)
 

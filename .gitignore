@@ -10,6 +10,7 @@ compile_commands.json
 CTestTestfile.cmake
 _deps
 CMakeUserPresets.json
-/GameEngine/.vs
-/GameEngine/out
+GameEngine/.vs
+GameEngine/out
+GameEngine/build
 EnginePaths.cmake
