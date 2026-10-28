@@ -1,13 +1,13 @@
 # ninja log v5
-63	1639	8143144470684209	CMakeFiles/GameEngineLib.dir/src/Engine/Renderer/GameViewport.cpp.obj	957c660d3e3d898d
-2	14	0	C:/Users/Airidas/Desktop/GameEngine/GameEngine/out/build/x64-debug/CMakeFiles/cmake.verify_globs	5446ea026a32ac87
+11	28	0	C:/Users/Airidas/Desktop/GameEngine/GameEngine/out/build/x64-debug/CMakeFiles/cmake.verify_globs	5446ea026a32ac87
 1260	2790	8143144482379494	CMakeFiles/EditorLib.dir/src/Editor/PlayModeManager.cpp.obj	ddfcdabdd5115c54
-1051	2787	8143144482339494	CMakeFiles/EditorLib.dir/src/Editor/AssetPropertiesLoader.cpp.obj	a556c7f80fe5861d
 2328	2623	8143144480689503	external/glfw/src/CMakeFiles/glfw.dir/null_joystick.c.obj	8eb32d88c6c8bc2e
+1051	2787	8143144482339494	CMakeFiles/EditorLib.dir/src/Editor/AssetPropertiesLoader.cpp.obj	a556c7f80fe5861d
+63	1639	8143144470684209	CMakeFiles/GameEngineLib.dir/src/Engine/Renderer/GameViewport.cpp.obj	957c660d3e3d898d
 36	545	8143144459895270	CMakeFiles/imgui.dir/external/imgui-docking/imgui_widgets.cpp.obj	2c6cb9a0aa788feb
 359	1264	8143144467074205	CMakeFiles/GameEngineLib.dir/src/Engine/SimpleAPI/Gizmos.cpp.obj	9bf1062283a785ac
-525	595	8143144460245270	glad.lib	efcf3e3786322160
 43	3148	8143144485939490	CMakeFiles/GameEngineLib.dir/src/Engine/Core/AssetDatabase.cpp.obj	cc33a568e16ad8bf
+525	595	8143144460245270	glad.lib	efcf3e3786322160
 24	453	8143144459015292	CMakeFiles/imgui.dir/external/imgui-docking/backends/imgui_impl_opengl3.cpp.obj	431a45765da74d85
 28	304	8143144457465086	CMakeFiles/imgui.dir/external/imgui-docking/imgui_demo.cpp.obj	2736416b07ae60a6
 1199	2712	8143144481589495	CMakeFiles/EditorLib.dir/src/Editor/GizmosManager.cpp.obj	59559e7b97a03be2
@@ -21,7 +21,7 @@
 2499	2761	8143144482089499	external/glfw/src/CMakeFiles/glfw.dir/win32_window.c.obj	5f426b9d1aea7a8a
 48	655	8143144461010350	CMakeFiles/GameEngineLib.dir/src/Engine/Core/WindowManager.cpp.obj	486570ac058f3bbb
 22	673	8143144461200351	CMakeFiles/imgui.dir/external/imgui-docking/backends/imgui_impl_glfw.cpp.obj	a45ced82630a5599
-3697	4215	8143144496478614	bin/GameEngineLib.lib	b7102c38345d2112
+133	387	8143158831793369	bin/GameEngineLib.lib	b7102c38345d2112
 26	916	8143144463590523	CMakeFiles/imgui.dir/external/imgui-docking/imgui.cpp.obj	41246951869fe280
 50	1050	8143144464944210	CMakeFiles/GameEngineLib.dir/src/Engine/ECS/Entity.cpp.obj	cde1690e071afa87
 81	1071	8143144465164210	CMakeFiles/GameEngineLib.dir/src/Engine/SimpleAPI/BaseComponent.cpp.obj	e6e1c59231b3cfc1
@@ -44,7 +44,7 @@
 83	1687	8143144471284206	CMakeFiles/GameEngineLib.dir/src/Engine/SimpleAPI/BoxCollider.cpp.obj	8d47740da19c06be
 454	2417	8143144478639500	CMakeFiles/GameEngineLib.dir/src/Engine/SimpleAPI/Renderer.cpp.obj	8699af68a7c8dab8
 85	1735	8143144471784204	CMakeFiles/GameEngineLib.dir/src/Engine/SimpleAPI/Camera.cpp.obj	80b00db34c7b3673
-2768	3071	8143144484979496	external/glfw/src/glfw3dll.lib	b7e38a08d3f9e624
+22	132	8143144482179499	external/glfw/src/glfw3dll.lib	b7e38a08d3f9e624
 46	1840	8143144472844203	CMakeFiles/GameEngineLib.dir/src/Engine/Core/AssetMeta.cpp.obj	d2b3c5ba6cb459ed
 77	1960	8143144474054423	CMakeFiles/GameEngineLib.dir/src/Engine/Scripting/ScriptSystem.cpp.obj	e6e7e1028baa69cd
 2496	2768	8143144482159498	external/glfw/src/CMakeFiles/glfw.dir/win32_monitor.c.obj	5dc2ae2511f50d62
@@ -71,7 +71,7 @@
 1654	3059	8143144485079491	CMakeFiles/Editor.dir/src/Main/main.cpp.obj	2888e63e36365540
 1077	3071	8143144485189500	CMakeFiles/EditorLib.dir/src/Editor/EditorController.cpp.obj	5b39b4377d31ec2c
 1583	3066	8143144485139499	CMakeFiles/Editor.dir/src/Executable/Assets/AudioAsset.cpp.obj	d39d0f4a63ddb9cb
-2768	3071	8143144484979496	bin/glfw3.dll	b7e38a08d3f9e624
+22	132	8143144482179499	bin/glfw3.dll	b7e38a08d3f9e624
 1608	3089	8143144485369494	CMakeFiles/Editor.dir/src/Executable/Assets/FontAsset.cpp.obj	8b19174e514477de
 546	3097	8143144485429492	CMakeFiles/GameEngineLib.dir/src/Engine/SimpleAPI/SceneManager.cpp.obj	73160ed6afc08593
 400	3116	8143144485629493	CMakeFiles/GameEngineLib.dir/src/Engine/SimpleAPI/InputManager.cpp.obj	cb79909a4627c8d4
@@ -81,15 +81,6 @@
 1264	3674	8143144491208617	CMakeFiles/EditorLib.dir/src/Editor/ProjectHub.cpp.obj	218e0eb41e2aa24
 1527	3793	8143144492398613	CMakeFiles/EditorLib.dir/src/Editor/PropertiesLoader.cpp.obj	78c888f4fa682bcf
 79	3697	8143144491378617	CMakeFiles/GameEngineLib.dir/src/Engine/SerializerLoader.cpp.obj	84327b09f1881e4d
-3697	4215	8143144496478614	bin/GameEngineLib.dll	b7102c38345d2112
-26	11184	8143153770240511	bin/EditorLib.lib	69d30948789dbc0f
-11184	11271	8143153881916868	bin/Editor.exe	f15562247ef6896e
-10	21	0	C:/Users/Airidas/Desktop/GameEngine/GameEngine/out/build/x64-debug/CMakeFiles/cmake.verify_globs	5446ea026a32ac87
-7	18	0	C:/Users/Airidas/Desktop/GameEngine/GameEngine/out/build/x64-debug/CMakeFiles/cmake.verify_globs	5446ea026a32ac87
-7	18	0	C:/Users/Airidas/Desktop/GameEngine/GameEngine/out/build/x64-debug/CMakeFiles/cmake.verify_globs	5446ea026a32ac87
-22	132	8143144482179499	bin/glfw3.dll	b7e38a08d3f9e624
-22	132	8143144482179499	external/glfw/src/glfw3dll.lib	b7e38a08d3f9e624
 133	387	8143158831793369	bin/GameEngineLib.dll	b7102c38345d2112
-133	387	8143158831793369	bin/GameEngineLib.lib	b7102c38345d2112
-387	1278	8143158832641513	bin/EditorLib.lib	69d30948789dbc0f
-1278	1437	8143158842271356	bin/Editor.exe	f15562247ef6896e
+34	41286	8149244936344232	bin/EditorLib.lib	5a6a53d8333b57e5
+41286	41466	8149245349263128	bin/Editor.exe	f15562247ef6896e

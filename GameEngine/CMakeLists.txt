@@ -128,6 +128,7 @@ add_custom_command(TARGET EditorLib POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/external/entt $<TARGET_FILE_DIR:EditorLib>/EngineSDK/external/entt
     COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/external/nlohmann $<TARGET_FILE_DIR:EditorLib>/EngineSDK/external/nlohmann
     COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/Assets $<TARGET_FILE_DIR:EditorLib>/Assets
+    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/CMake $<TARGET_FILE_DIR:EditorLib>/CMake
 )
 
 set_target_properties(EditorLib PROPERTIES
@@ -150,7 +151,7 @@ target_link_directories(Editor
     include/Executable 
 )
 
-option(ENABLE_TESTS "Build unit tests" OFF) 
+option(ENABLE_TESTS "Build unit tests" ON) 
 
 if(ENABLE_TESTS)
 
