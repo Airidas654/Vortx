@@ -115,13 +115,6 @@ if(WIN32)
 endif()
 
 
-if(MSVC)
-    target_link_options(EditorLib PUBLIC
-        $<$<NOT:$<CONFIG:Debug>>:/SUBSYSTEM:WINDOWS>
-        $<$<NOT:$<CONFIG:Debug>>:/ENTRY:mainCRTStartup> 
-    )
-endif() 
-
 add_custom_command(TARGET EditorLib POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/include/Engine   $<TARGET_FILE_DIR:EditorLib>/EngineSDK/include/Engine
     COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/external/glm  $<TARGET_FILE_DIR:EditorLib>/EngineSDK/external/glm
@@ -141,6 +134,12 @@ file(GLOB_RECURSE SRC_EDITOR_EXECUTABLE CONFIGURE_DEPENDS
 
 add_executable(Editor ${SRC_EDITOR_EXECUTABLE})
 
+if(MSVC)
+    target_link_options(Editor PRIVATE
+        $<$<NOT:$<CONFIG:Debug>>:/SUBSYSTEM:WINDOWS>
+        $<$<NOT:$<CONFIG:Debug>>:/ENTRY:mainCRTStartup>)
+endif()
+
 target_link_libraries(Editor 
     PRIVATE 
     EditorLib
@@ -151,36 +150,27 @@ target_link_directories(Editor
     include/Executable 
 )
 
-option(ENABLE_TESTS "Build unit tests" ON) 
-
+option(ENABLE_TESTS "Build unit tests" ON)
 if(ENABLE_TESTS)
+    set(INSTALL_GTEST OFF)
+    set(BUILD_GMOCK OFF)
+    set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+    set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
+    add_subdirectory(external/googletest)
+    enable_testing()
 
-set(INSTALL_GTEST OFF)
-set(BUILD_GMOCK OFF)
 
-add_subdirectory(external/googletest)
+    file(GLOB_RECURSE TEST_SRC CONFIGURE_DEPENDS 
+        tests/editor/*.cpp
+        tests/engine/*.cpp
+    )
+    add_executable(UnitTests ${TEST_SRC})
+    target_include_directories(UnitTests PRIVATE tests)
+    if(MSVC) 
+        target_compile_options(UnitTests PRIVATE /EHsc /bigobj) 
+    endif()
+    target_link_libraries(UnitTests PRIVATE EditorLib GTest::gtest_main)
 
-enable_testing()
-
-file(GLOB TEST_SRC CONFIGURE_DEPENDS
-    tests/unit/*.cpp
-)
-
-add_executable(UnitTests ${TEST_SRC})
-
-target_compile_definitions(UnitTests PRIVATE
-    TEST_DATA_DIR="${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/tests/data"
-)
-
-target_compile_options(UnitTests PRIVATE /EHsc)
-
-target_link_libraries(UnitTests
-    PRIVATE
-    EditorLib
-    GTest::gtest_main
-)
-
-include(GoogleTest)
-gtest_discover_tests(UnitTests)
-
+    include(GoogleTest)
+    gtest_discover_tests(UnitTests)
 endif()
