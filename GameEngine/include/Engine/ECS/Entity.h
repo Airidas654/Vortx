@@ -1,11 +1,12 @@
 #pragma once
 
 #include "ECS/Registry.h"
+#include "EngineAPI.h"
 
 namespace Vortx
 {
 
-	class Entity
+	class ENGINE_API Entity
 	{
 	private:
 

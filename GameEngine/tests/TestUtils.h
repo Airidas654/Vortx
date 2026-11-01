@@ -54,7 +54,9 @@ namespace TestUtils
 
     inline void WriteFile(const fs::path& p, const std::string& content)
     {
-        fs::create_directories(p.parent_path());
+        if (p.parent_path() != fs::path()) {
+            fs::create_directories(p.parent_path());
+        }
         std::ofstream out(p, std::ios::binary);
         out << content;
     }

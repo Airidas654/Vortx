@@ -2,6 +2,7 @@
 
 #include "Core/Asset.h"
 #include "AssetID.h"
+#include "EngineAPI.h"
 
 #include "json.hpp"
 
@@ -9,7 +10,7 @@
 
 namespace Vortx
 {
-    struct AssetMeta
+    struct ENGINE_API AssetMeta
     {
         AssetID guid;
         AssetType type = AssetType::Unknown;

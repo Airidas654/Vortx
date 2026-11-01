@@ -87,8 +87,8 @@ void ProjectHub::Setup()
                 }
             }
         }
-        catch (nlohmann::json::exception e) {
-            std::cerr << e.what() << std::endl;
+        catch (std::exception e) {
+            //std::cerr << e.what() << std::endl;
 
             projects.clear();
         }

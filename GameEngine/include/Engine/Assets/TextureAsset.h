@@ -4,13 +4,14 @@
 #include "Core/Asset.h"
 #include "Core/AssetMeta.h"
 #include "Renderer/RenderTypes.h"
+#include "EngineAPI.h"
 
 #include <cstdint>
 #include <string>
 
 namespace Vortx
 {
-    class TextureAsset : public Asset
+    class ENGINE_API TextureAsset : public Asset
     {
     public:
         TextureHandle handle;

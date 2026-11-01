@@ -3,6 +3,7 @@
 #include "EngineAPI.h"
 #include "Core/Asset.h"
 #include "Core/AssetMeta.h"
+#include "EngineAPI.h"
 
 #include <vector>
 #include <cstdint>
@@ -15,7 +16,7 @@ namespace Vortx
     // still participates fully in the refcounted load/unload system - the
     // rasterization/atlas step is a separate concern you can layer on top
     // whenever you build text rendering.
-    class FontAsset : public Asset
+    class ENGINE_API FontAsset : public Asset
     {
     public:
         std::vector<uint8_t> fileData;

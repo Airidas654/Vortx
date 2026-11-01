@@ -3,6 +3,7 @@
 #include "EngineAPI.h"
 #include "Core/Asset.h"
 #include "Core/AssetMeta.h"
+#include "EngineAPI.h"
 
 #include <vector>
 #include <cstdint>
@@ -13,7 +14,7 @@ namespace Vortx
     // Holds decoded PCM + format info. There's deliberately no playback code
     // here - that's a separate AudioSource/mixer concern. This just makes
     // sure "how does an audio file get loaded and refcounted" is handled.
-    class AudioAsset : public Asset
+    class ENGINE_API AudioAsset : public Asset
     {
     public:
         std::vector<uint8_t> pcmData;

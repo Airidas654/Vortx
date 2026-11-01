@@ -159,11 +159,7 @@ if(ENABLE_TESTS)
     add_subdirectory(external/googletest)
     enable_testing()
 
-
-    file(GLOB_RECURSE TEST_SRC CONFIGURE_DEPENDS 
-        tests/editor/*.cpp
-        tests/engine/*.cpp
-    )
+    file(GLOB_RECURSE TEST_SRC CONFIGURE_DEPENDS tests/*.cpp)
     add_executable(UnitTests ${TEST_SRC})
     target_include_directories(UnitTests PRIVATE tests)
     if(MSVC) 
