@@ -96,7 +96,7 @@ namespace Vortx
 		Entity entity = gameObject.GetEntity();
 		Transform transform = gameObject.GetComponent<Transform>();
 
-		std::vector<Transform> &childrenCopy = transform.GetChildren();
+		std::vector<Transform> childrenCopy = transform.GetChildren();
 		for (Transform& child : childrenCopy)
 			DestroyGameObject(child.GetGameObject());
 

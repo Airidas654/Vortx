@@ -291,6 +291,9 @@ void ProjectHub::AddProject(const std::string& path)
             return;
         }
     }
+    else {
+        return;
+    }
 
     ProjectShowcase obj;
     obj.name = name;

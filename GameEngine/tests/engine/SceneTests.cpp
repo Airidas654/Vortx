@@ -85,10 +85,7 @@ TEST_F(SceneTests, DestroyChildRemovesItFromParent)
     EXPECT_EQ(parent.GetChildCount(), 0);
 }
 
-// Known bug: DestroyGameObject iterates transform.GetChildren() by reference while
-// the recursive call erases from that same vector (iterator invalidation).
-// Fix by iterating over a copy, then enable this test.
-TEST_F(SceneTests, DISABLED_DestroyParentDestroysChildren)
+TEST_F(SceneTests, DestroyParentDestroysChildren)
 {
     GameObject parent = Make("p");
     GameObject child = Make("c");

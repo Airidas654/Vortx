@@ -207,9 +207,7 @@ TEST_F(SerializerTest, CameraSizeRoundTripsForWholeNumbers)
     EXPECT_FLOAT_EQ(Find("Cam")->GetComponent<Camera>().GetSize(), 8.0f);
 }
 
-// Known bug: CameraData is read with `in.value("size", 5)`, which makes nlohmann
-// return an int, so 7.5 comes back as 7. Use `in.value("size", 5.0f)` and enable.
-TEST_F(SerializerTest, DISABLED_CameraFractionalSizeRoundTrips)
+TEST_F(SerializerTest, CameraFractionalSizeRoundTrips)
 {
     GameObject go = Make("Cam");
     Camera cam = go.AddComponent<Camera>();

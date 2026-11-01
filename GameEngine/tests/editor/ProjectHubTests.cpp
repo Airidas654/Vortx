@@ -104,10 +104,7 @@ TEST_F(ProjectHubTest, AddProjectRejectsInvalidJson)
     EXPECT_TRUE(h.projects.empty());
 }
 
-// Known bug: for a .vortx path that does not exist, AddProject skips the read
-// block entirely and still adds a project with an empty name. Enable after
-// returning early when the file is missing.
-TEST_F(ProjectHubTest, DISABLED_AddProjectRejectsMissingFile)
+TEST_F(ProjectHubTest, AddProjectRejectsMissingFile)
 {
     ProjectHub h;
     h.AddProject((tmp / "ghost" / "project.vortx").string());
