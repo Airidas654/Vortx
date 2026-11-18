@@ -82,8 +82,8 @@ In short: write gameplay the object-oriented way, and let the ECS keep it fast.
 **Windows (Visual Studio, recommended)**
 
 ```bash
-git clone https://github.com/<your-username>/<your-repo>.git
-cd <your-repo>
+git clone https://github.com/Airidas654/Vortx.git
+cd Vortx
 cmake -S . -B build -G "Visual Studio 17 2022"
 ```
 
